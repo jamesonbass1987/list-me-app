@@ -10,15 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171119213225) do
+ActiveRecord::Schema.define(version: 20171119230440) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
-  end
-
-  create_table "category_tags", force: :cascade do |t|
-    t.integer "category_id"
-    t.string "tag_name"
   end
 
   create_table "counties", force: :cascade do |t|
@@ -35,6 +30,11 @@ ActiveRecord::Schema.define(version: 20171119213225) do
   create_table "listing_images", force: :cascade do |t|
     t.integer "listing_id"
     t.string "image_url"
+  end
+
+  create_table "listing_tags", force: :cascade do |t|
+    t.integer "listing_id"
+    t.integer "tag_id"
   end
 
   create_table "listings", force: :cascade do |t|
@@ -59,7 +59,16 @@ ActiveRecord::Schema.define(version: 20171119213225) do
     t.index ["abbr"], name: "index_states_on_abbr"
   end
 
-  create_table "users_tables", force: :cascade do |t|
+  create_table "sub_categories", force: :cascade do |t|
+    t.integer "category_id"
+    t.string "tag_name"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
     t.string "first_name"
