@@ -9,4 +9,9 @@ module ListingsHelper
   def current_tags_in_listing_text(listing)
     "None (Enter new tags below)" if listing.tags.empty?
   end
+
+  def tag_attributes_field(tag_fields)
+    tag_fields.text_field :name unless tag_fields.object[:name].present?
+  end
+
 end

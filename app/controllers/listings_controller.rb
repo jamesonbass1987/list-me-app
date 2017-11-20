@@ -18,8 +18,6 @@ class ListingsController < ApplicationController
     @listing = Listing.new(listing_params)
     @listing.user = current_user
 
-    ##NEED TO WORK ON TAGS FOR FORM!!! DOESN'T WORK!
-
     if @listing.save
       redirect_to location_listing_path(@listing.location, @listing)
     else

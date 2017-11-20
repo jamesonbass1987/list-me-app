@@ -16,7 +16,7 @@
 
   <%= f.label :tags, "Add New Tags:" %>
   <%= f.fields_for :tags, 5.times {listing.tags.build} do |tag_fields| %>
-    <%= tag_fields.text_field :name %>
+    <%= tag_attributes_field(tag_fields) %>
   <% end %> <br>
 
 
