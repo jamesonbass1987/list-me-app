@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120003405) do
+ActiveRecord::Schema.define(version: 20171120004105) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -61,8 +61,8 @@ ActiveRecord::Schema.define(version: 20171120003405) do
   end
 
   create_table "sub_categories", force: :cascade do |t|
+    t.string "name"
     t.integer "category_id"
-    t.string "tag_name"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20171120003405) do
     t.string "password_digest"
     t.string "first_name"
     t.string "last_name"
-    t.string "profile_image_url"
+    t.string "profile_image_url", default: "https://i.imgur.com/jNNT4LE.jpg"
   end
 
   create_table "zipcodes", force: :cascade do |t|
