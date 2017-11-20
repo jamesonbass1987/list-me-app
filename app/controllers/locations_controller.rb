@@ -1,12 +1,13 @@
 class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :edit, :update, :destroy]
+  before_action :validate_location, only: [:show, :edit, :update, :destroy]
+
 
   def index
     @locations = Location.all
   end
 
   def show
-    @location = Location.find_by(id: params[:id])
     @categories = Category.all
     @listings = @location.listings
   end
@@ -51,4 +52,9 @@ class LocationsController < ApplicationController
   def set_location
     @location = Location.find_by(id: params[:id])
   end
+
+  def validate_location
+    redirect_to locations_path if @location.nil?
+  end
+
 end

@@ -1,7 +1,9 @@
 class ListingsController < ApplicationController
   before_action :set_listing, only: [:show, :edit, :update, :destroy]
+  before_action :validate_location_listing
 
   def show
+
   end
 
   def new
@@ -51,6 +53,11 @@ class ListingsController < ApplicationController
 
   def set_listing
     @listing = Listing.find_by(id: params[:id])
+  end
+
+  def validate_location_listing
+    location_from_params = Location.find_by(id: params[:location_id])
+    redirect_to location_path(location_from_params) unless @listing.location != location_from_params
   end
 
 end
