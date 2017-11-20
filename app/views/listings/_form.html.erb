@@ -9,6 +9,11 @@
   <%= f.label :price %>
   <%= f.number_field :price %><br>
 
+  <%= f.label :category %>
+  <%= f.collection_select :category_id, @categories, :id, :name %><br>
+
+  <%= f.hidden_field :location_id, :value => location.id %>
+
   <%= submit_tag :submit%>
 
 <% end %>
