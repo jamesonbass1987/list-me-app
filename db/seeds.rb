@@ -18,7 +18,20 @@ Location.create(state: "TX", city: "Austin")
 Location.create(state: "IL", city: "Chicago")
 
 
-Category.create(name: "Housing")
-Category.create(name: "For Sale")
-Category.create(name: "Jobs")
-Category.create(name: "Services")
+Category.create(name: "Furniture")
+Category.create(name: "Books")
+Category.create(name: "Appliances")
+Category.create(name: "Cell Phones")
+Category.create(name: "Electronics & Computers")
+Category.create(name: "Musical Instruments")
+Category.create(name: "Household")
+Category.create(name: "Jewelry")
+Category.create(name: "Toys & Games")
+Category.create(name: "Video Games")
+Category.create(name: "Collectibles")
+
+
+25.times do
+  Listing.create(title: Faker::Hipster.sentence, description: Faker::Hipster.paragraphs(1), price:
+  Faker::Commerce.price, category_id: rand(21...31), location_id: rand(1...7))
+end

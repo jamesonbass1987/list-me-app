@@ -61,3 +61,4 @@ gem 'mocha', group: :test
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'dotenv-rails'
+gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
