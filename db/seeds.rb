@@ -35,3 +35,16 @@ Category.create(name: "Collectibles")
   Listing.create(title: Faker::Hipster.sentence, description: Faker::Hipster.paragraphs(1), price:
   Faker::Commerce.price, category_id: rand(21...31), location_id: rand(1...7))
 end
+
+
+15.times do
+  tag = Tag.find_or_create_by(name: Faker::DrWho.specie)
+  listing = Listing.find_by(id: rand(1...28))
+  listing.tags << tag
+end
+
+50.times do
+  tag = Tag.find_or_create_by(name: Faker::Commerce.product_name)
+  listing = Listing.find_by(id: rand(1...28))
+  listing.tags << tag
+end

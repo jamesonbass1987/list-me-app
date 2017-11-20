@@ -1,0 +1,2 @@
+<%= f.label :tags, "Current Tags: #{current_tags_in_listing_text(listing)}" %>
+<%= f.collection_check_boxes :tag_ids, listing.tags, :id, :name %><br>

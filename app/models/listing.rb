@@ -10,7 +10,21 @@ class Listing < ApplicationRecord
   has_many :listing_tags
   has_many :tags, through: :listing_tags
 
+  accepts_nested_attributes_for :tags
+
+  def tags_attributes=(tag_attributes)
+    #parse tag_attributes passed in as hash, checking for empties
+    tag_attributes.values.each do |tag_attribute|
+      if !tag_attribute[:name].blank?
+        tag = Tag.find_or_create_by(tag_attribute)
+        self.tags << tag
+      end
+    end
+  end
+
   def overview
     title + " - $" + price.to_f.to_s
   end
+
+
 end

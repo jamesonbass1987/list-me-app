@@ -10,7 +10,15 @@
   <%= f.number_field :price %><br>
 
   <%= f.label :category %>
-  <%= f.collection_select :category_id, @categories, :id, :name %><br>
+  <%= f.collection_select :category_id, categories, :id, :name %><br>
+
+  <%= render_edit_post_checkboxes(location, listing, f) %>
+
+  <%= f.label :tags, "Add New Tags:" %>
+  <%= f.fields_for :tags, 5.times {listing.tags.build} do |tag_fields| %>
+    <%= tag_fields.text_field :name %>
+  <% end %> <br>
+
 
   <%= f.hidden_field :location_id, :value => location.id %>
 

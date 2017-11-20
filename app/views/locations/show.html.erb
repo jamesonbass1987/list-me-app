@@ -6,6 +6,6 @@
 
 <%= content_tag(:ul) do %>
   <% @listings.each do |listing| %>
-    <%= content_tag(:li, (link_to listing.overview, location_listing_path(listing))) %>
+    <%= content_tag(:li, (link_to listing.overview, location_listing_path(@location, listing))) %>
   <% end %>
 <% end %>
