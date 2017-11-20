@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120004105) do
+ActiveRecord::Schema.define(version: 20171120041718) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20171120004105) do
     t.string "first_name"
     t.string "last_name"
     t.string "profile_image_url", default: "https://i.imgur.com/jNNT4LE.jpg"
+    t.string "uid"
   end
 
   create_table "zipcodes", force: :cascade do |t|

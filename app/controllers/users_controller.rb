@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :settings]
 
   def new
     @user = User.new
@@ -18,9 +18,6 @@ class UsersController < ApplicationController
 
   def update
 
-    #delete password field if user left blank during edit prior to validations
-    delete_password_field_if_empty
-
     if @user.update_attributes(user_params)
       redirect_to user_path(@user)
     else
@@ -33,7 +30,10 @@ class UsersController < ApplicationController
 
     @user.destroy
     redirect_to root_path
-    
+  end
+
+  def settings
+
   end
 
   private
@@ -46,8 +46,4 @@ class UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
   end
 
-
-  def delete_password_field_if_empty
-    params[:user].delete(:password) if params[:user][:password].blank?
-  end
 end
