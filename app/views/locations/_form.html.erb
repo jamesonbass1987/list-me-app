@@ -1,0 +1,11 @@
+<%= form_for(@location) do |f| %>
+
+  <%= f.label :city %>
+  <%= f.text_field :city %><br>
+
+  <%= f.label :state, "State" %>
+  <%= f.collection_select :state, State.all, :abbr, :abbr %><br>
+
+  <%= submit_tag "Submit" %>
+
+<% end %>

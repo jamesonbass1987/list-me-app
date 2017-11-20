@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120041718) do
+ActiveRecord::Schema.define(version: 20171120061051) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(version: 20171120041718) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.string "state"
     t.string "city"
+    t.string "state"
   end
 
   create_table "states", force: :cascade do |t|
@@ -58,11 +58,6 @@ ActiveRecord::Schema.define(version: 20171120041718) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["abbr"], name: "index_states_on_abbr"
-  end
-
-  create_table "sub_categories", force: :cascade do |t|
-    t.string "name"
-    t.integer "category_id"
   end
 
   create_table "tags", force: :cascade do |t|

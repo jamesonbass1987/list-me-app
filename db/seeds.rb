@@ -8,3 +8,17 @@
 
 
 User.create(first_name: 'Jameson', last_name: 'Bass', email:'jamesonbass@gmail.com', password: 'password', profile_image_url: 'https://avatars3.githubusercontent.com/u/21073456?s=460&v=4')
+
+Location.create(state: "NY", city: "New York")
+Location.create(state: "OR", city: "Portland")
+Location.create(state: "TN", city: "Nashville")
+Location.create(state: "CA", city: "Los Angeles")
+Location.create(state: "CA", city: "San Francisco")
+Location.create(state: "TX", city: "Austin")
+Location.create(state: "IL", city: "Chicago")
+
+
+Category.create(name: "Housing")
+Category.create(name: "For Sale")
+Category.create(name: "Jobs")
+Category.create(name: "Services")
