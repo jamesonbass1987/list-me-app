@@ -20,11 +20,13 @@ class LocationsController < ApplicationController
     @location = Location.new(location_params)
 
     if @location.save
-      session[:location_id] = @location.id
       redirect_to location_path(@location)
     else
       render :new
     end
+  end
+
+  def edit
   end
 
   def update

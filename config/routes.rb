@@ -15,6 +15,6 @@ Rails.application.routes.draw do
 
   resources :locations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :locations, only: [:show] do
-    resources :listings, only: [:index, :show]
+    resources :listings
   end
 end

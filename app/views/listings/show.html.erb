@@ -1,0 +1,16 @@
+<h1>Listing Overview</h1>
+
+<p><%= @listing.location.full_location_name %></p>
+
+<h3><%= @listing.title %></h3>
+<h4>Price: $<%= @listing.price %></h4>
+
+<h3>Description:</h4>
+<p><%= @listing.description %></p>
+
+<p>Posted By: <%= @listing.user.full_name %></p>
+
+<h5>Tags:</h5>
+<% @listing.tags.each do |tag| %>
+  <%= tag.name %>
+<% end %>
