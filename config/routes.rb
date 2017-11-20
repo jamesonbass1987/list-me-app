@@ -3,7 +3,13 @@ Rails.application.routes.draw do
 
   root 'static#welcome'
 
+  get '/signup' => 'users#new'
+  get '/login' => 'sessions#new'
+  delete '/logout' => 'sessions#destroy'
   resources :users
+
+
+  resources :sessions, only: [:create, :destroy]
 
   resources :locations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :locations, only: [:show] do
