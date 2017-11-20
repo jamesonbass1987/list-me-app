@@ -1,0 +1,10 @@
+<h1>Welcome <%= @user.full_name %>!</h1>
+
+<%= image_tag @user.profile_image_url %>
+
+<%= content_tag(:div, @user) do %>
+  <strong>Email:</strong> <%= @user.email %><br>
+<% end %>
+
+<%= link_to "Edit Profile", edit_user_path %><br>
+<%= link_to "Log Out", logout_path, :method => :delete %>
