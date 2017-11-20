@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171119230440) do
+ActiveRecord::Schema.define(version: 20171120003405) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -42,8 +42,9 @@ ActiveRecord::Schema.define(version: 20171119230440) do
     t.text "description"
     t.decimal "price"
     t.integer "location_id"
-    t.integer "category_id"
+    t.integer "sub_category_id"
     t.integer "user_id"
+    t.integer "subcategory_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -74,7 +75,6 @@ ActiveRecord::Schema.define(version: 20171119230440) do
     t.string "first_name"
     t.string "last_name"
     t.string "profile_image_url"
-    t.integer "location_id"
   end
 
   create_table "zipcodes", force: :cascade do |t|
