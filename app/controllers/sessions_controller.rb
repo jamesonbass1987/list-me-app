@@ -17,17 +17,16 @@ class SessionsController < ApplicationController
         u.last_name = fb_auth[:info][:name].split(" ")[1]
       end
     else
-
       user = User.find_by(email: params[:user][:email])
-      if user.authenticate(params[:user][:password])
+      if user.present? && user.authenticate(params[:user][:password])
+        session[:user_id] = user.id
         redirect_to user_path(user) and return
       else
+        @user = User.new
+        @user.errors[:base] << "Username or password was invalid. Please try again."
         render :new
       end
     end
-
-    session[:user_id] = user.id
-    redirect_to user_path(user)
   end
 
   def destroy

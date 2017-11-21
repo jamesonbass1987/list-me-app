@@ -1,5 +1,7 @@
 <%= form_for [location, listing] do |f| %>
 
+  <%= render 'shared/error_messages', locals: {form_input: listing} %>
+
   <%= f.label :title %>
   <%= f.text_field :title %><br>
 

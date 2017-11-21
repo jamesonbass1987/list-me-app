@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   resources :sessions, only: [:create, :destroy]
 
   resources :users
-  get 'users/:id/settings' => 'users#settings'
 
   resources :locations, only: [:show, :new, :create, :edit, :update, :destroy]
   resources :locations, only: [:show] do
