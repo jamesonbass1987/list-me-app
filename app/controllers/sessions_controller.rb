@@ -17,8 +17,13 @@ class SessionsController < ApplicationController
         u.last_name = fb_auth[:info][:name].split(" ")[1]
       end
     else
+
       user = User.find_by(email: params[:user][:email])
-      return head(:forbidden) unless user.authenticate(params[:user][:password])
+      if user.authenticate(params[:user][:password])
+        redirect_to user_path(user) and return
+      else
+        render :new
+      end
     end
 
     session[:user_id] = user.id
