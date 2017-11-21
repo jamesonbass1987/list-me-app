@@ -13,6 +13,12 @@ class ListingsController < ApplicationController
 
       @listings = Listing.listings_in_category(category_filter, @location)
 
+    elsif params[:search].present?
+      search_term = params[:search].strip
+      results = listings_matching_query(search_term, @location.listings)
+
+      @listings = results
+
     else
       @listings = @location.listings
     end
@@ -75,6 +81,12 @@ class ListingsController < ApplicationController
   def validate_location_listing
     location_from_params = Location.find_by(id: params[:location_id])
     redirect_to location_listings_path(location_from_params) unless @listing && @listing.location == location_from_params
+  end
+
+  def listings_matching_query(search_term, listings)
+    listings.find_all do |listing|
+      listing.title.downcase.include?(search_term) || listing.description.downcase.include?(search_term.downcase) || listing.tags.any?{|tag| tag.name.include?(search_term.downcase)}
+    end
   end
 
 end

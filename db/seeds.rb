@@ -48,3 +48,9 @@ end
   listing = Listing.find_by(id: rand(1...28))
   listing.tags << tag
 end
+
+tags = Tag.all
+
+tags.each{|tag| tag.update(name: tag.name.downcase) }
+  tag.update(name: tag.name.downcase)
+end

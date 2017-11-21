@@ -2,6 +2,18 @@
 
 <p>Currently viewing listings for: <%= current_listing_filter(@listings, @location) %><p>
 
+<!--  Listing Search Filter -->
+<%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form') do %>
+    <p>
+      Search Listings (Separate terms with a comma):
+      <%= text_field_tag :search, params[:search] %>
+      <%= hidden_field_tag :location_selector, @location.id  %>
+      <%= submit_tag "Search", :name => nil %>
+
+    </p>
+<% end %>
+
+<!--  Listing Category Filter -->
 <%= form_tag '/search' do %>
     <p>
       View Listings For:
