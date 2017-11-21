@@ -1,7 +1,5 @@
 <%= form_for [location, listing] do |f| %>
 
-  <%= render 'shared/error_messages', locals: {form_input: listing} %>
-
   <%= f.label :title %>
   <%= f.text_field :title %><br>
 
@@ -15,12 +13,17 @@
   <%= f.collection_select :category_id, categories, :id, :name %><br>
 
   <%= render_edit_post_checkboxes(location, listing, f) %>
+  <%= render_image_post_checkboxes(location, listing, f) %>
 
-  <%= f.label :tags, "Add New Tags:" %>
-  <%= f.fields_for :tags, 5.times {listing.tags.build} do |tag_fields| %>
-    <%= tag_attributes_field(tag_fields) %>
+  <%= f.label :listing_images, "Add Image URLs:" %>
+  <%= f.fields_for :listing_images, listing.listing_images do |listing_image_fields| %>
+    <%= listing_images_attributes_field(listing_image_fields) %>
   <% end %> <br>
 
+  <%= f.label :tags, "Add New Tags:" %>
+  <%= f.fields_for :tags, listing.tags do |tag_fields| %>
+    <%= tag_attributes_field(tag_fields) %>
+  <% end %> <br>
 
   <%= f.hidden_field :location_id, :value => location.id %>
 

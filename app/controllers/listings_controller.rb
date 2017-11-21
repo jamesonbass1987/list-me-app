@@ -1,6 +1,6 @@
 class ListingsController < ApplicationController
   before_action :set_listing, only: [:show, :edit, :update, :destroy]
-  before_action :validate_location_listing, except: [:index]
+  before_action :validate_location_listing, except: [:index, :new, :create, :destroy]
 
   def index
     @location = Location.find_by(id: params[:location_id])
@@ -25,11 +25,10 @@ class ListingsController < ApplicationController
 
   def new
     @location = Location.find_by(id: params[:location_id])
-    @listing = @location.listings.new
+    @listing = @location.listings.build
     @categories = Category.all
-
-    5.times { @listing.tags.build }
-
+    5.times {@listing.listing_images.build}
+    5.times {@listing.tags.build}
   end
 
   def create
@@ -46,6 +45,7 @@ class ListingsController < ApplicationController
 
   def edit
     @categories = Category.all
+    @location = @listing.location
   end
 
   def update
@@ -65,7 +65,7 @@ class ListingsController < ApplicationController
   private
 
   def listing_params
-    params.require(:listing).permit(:title, :description, :price, :location_id, :user_id, :category_id, tag_ids:[], tags_attributes:[:name])
+    params.require(:listing).permit(:title, :description, :price, :location_id, :user_id, :category_id, tag_ids:[], tags_attributes:[:name], listing_image_ids:[], listing_images_attributes:[:image_url])
   end
 
   def set_listing

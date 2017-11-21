@@ -1,0 +1,4 @@
+<%= f.label :tag_ids, "Current Images: #{currently_in_listing_text(listing, listing.listing_images)}" %>
+<%= f.collection_check_boxes :listing_image_ids, listing.listing_images, :id, :id do |image| %>
+    <%= image.check_box + image_tag(image.object.image_url) %>
+<% end %> <br>
