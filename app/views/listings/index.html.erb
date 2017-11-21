@@ -1,0 +1,16 @@
+<h1>Listings in <%= @location.full_location_name %></h1>
+
+<p>Currently viewing listings for: <%= current_listing_filter(@listings, @location) %><p>
+
+<%= form_tag '/search' do %>
+    <p>
+      View Listings For:
+      <%= select_tag 'category_selector', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything' %>
+      <%= hidden_field_tag :location_selector, @location.id  %>
+      <%= submit_tag "Filter" %>
+    </p>
+<% end %>
+
+<%= content_tag(:ul) do %>
+  <%= listings_list(@listings) %>
+<% end %>

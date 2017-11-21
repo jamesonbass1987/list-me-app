@@ -1,6 +1,23 @@
 class ListingsController < ApplicationController
   before_action :set_listing, only: [:show, :edit, :update, :destroy]
-  before_action :validate_location_listing
+  before_action :validate_location_listing, except: [:index]
+
+  def index
+    @location = Location.find_by(id: params[:location_id])
+    @categories = Category.all
+
+    if session[:category_id_filter].present?
+      #find category by category_id_filter and clear session data once done
+      category_filter = Category.find_by(id: session[:category_id_filter])
+      session[:category_id_filter].clear
+
+      @listings = Listing.listings_in_category(category_filter, @location)
+
+    else
+      @listings = @location.listings
+    end
+
+  end
 
   def show
 
@@ -57,7 +74,7 @@ class ListingsController < ApplicationController
 
   def validate_location_listing
     location_from_params = Location.find_by(id: params[:location_id])
-    redirect_to location_path(location_from_params) unless @listing.location != location_from_params
+    redirect_to location_listings_path(location_from_params) unless @listing && @listing.location == location_from_params
   end
 
 end

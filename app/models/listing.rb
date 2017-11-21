@@ -28,4 +28,8 @@ class Listing < ApplicationRecord
     title + " - $" + price.to_f.to_s
   end
 
+  def self.listings_in_category(category, location)
+      where("category_id = ? AND location_id = ?", category.id, location.id)
+  end
+
 end

@@ -11,4 +11,5 @@
 
 <p><strong>Posted By:</strong> <%= @listing.user.full_name %></p>
 
+<p><strong>Category:</strong> <%= @listing.category.name %></p>
 <p><strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %></p>

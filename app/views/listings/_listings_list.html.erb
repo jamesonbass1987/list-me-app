@@ -1,0 +1,5 @@
+<% listings.each do |listing| %>
+  <%= content_tag :li do %>
+    <%= link_to listing.overview, location_listing_path(listing.location, listing) %>
+  <% end %>
+<% end %>

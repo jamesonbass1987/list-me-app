@@ -1,0 +1,15 @@
+<h1>Welcome To List.me</h1>
+
+
+<%= content_tag :div do %>
+  <%= form_tag "/search" do %>
+  I'm looking for
+    <%= select_tag 'category_selector', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything' %>
+  in
+    <%= select_tag 'location_selector', options_from_collection_for_select(@locations, 'id', :full_location_name) %><br>
+
+    <%= submit_tag "Show me what you've got." %>
+
+  <% end %>
+
+<% end %>

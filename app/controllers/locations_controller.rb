@@ -2,11 +2,6 @@ class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :edit, :update, :destroy]
   before_action :validate_location, only: [:show, :edit, :update, :destroy]
 
-
-  def index
-    @locations = Location.all
-  end
-
   def show
     @categories = Category.all
     @listings = @location.listings
