@@ -8,3 +8,6 @@
     <%= content_tag(:li, (link_to listing.overview, location_listing_path(@location, listing))) %>
   <% end %>
 <% end %>
+
+
+<%= link_to "Delete Location", location_path(@location.id), :method => :delete%>

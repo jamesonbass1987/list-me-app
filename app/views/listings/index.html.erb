@@ -5,11 +5,9 @@
 <!--  Listing Search Filter -->
 <%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form') do %>
     <p>
-      Search Listings (Separate terms with a comma):
+      Search Listings:
       <%= text_field_tag :search, params[:search] %>
-      <%= hidden_field_tag :location_selector, @location.id  %>
       <%= submit_tag "Search", :name => nil %>
-
     </p>
 <% end %>
 

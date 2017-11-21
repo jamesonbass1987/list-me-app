@@ -9,3 +9,4 @@
 <%= link_to "Account Settings", "/users/#{@user.id}/settings" %><br>
 <%= link_to "Edit Profile", edit_user_path %><br>
 <%= link_to "Log Out", logout_path, :method => :delete %>
+<%= link_to "Delete Account", user_path(@user.id), :method => :delete%>

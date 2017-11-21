@@ -6,7 +6,7 @@ class User < ApplicationRecord
   validates :last_name, presence: true
 
   has_secure_password
-  has_many :listings
+  has_many :listings, :dependent => :destroy
 
 
   def full_name

@@ -14,10 +14,9 @@ class ListingsController < ApplicationController
       @listings = Listing.listings_in_category(category_filter, @location)
 
     elsif params[:search].present?
-      search_term = params[:search].strip
-      results = listings_matching_query(search_term, @location.listings)
 
-      @listings = results
+      search_term = params[:search].strip
+      @listings = listings_matching_query(search_term, @location.listings)
 
     else
       @listings = @location.listings
