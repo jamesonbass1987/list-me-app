@@ -24,7 +24,7 @@ module ListingsHelper
     if listings == location.listings
       "Everything. The whole shebang. The whole kit and caboodle."
     else
-      if listings
+      if listings.present?
         listings.first.category.name
       else
         "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything in that category. Try another filter."
