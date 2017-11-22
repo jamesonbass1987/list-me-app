@@ -46,4 +46,12 @@ class Listing < ApplicationRecord
       where("category_id = ? AND location_id = ?", category.id, location.id)
   end
 
+  def self.highest_price_item(location)
+      where("location_id = ?", location.id).order(price: :desc).first
+  end
+
+  def self.all_user_listings(user)
+    where(:user_id => user.id)
+  end
+
 end

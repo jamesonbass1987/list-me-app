@@ -4,6 +4,7 @@
 
 <%= content_tag(:div, @user) do %>
   <strong>Email:</strong> <%= @user.email %><br>
+  <strong>Username:</strong> <%= @user.username %><br>
 <% end %>
 
 <%= link_to "Account Settings", "/users/#{@user.id}/settings" %><br>

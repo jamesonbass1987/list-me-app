@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
         u.last_name = fb_auth[:info][:name].split(" ")[1]
       end
     else
-      user = User.find_by(email: params[:user][:email])
+      user = User.find_by(username: params[:user][:username])
       if user.present? && user.authenticate(params[:user][:password])
         session[:user_id] = user.id
         redirect_to user_path(user) and return

@@ -1,9 +1,10 @@
 class ListingsController < ApplicationController
   before_action :set_listing, only: [:show, :edit, :update, :destroy]
-  before_action :validate_location_listing, except: [:index, :new, :create, :destroy]
+  before_action :validate_location
+  before_action :validate_listings, except: [:index, :new, :create, :destroy]
 
   def index
-    @location = Location.find_by(id: params[:location_id])
+    @location = Location.friendly.find(params[:location_id])
     @categories = Category.all
 
     if session[:category_id_filter].present?
@@ -29,7 +30,7 @@ class ListingsController < ApplicationController
   end
 
   def new
-    @location = Location.find_by(id: params[:location_id])
+    @location = Location.friendly.find(params[:location_id])
     @listing = @location.listings.build
     @categories = Category.all
     5.times {@listing.listing_images.build}
@@ -63,8 +64,9 @@ class ListingsController < ApplicationController
   end
 
   def destroy
+    location = @listing.location
     @listing.destroy
-    redirect_to listings_path
+    redirect_to location_listings_path(location)
   end
 
   private
@@ -77,8 +79,8 @@ class ListingsController < ApplicationController
     @listing = Listing.find_by(id: params[:id])
   end
 
-  def validate_location_listing
-    location_from_params = Location.find_by(id: params[:location_id])
+  def validate_listings
+    location_from_params = Location.friendly.find(params[:location_id])
     redirect_to location_listings_path(location_from_params) unless @listing && @listing.location == location_from_params
   end
 

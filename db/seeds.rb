@@ -54,3 +54,15 @@ tags = Tag.all
 tags.each{|tag| tag.update(name: tag.name.downcase) }
   tag.update(name: tag.name.downcase)
 end
+
+
+location_list.each do |location|
+  location.location_long_name = location.city + " " + location.state
+  location.save
+end
+
+locations = Location.all
+
+locations.each {|location| location.update(location_long_name: "#{location.city location.state}") "#{location.city location.state}")
+
+end

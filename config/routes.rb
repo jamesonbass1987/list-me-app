@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :locations, only: [:show, :new, :create, :edit, :update, :destroy]
+  resources :locations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   resources :locations, only: [:show] do
     resources :listings
   end

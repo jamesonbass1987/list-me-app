@@ -16,4 +16,10 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless logged_in?
   end
 
+  def validate_location
+    location ||= Location.friendly.find(params[:location_id])
+    redirect_to root_path unless location
+  end
+
+
 end

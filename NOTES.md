@@ -1,8 +1,8 @@
 TODO for List.me App
 
-Add class methods (ie. most expensive listing)
-
+friendly_id gem
 Admin/Site Authorization
+
 Add site navigation links
 
 Refactor/Clean Up Code according to style guide (https://github.com/bbatsov/rails-style-guide)

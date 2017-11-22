@@ -37,14 +37,20 @@ module ListingsHelper
   end
 
   def current_listing_filter(listings, location)
-    if listings == location.listings
+    if listings == location.listings && location.listings.present?
       "Everything. The whole shebang. The whole kit and caboodle."
     else
       if listings.present?
         listings.first.category.name
       else
-        "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything in that category. Try another filter."
+        "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything."
       end
+    end
+  end
+
+  def highest_price_item_link(location)
+    if location.listings.present?
+      link_to 'I got some money to burn...show me your best.', location_listing_path(location, Listing.highest_price_item(location))
     end
   end
 

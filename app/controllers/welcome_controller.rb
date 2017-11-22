@@ -6,9 +6,9 @@ class WelcomeController < ApplicationController
   end
 
   def search
-    location = Location.find_by(id: params[:location_selector])
+    location = Location.friendly.find(params[:location_selector])
     session[:category_id_filter] = params[:category_selector]
-    
+
     redirect_to location_listings_path(location)
   end
 

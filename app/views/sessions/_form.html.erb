@@ -1,8 +1,8 @@
 <%= form_for(user, url: login_path) do |f| %>
   <%= render partial: 'shared/error_messages', locals: {form_input: user} %>
 
-  <%= f.label :email %>
-  <%= f.text_field :email, :required => true%><br>
+  <%= f.label :username %>
+  <%= f.text_field :username, :required => true%><br>
 
   <%= f.label :password %>
   <%= f.password_field :password, :required => true%><br>
