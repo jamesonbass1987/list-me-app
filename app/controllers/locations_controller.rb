@@ -3,11 +3,14 @@ class LocationsController < ApplicationController
   before_action :validate_location, only: [:show, :edit, :update, :destroy]
 
   def show
+    authorize! :show, @locations
+
     @categories = Category.all
     @listings = @location.listings
   end
 
   def index
+    authorize! :index, @locations
     @locations = Location.all
   end
 

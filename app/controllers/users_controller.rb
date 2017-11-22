@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :settings]
 
+  def show
+    authorize! :show, @user
+  end
+
   def new
     @user = User.new
   end
@@ -16,8 +20,11 @@ class UsersController < ApplicationController
     end
   end
 
-  def update
+  def edit
+    authorize! :edit, @user
+  end
 
+  def update
     if @user.update_attributes(user_params)
       redirect_to user_path(@user)
     else
@@ -27,6 +34,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @user
 
     @user.destroy
     redirect_to root_path
@@ -35,7 +43,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :username, :slug, :password, :password_confirmation, :first_name, :last_name, :profile_image_url)
+    params.require(:user).permit(:email, :username, :slug, :password, :password_confirmation, :first_name, :last_name, :profile_image_url, :role, :role_id)
   end
 
   def set_user

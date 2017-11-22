@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171121233303) do
+ActiveRecord::Schema.define(version: 20171122040921) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -65,6 +65,12 @@ ActiveRecord::Schema.define(version: 20171121233303) do
     t.string "location_long_name"
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "states", force: :cascade do |t|
     t.string "abbr", limit: 2
     t.string "name"
@@ -86,6 +92,7 @@ ActiveRecord::Schema.define(version: 20171121233303) do
     t.string "uid"
     t.string "username"
     t.string "slug"
+    t.integer "role_id", default: 1
   end
 
   create_table "zipcodes", force: :cascade do |t|

@@ -18,15 +18,15 @@ class SessionsController < ApplicationController
       end
     else
       user = User.find_by(username: params[:user][:username])
-      if user.present? && user.authenticate(params[:user][:password])
-        session[:user_id] = user.id
-        redirect_to user_path(user) and return
-      else
+      if !user.present? && user.authenticate(params[:user][:password])
         @user = User.new
         @user.errors[:base] << "Username or password was invalid. Please try again."
         render :new
       end
     end
+
+    session[:user_id] = user.id
+    redirect_to user_path(user)
   end
 
   def destroy

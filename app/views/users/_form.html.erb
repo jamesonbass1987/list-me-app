@@ -1,5 +1,5 @@
 <%= form_for user do |f| %>
-  <%= render partial 'shared/error_messages', locals: {form_input: users} %>
+  <%= render partial: 'shared/error_messages', locals: {form_input: user} %>
 
   <%= f.label :email %>
   <%= f.text_field :email %><br>
@@ -19,8 +19,9 @@
   <%= f.label :password_confirmation %>
   <%= f.password_field :password_confirmation %><br>
 
-  <%= f.label :profile_image_url, "Profile Image URL" if @user.persisted? %>
-  <%= f.text_field :profile_image_url if @user.persisted? %><br>
+  <%= render_admin_field(user, f) %>
+
+  <%= render_profile_image_field(user, f) %>
 
   <%= f.submit %>
 <% end %>

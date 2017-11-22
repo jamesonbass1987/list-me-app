@@ -60,7 +60,7 @@ gem 'mocha', group: :test
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'dotenv-rails'
-gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
 gem 'friendly_id', '~> 5.1.0'
 gem 'my_zipcode_gem'
 gem 'record_tag_helper', '~> 1.0'
+gem 'cancancan', '~> 2.0'

@@ -1,5 +1,4 @@
 class WelcomeController < ApplicationController
-
   def index
     @locations = Location.all
     @categories = Category.all

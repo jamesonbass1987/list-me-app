@@ -66,3 +66,8 @@ locations = Location.all
 locations.each {|location| location.update(location_long_name: "#{location.city location.state}") "#{location.city location.state}")
 
 end
+
+
+
+Role.create(title: 'user')
+Role.create(title: 'admin')

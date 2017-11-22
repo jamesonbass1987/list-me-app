@@ -64,6 +64,7 @@ class ListingsController < ApplicationController
   end
 
   def destroy
+
     location = @listing.location
     @listing.destroy
     redirect_to location_listings_path(location)

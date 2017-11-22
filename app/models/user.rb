@@ -11,10 +11,15 @@ class User < ApplicationRecord
 
   has_secure_password
   has_many :listings, :dependent => :destroy
+  belongs_to :role
 
 
   def full_name
     first_name + " " + last_name
+  end
+
+  def admin?
+    role.title == 'admin'
   end
 
 end

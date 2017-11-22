@@ -3,17 +3,21 @@ class CategoriesController < ApplicationController
 
   def index
     @categories = Category.all
+    authorize! :index, @categories
   end
 
   def show
+    authorize! :show, @category
   end
 
   def new
     @category = Category.new
+    authorize! :new, @category
   end
 
   def create
     @category = Category.new(category_params)
+    authorize! :create, @category
 
     if @category.save
       redirect_to categories_path
@@ -23,7 +27,7 @@ class CategoriesController < ApplicationController
   end
 
   def edit
-    @category = Category.find_by(id: params[:id])
+    authorize! :edit, @category
   end
 
   def update
