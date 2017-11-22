@@ -1,8 +1,7 @@
 TODO for List.me App
 
-friendly_id gem
+Create New Categories
 Admin/Site Authorization
-
 Add site navigation links
 
 Refactor/Clean Up Code according to style guide (https://github.com/bbatsov/rails-style-guide)

@@ -2,10 +2,15 @@
 
 <%= image_tag @user.profile_image_url %>
 
-<%= content_tag(:div, @user) do %>
+<%= div_for(@user) do %>
   <strong>Email:</strong> <%= @user.email %><br>
   <strong>Username:</strong> <%= @user.username %><br>
 <% end %>
+
+<%= div_for(@user.listings) do |listing| %>
+  <%= link_to listing.overview, location_listings_path(listing.location, listing) %>
+<% end %>
+
 
 <%= link_to "Account Settings", "/users/#{@user.id}/settings" %><br>
 <%= link_to "Edit Profile", edit_user_path %><br>
