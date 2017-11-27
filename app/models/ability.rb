@@ -9,6 +9,7 @@ class Ability
       can :manage, ListingImage, user_id: user.id
       can :create, Tag
       can :manage, User, id: user.id
+      cannot :index, User
       cannot :manage, Category
 
       if user.admin?

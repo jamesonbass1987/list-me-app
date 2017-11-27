@@ -1,6 +1,6 @@
 <%= form_for(location) do |f| %>
 
-  <%= render partial: 'shared/error_messages', locals: {form_input: location} %>
+  <%= form_errors_check(location) %>
 
   <%= f.label :city %>
   <%= f.text_field :city %><br>

@@ -43,14 +43,21 @@ module ListingsHelper
       if listings.present?
         listings.first.category.name
       else
-        "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything."
+        "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything here."
       end
     end
   end
 
   def highest_price_item_link(location)
     if location.listings.present?
-      link_to 'I got some money to burn...show me your best.', location_listing_path(location, Listing.highest_price_item(location))
+      link_to "Show me the best #{location.city} has to offer.", location_listing_path(location, Listing.highest_price_item(location))
+    end
+  end
+
+  def delete_edit_listing_links(listing)
+    if can? :destroy, listing
+      ((link_to 'Delete', location_listing_path(@listing.location, @listing), :method => :delete, :class => 'btn btn-danger') + " " +
+      (link_to "Edit", edit_location_listing_path(@listing.location, @listing), :class => 'btn btn-warning'))
     end
   end
 

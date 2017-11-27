@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :navbar_locations_list
 
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = exception.message
@@ -21,6 +21,12 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless logged_in?
   end
 
+  def redirect_to_profile_if_logged_in
+    if current_user
+      redirect_to user_path(current_user) and return
+    end
+  end
+
   def validate_location
     if params[:location_id]
       location ||= Location.friendly.find(params[:location_id])
@@ -30,9 +36,8 @@ class ApplicationController < ActionController::Base
     redirect_to root_path unless location
   end
 
-  def authenticate_user!
-
+  def navbar_locations_list
+    Location.all
   end
-
 
 end

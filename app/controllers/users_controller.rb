@@ -1,5 +1,12 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :settings]
+  before_action :redirect_to_profile_if_logged_in, only: :new
+
+
+  def index
+    @users = User.all
+    authorize! :index, current_user
+  end
 
   def show
     authorize! :show, @user
@@ -16,7 +23,7 @@ class UsersController < ApplicationController
       session[:user_id] = @user.id
       redirect_to user_path(@user)
     else
-      render :new
+      render :new and return
     end
   end
 
@@ -43,7 +50,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email, :username, :slug, :password, :password_confirmation, :first_name, :last_name, :profile_image_url, :role, :role_id)
+    params.require(:user).permit(:email, :username, :slug, :password, :password_confirmation, :profile_image_url, :role, :role_id)
   end
 
   def set_user

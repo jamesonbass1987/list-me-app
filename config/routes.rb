@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   resources :locations, only: [:show] do
     resources :listings
   end
+
 end

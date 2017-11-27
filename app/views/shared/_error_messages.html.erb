@@ -1,12 +1,7 @@
-<% if form_input.errors.any? %>
-  <div id="error_explanation">
-    <div class="alert alert-danger">
-      The form contains <%= pluralize(form_input.errors.count, "error") %>.
-    </div>
-    <ul>
+<%= content_tag :div, "The form contains #{pluralize(form_input.errors.count, 'error')}" , :class => 'alert alert-danger' do %>
+  <%= content_tag :ul do %>
     <% form_input.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
+      <%= content_tag(:li, msg) %>
     <% end %>
-    </ul>
-  </div>
+  <% end %>
 <% end %>

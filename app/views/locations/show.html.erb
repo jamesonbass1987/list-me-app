@@ -1,4 +1,3 @@
-<h1>ADMIN PAGE</h1>
 <h1><%= @location.full_location_name %></h1>
 
 <h3>All Listings:</h3>
@@ -10,4 +9,6 @@
 <% end %>
 
 
-<%= link_to "Delete Location", location_path(@location.id), :method => :delete%>
+<%= link_to "Edit", edit_location_path(@location.id), :class => 'btn btn-warning'%>
+<%= link_to "Delete Location", location_path(@location.id), :method => :delete, :class => 'btn btn-danger', :remote => 'true'%>
+<%= render 'locations/manage_locations_button' %>

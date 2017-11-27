@@ -1,6 +1,7 @@
-<h1>Locations Overview (ADMIN PAGE)</h1>
-
+<h1>Locations Manager</h1>
 
 <%= content_tag(:ul) do %>
   <%= locations_list(@locations) %>
 <% end %>
+
+<%= link_to "Create New Location", new_location_path, :class => 'btn btn-primary'%>

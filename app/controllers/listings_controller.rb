@@ -30,8 +30,8 @@ class ListingsController < ApplicationController
   end
 
   def new
-    @location = Location.friendly.find(params[:location_id])
-    @listing = @location.listings.build
+    location = Location.friendly.find(params[:location_id])
+    @listing = location.listings.build
     @categories = Category.all
     5.times {@listing.listing_images.build}
     5.times {@listing.tags.build}
@@ -45,13 +45,14 @@ class ListingsController < ApplicationController
     if @listing.save
       redirect_to location_listing_path(@listing.location, @listing)
     else
-      render :new
+      @categories = Category.all
+      render :new and return
     end
   end
 
   def edit
     @categories = Category.all
-    @location = @listing.location
+    5.times {@listing.listing_images.build}
   end
 
   def update

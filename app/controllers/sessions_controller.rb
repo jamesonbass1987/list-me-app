@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  before_action :redirect_to_profile_if_logged_in, only: :new
 
   def new
     @user = User.new
@@ -17,11 +18,11 @@ class SessionsController < ApplicationController
         u.last_name = fb_auth[:info][:name].split(" ")[1]
       end
     else
-      user = User.find_by(username: params[:user][:username])
-      if !user.present? && user.authenticate(params[:user][:password])
+      user ||= User.find_by(username: params[:user][:username])
+      if !user.present? || !user.authenticate(params[:user][:password])
         @user = User.new
-        @user.errors[:base] << "Username or password was invalid. Please try again."
-        render :new
+        @user.errors[:base] << "Your login credentials were invalid. Please try again."
+        render :new and return
       end
     end
 

@@ -23,7 +23,6 @@ class LocationsController < ApplicationController
     @location = Location.new(location_params)
 
     if @location.save
-      binding.pry
       redirect_to location_path(@location)
     else
       render :new

@@ -1,4 +1,4 @@
-<h1>Welcome <%= @user.full_name %>!</h1>
+<h1>Welcome <%= @user.username %>!</h1>
 
 <%= image_tag @user.profile_image_url %>
 
@@ -7,12 +7,15 @@
   <strong>Username:</strong> <%= @user.username %><br>
 <% end %>
 
+<h3>Your Listings:</h3>
+
 <%= div_for(@user.listings) do |listing| %>
-  <%= link_to listing.overview, location_listings_path(listing.location, listing) %>
+  <%= link_to listing.overview, location_listing_path(listing.location, listing.id) %>
 <% end %>
 
+<h3>Account Settings:</h3>
 
-<%= link_to "Account Settings", "/users/#{@user.id}/settings" %><br>
-<%= link_to "Edit Profile", edit_user_path %><br>
-<%= link_to "Log Out", logout_path, :method => :delete %>
-<%= link_to "Delete Account", user_path(@user.id), :method => :delete%>
+<%= link_to "Edit Profile", edit_user_path, :class => 'btn btn-warning' %>
+<%= link_to "Delete Account", user_path(@user.id), :method => :delete, :class => 'btn btn-danger'%>
+
+<%= display_admin_profile_tools(@user) %>

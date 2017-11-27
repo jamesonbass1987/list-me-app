@@ -1,0 +1,5 @@
+<h1>User Management</h1>
+
+<%= div_for(@users) do |user| %>
+  <%= link_to user.username, user_path(user) %>
+<% end %>

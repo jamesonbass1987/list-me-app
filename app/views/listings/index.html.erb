@@ -1,6 +1,6 @@
 <h1>Listings in <%= @location.full_location_name %></h1>
 
-<p>Currently viewing listings for: <%= current_listing_filter(@listings, @location) %><p>
+<p>Currently viewing: <%= current_listing_filter(@listings, @location) %><p>
 
 <!--  Listing Search Filter -->
 <%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form') do %>

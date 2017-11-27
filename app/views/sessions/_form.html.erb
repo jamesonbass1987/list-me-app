@@ -1,12 +1,11 @@
-<%= form_for(user, url: login_path) do |f| %>
-  <%= render partial: 'shared/error_messages', locals: {form_input: user} %>
+<%= form_for(user, url: login_path, layout: :basic) do |f| %>
+  <%= form_errors_check(user) %>
 
   <%= f.label :username %>
-  <%= f.text_field :username, :required => true%><br>
-
+  <%= f.text_field :username%><br>
   <%= f.label :password %>
-  <%= f.password_field :password, :required => true%><br>
+  <%= f.password_field :password%><br>
 
-  <%= submit_tag 'Sign In'%>
+  <%= f.submit 'Sign In'%>
 
 <% end %>
