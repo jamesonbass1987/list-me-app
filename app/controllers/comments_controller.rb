@@ -1,18 +1,18 @@
 class CommentsController < ApplicationController
 
   def create
-    binding.pry
 
-    listing = Listing.find_by(id: params[:listing_id])
+    @listing = Listing.find_by(id: params[:listing_id])
 
-    comment = Comment.new(comment_params)
-    comment.user = current_user
+    @comment = Comment.new(comment_params)
+    @comment.user = current_user
 
-    binding.pry
-
-    comment.save
-
-    redirect_to location_listing_path(listing.location, listing)
+    if @comment.save
+      redirect_to location_listing_path(listing.location, listing)
+    else
+      @comment.errors[:base]
+      render "listings/show"
+    end
   end
 
   def edit

@@ -54,6 +54,7 @@
   <h5>Leave A Comment:</h5>
 
   <%= form_for([@listing.location, @listing, @comment]) do |f| %>
+    <%= form_errors_check(@comment) %>
     <%= f.text_area :content %><br>
     <%= f.hidden_field :location_id, :value => @listing.location_id %>
     <%= f.hidden_field :listing_id, :value => @listing.id %>
