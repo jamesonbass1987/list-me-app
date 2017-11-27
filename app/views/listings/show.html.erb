@@ -11,7 +11,7 @@
 <h3>Description:</h4>
 <p><%= @listing.description %></p>
 
-<p><strong>Price:</strong> $<%= @listing.price %></p>
+<p><strong>Price:</strong> <%= number_to_currency(@listing.price) %></p>
 
 <p><strong>Posted By:</strong> <%= @listing.user.username %></p>
 

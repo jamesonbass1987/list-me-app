@@ -61,4 +61,8 @@ module ListingsHelper
     end
   end
 
+  def listing_overview(listing)
+    listing.title + " - " + number_to_currency(listing.price)
+  end
+
 end
