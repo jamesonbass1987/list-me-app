@@ -31,13 +31,15 @@
         <li>
 
           <strong><%= comment.user.username %></strong>: <%= comment.content %><br>
-          <strong>Status:</strong> <%= comment.comment_status.name %><br>
+          <% if comment.user != @listing.user %>
+            <strong>Status:</strong> <%= comment.comment_status.name %><br>
+          <% end %>
           <strong>Posted At:</strong> <%= comment.created_at %><br>
 
           <% if comment.user == current_user %>
 
           <%= link_to("Edit Comment", edit_location_listing_comment_path(@listing.location, @listing, comment), :class => 'btn btn-info') %>
-            <%= link_to("Delete Comment", location_listing_comment_path(@listing.location, @listing, comment), :method => :delete, :class => 'btn btn-danger') %>
+          <%= link_to("Delete Comment", location_listing_comment_path(@listing.location, @listing, comment), :method => :delete, :class => 'btn btn-danger') %>
 
           <% end %>
         </li>
