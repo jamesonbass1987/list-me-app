@@ -12,7 +12,7 @@ class Ability
       cannot :index, User
       cannot :manage, Category
       can :manage, Comment, user_id: user.id
-      can :manage, CommentStatus, user_id: user.id
+      can :manage, CommentStatus, user: user
 
       if user.admin?
         can :manage, :all

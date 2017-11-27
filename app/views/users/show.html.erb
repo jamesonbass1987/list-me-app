@@ -10,7 +10,7 @@
 <h3>Your Listings:</h3>
 
 <%= div_for(@user.listings) do |listing| %>
-  <%= link_to listing.overview, location_listing_path(listing.location, listing.id) %>
+  <%= link_to listing_overview(listing), location_listing_path(listing.location, listing.id) %>
 <% end %>
 
 <h3>Account Settings:</h3>

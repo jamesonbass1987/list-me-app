@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def set_listing
+    @listing = Listing.find_by(id: params[:id])
+  end
+
   def logged_in?
     !!current_user
   end

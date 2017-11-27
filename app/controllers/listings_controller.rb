@@ -26,7 +26,7 @@ class ListingsController < ApplicationController
   end
 
   def show
-
+    @comment = @listing.comments.build
   end
 
   def new
@@ -75,10 +75,6 @@ class ListingsController < ApplicationController
 
   def listing_params
     params.require(:listing).permit(:title, :description, :price, :location_id, :user_id, :category_id, tag_ids:[], tags_attributes:[:name], listing_image_ids:[], listing_images_attributes:[:image_url])
-  end
-
-  def set_listing
-    @listing = Listing.find_by(id: params[:id])
   end
 
   def validate_listings

@@ -20,3 +20,44 @@
 
 
 <%= delete_edit_listing_links(@listing) %>
+
+
+<h3>Comments:</h3>
+
+<% if !@listing.comments.first.content.nil? %>
+  <ul>
+    <% @listing.comments.each do |comment| %>
+      <% if !comment.content.nil? %>
+        <li>
+
+          <strong><%= comment.user.username %></strong>: <%= comment.content %><br>
+          <strong>Status:</strong> <%= comment.comment_status.name %><br>
+          <strong>Posted At:</strong> <%= comment.created_at %><br>
+
+          <% if comment.user == current_user %>
+
+          <%= link_to("Edit Comment", edit_location_listing_comment_path(@listing.location, @listing, comment), :class => 'btn btn-info') %>
+            <%= link_to("Delete Comment", location_listing_comment_path(@listing.location, @listing, comment), :method => :delete, :class => 'btn btn-danger') %>
+
+          <% end %>
+        </li>
+
+
+
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if logged_in? %>
+
+  <h5>Leave A Comment:</h5>
+
+  <%= form_for([@listing.location, @listing, @comment]) do |f| %>
+    <%= f.text_area :content %><br>
+    <%= f.hidden_field :location_id, :value => @listing.location_id %>
+    <%= f.hidden_field :listing_id, :value => @listing.id %>
+    <%= f.submit %>
+  <% end %>
+
+<% end %>

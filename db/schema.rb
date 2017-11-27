@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20171127194956) do
     t.string "content"
     t.integer "user_id"
     t.integer "listing_id"
-    t.integer "comment_status_id"
+    t.integer "comment_status_id", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["comment_status_id"], name: "index_comments_on_comment_status_id"

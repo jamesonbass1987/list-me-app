@@ -1,0 +1,11 @@
+<h1>Edit Comment</h1>
+
+<%= form_for [@comment.listing.location, @comment.listing, @comment] do |f| %>
+
+  <%= f.text_area :content %><br>
+
+  <%= f.collection_select :comment_status_id, CommentStatus.all, :id, :name %><br>
+
+  <%= f.submit %>
+
+<% end %>
