@@ -14,3 +14,12 @@
 
  @import "bootstrap-sprockets";
  @import "bootstrap";
+
+
+
+ /*---LISTINGS---*/
+
+ .listing-image {
+   height: 300px;
+   width: auto
+ }

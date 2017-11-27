@@ -32,7 +32,7 @@ module ListingsHelper
 
   def listing_feature_image(listing)
     if !listing.listing_images.empty?
-      image_tag listing.listing_images.first.image_url
+      image_tag(listing.listing_images.first.image_url, :class => 'listing-image')
     end
   end
 

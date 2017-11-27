@@ -5,7 +5,7 @@
 <h3><%= @listing.title %></h3>
 
 <% @listing.listing_images.each do |image| %>
-  <%= image_tag(image.image_url) %>
+  <%= image_tag(image.image_url, :class => 'listing-image') %>
 <% end %>
 
 <h3>Description:</h4>
