@@ -11,6 +11,8 @@ class Ability
       can :manage, User, id: user.id
       cannot :index, User
       cannot :manage, Category
+      can :manage, Comment, user_id: user.id
+      can :manage, CommentStatus, user_id: user.id
 
       if user.admin?
         can :manage, :all

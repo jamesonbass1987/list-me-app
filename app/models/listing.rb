@@ -10,6 +10,9 @@ class Listing < ApplicationRecord
   has_many :listing_tags
   has_many :tags, through: :listing_tags
 
+  has_many :comments
+  has_many :comment_statuses, through: :comments
+
   accepts_nested_attributes_for :tags
   accepts_nested_attributes_for :listing_images
 

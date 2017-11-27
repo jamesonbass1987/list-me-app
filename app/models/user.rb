@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :listings, :dependent => :destroy
   belongs_to :role
 
+
   def admin?
     role.title == 'admin'
   end
