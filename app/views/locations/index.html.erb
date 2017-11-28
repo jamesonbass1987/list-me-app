@@ -1,7 +1,11 @@
 <h1 class="heading-text">Manage Locations</h1>
 
 <%= content_tag(:ul) do %>
-  <%= locations_list(@locations) %>
+  <% @locations.each do |location| %>
+    <%= content_tag :li do %>
+      <%= link_to full_location_name(location), location_path(location) %>
+    <% end %>
+  <% end %>
 <% end %>
 
 <%= link_to "Create New Location", new_location_path, :class => 'btn btn-outline-success btn-block'%>

@@ -1,7 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :edit, :update, :destroy]
-  before_action :validate_location, except: [:index, :new, :update]
-
+  before_action :validate_location, except: [:index, :new, :create, :update]
 
   def show
     authorize! :show, @locations
