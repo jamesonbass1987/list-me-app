@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
     session[:user_id] ||= @user.id
 
     if session[:user_id]
-      redirect_to(user_path(@user))
+      redirect_to(user_path(@user)) and return
     else
       render :new and return
     end
