@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
   def set_listing
     @listing = Listing.find_by(id: params[:id])
   end
@@ -27,7 +26,8 @@ class ApplicationController < ActionController::Base
 
   def redirect_to_profile_if_logged_in
     if current_user
-      redirect_to user_path(current_user) and return
+      redirect_to user_path(current_user)
+      return
     end
   end
 
@@ -43,5 +43,4 @@ class ApplicationController < ActionController::Base
   def navbar_locations_list
     Location.all
   end
-
 end

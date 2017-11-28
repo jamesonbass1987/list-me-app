@@ -6,4 +6,8 @@ module LocationsHelper
     end
   end
 
+  def full_location_name(location)
+    "#{location.city}, #{location.state}"
+  end
+
 end

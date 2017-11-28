@@ -6,33 +6,41 @@ class SessionsController < ApplicationController
   end
 
   def create
-
     fb_auth ||= request.env["omniauth.auth"]
 
     if fb_auth
-      user = User.find_or_create_by(email: fb_auth[:info][:email]) do |u|
-        u.uid = fb_auth[:uid]
-        u.profile_image_url = fb_auth[:info][:image]
-        u.password = SecureRandom.hex(10) unless u.password.present?
-        u.first_name = fb_auth[:info][:name].split(" ")[0]
-        u.last_name = fb_auth[:info][:name].split(" ")[1]
-      end
+      auth_by_facebook
     else
-      user ||= User.find_by(username: params[:user][:username])
-      if !user.present? || !user.authenticate(params[:user][:password])
-        @user = User.new
-        @user.errors[:base] << "Your login credentials were invalid. Please try again."
-        render :new and return
-      end
+      auth_by_username
     end
 
     session[:user_id] = user.id
-    redirect_to user_path(user)
+    redirect_to(user_path(user))
   end
 
   def destroy
     session.delete :user_id
-    redirect_to root_path
+    redirect_to(root_path)
   end
 
+  private
+  def auth_by_facebook
+    user = User.find_or_create_by!(email: fb_auth[:info][:email]) do |u|
+      u.uid = fb_auth[:uid]
+      u.profile_image_url = fb_auth[:info][:image]
+      u.password = SecureRandom.hex(10) unless u.password.present?
+      u.first_name = fb_auth[:info][:name].split(" ")[0]
+      u.last_name = fb_auth[:info][:name].split(" ")[1]
+    end
+  end
+
+  def auth_by_username
+    user ||= User.find_by(username: params[:user][:username])
+    if !user.present? || !user.authenticate(params[:user][:password])
+      @user = User.new
+      @user.errors[:base] << "Your login credentials were invalid. Please try again."
+      render :new
+      return
+    end
+  end
 end

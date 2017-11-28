@@ -48,12 +48,6 @@ module ListingsHelper
     end
   end
 
-  def highest_price_item_link(location)
-    if location.listings.present?
-      link_to "Show me the best #{location.city} has to offer.", location_listing_path(location, Listing.highest_price_item(location))
-    end
-  end
-
   def delete_edit_listing_links(listing)
     if can? :destroy, listing
       ((link_to 'Delete', location_listing_path(@listing.location, @listing), :method => :delete, :class => 'btn btn-danger') + " " +
@@ -62,7 +56,7 @@ module ListingsHelper
   end
 
   def listing_overview(listing)
-    listing.title + " - " + number_to_currency(listing.price)
+    "#{listing.title} - #{number_to_currency(listing.price)}"
   end
 
 end

@@ -1,10 +1,13 @@
 class Tag < ApplicationRecord
-  validates :name, presence: true
   has_many :listing_tags
   has_many :listings, through: :listing_tags
 
-  def downcase_name
-    name.downcase
+  validates :name, presence: true
+
+  before_create :strip_tag
+
+  def strip_tag
+    name = name.strip.downcaseå
   end
 
 end

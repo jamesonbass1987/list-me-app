@@ -32,7 +32,7 @@
             </a>
             <%= content_tag :div, :class => "dropdown-menu", html: "aria-labelledby => 'navbarDropdown'"  do %>
               <% navbar_locations_list.each do |location| %>
-                <%= link_to location.full_location_name, location_listings_path(location), :class => 'dropdown-item' %>
+                <%= link_to full_location_name(location), location_listings_path(location), :class => 'dropdown-item' %>
               <% end %>
             <% end %>
           </li>

@@ -1,5 +1,5 @@
 <% locations.each do |location| %>
   <%= content_tag :li do %>
-    <%= link_to location.full_location_name, location_path(location) %>
+    <%= link_to full_location_name(location), location_path(location) %>
   <% end %>
 <% end %>

@@ -1,17 +1,16 @@
 class Listing < ApplicationRecord
-  validates :title, presence: true
-  validates :price, presence: true
-  validates :description, length: {:maximum => 500}
-
   belongs_to :location
   belongs_to :category
   belongs_to :user
   has_many :listing_images, :dependent => :destroy
   has_many :listing_tags
   has_many :tags, through: :listing_tags
-
   has_many :comments
   has_many :comment_statuses, through: :comments
+
+  validates :title, presence: true
+  validates :price, presence: true
+  validates :description, length: {:maximum => 500}
 
   accepts_nested_attributes_for :tags
   accepts_nested_attributes_for :listing_images
@@ -42,11 +41,11 @@ class Listing < ApplicationRecord
   end
 
   def self.listings_in_category(category, location)
-      where("category_id = ? AND location_id = ?", category.id, location.id)
+      where("category_id = :category_id AND location_id = :location_id", category_id: category.id, location_id: location.id)
   end
 
   def self.highest_price_item(location)
-      where("location_id = ?", location.id).order(price: :desc).first
+      find_by(:location_id => location.id).order(price: :desc).first
   end
 
   def self.all_user_listings(user)

@@ -1,4 +1,4 @@
-<h1>Listings in <%= @location.full_location_name %></h1>
+<h1>Listings in <%= full_location_name(@location) %></h1>
 
 <p>Currently viewing: <%= current_listing_filter(@listings, @location) %><p>
 
@@ -21,8 +21,13 @@
     </p>
 <% end %>
 
-<%= highest_price_item_link(@location) %>
+<%= link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money" %>
 
 <%= content_tag(:ul) do %>
   <%= listings_list(@listings) %>
+<% end %>
+
+
+<% if can? :create, Listing %>
+<%= link_to("Create New Listing", new_location_listing_path(@location), :class => 'btn btn-primary') %>
 <% end %>

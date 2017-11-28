@@ -19,17 +19,13 @@ class LocationsController < ApplicationController
   end
 
   def create
-
     @location = Location.new(location_params)
 
     if @location.save
-      redirect_to location_path(@location)
+      redirect_to(location_path(@location))
     else
       render :new
     end
-  end
-
-  def edit
   end
 
   def update
@@ -42,11 +38,10 @@ class LocationsController < ApplicationController
 
   def destroy
     @location.destroy
-    redirect_to locations_path
+    redirect_to(locations_path)
   end
 
   private
-
   def location_params
     params.require(:location).permit(:city, :state, :slug, :location_long_name)
   end
@@ -54,5 +49,4 @@ class LocationsController < ApplicationController
   def set_location
     @location = Location.friendly.find(params[:id])
   end
-
 end

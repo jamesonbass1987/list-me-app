@@ -1,7 +1,5 @@
 TODO for List.me App
 
-Add site navigation links (with auth conditionals)
-
 Refactor/Clean Up Code according to style guide (https://github.com/bbatsov/rails-style-guide)
 Airbnb rails style guide - https://github.com/airbnb/ruby#line-length
 

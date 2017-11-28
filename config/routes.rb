@@ -9,14 +9,15 @@ Rails.application.routes.draw do
   post '/login' => 'sessions#create'
   delete '/logout' => 'sessions#destroy'
 
+
   get '/auth/facebook/callback' => 'sessions#create'
   resources :sessions, only: [:create, :destroy]
 
   resources :users
   resources :categories
 
+  get '/locations/:id/listings/take_my_money' => 'listings#take_my_money'
   resources :locations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-
   resources :locations, only: [:show] do
     resources :listings do
       resources :comments, only: [:create, :update, :destroy, :edit]
