@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :edit, :update, :destroy]
-  before_action :validate_location, only: [:show, :edit, :update, :destroy]
+  before_action :validate_location
 
   def show
     authorize! :show, @locations
@@ -46,6 +46,7 @@ class LocationsController < ApplicationController
     params.require(:location).permit(:city, :state, :slug, :location_long_name)
   end
 
+  #sets location for views based on id param
   def set_location
     @location = Location.friendly.find(params[:id])
   end

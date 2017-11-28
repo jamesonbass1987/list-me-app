@@ -50,6 +50,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(:email, :username, :slug, :password, :password_confirmation, :profile_image_url, :role, :role_id)
   end
 
+  #set user based on id params for views
   def set_user
     @user = User.friendly.find(params[:id])
   end

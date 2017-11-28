@@ -29,6 +29,8 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  #login users who are oauthing via facebook
   def auth_by_facebook(fb_auth)
     @user = User.find_or_create_by!(email: fb_auth[:info][:email]) do |u|
       u.uid = fb_auth[:uid]
@@ -39,6 +41,7 @@ class SessionsController < ApplicationController
     end
   end
 
+  #login users who are signing in through username and password
   def auth_by_username
     @user ||= User.find_by(username: params[:user][:username])
     if !@user.present? || !@user.authenticate(params[:user][:password])

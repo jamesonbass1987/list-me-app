@@ -48,6 +48,7 @@ class CategoriesController < ApplicationController
     params.require(:category).permit(:name)
   end
 
+  #sets category based on id params for appropriate views
   def set_category
     @category = Category.find_by(id: params[:id])
   end

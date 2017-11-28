@@ -35,6 +35,7 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:content, :user_id, :listing_id, :comment_status_id)
   end
 
+  #sets comment for views based on id param
   def find_comment
     @comment = Comment.find_by(id: params[:id])
   end
