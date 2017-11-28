@@ -34,12 +34,14 @@
   margin: 20px;
 }
 
-.nav-left {
-  float: left;
+.main-heading-text {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 70px;
 }
 
-.nav-right {
-  float: right;
+.main-heading-subtext {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
 }
 
  /*---LISTINGS---*/
