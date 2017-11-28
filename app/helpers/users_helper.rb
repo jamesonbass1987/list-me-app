@@ -1,14 +1,15 @@
 module UsersHelper
 
   def render_admin_field(user, f)
-    if current_user && current_user.admin?
-      f.collection_select :role_id, Role.all, :id, :title
+    if logged_in? && current_user.admin?
+      ((f.label :role_id, "Role") +
+      (f.collection_select :role_id, Role.all, :id, :title, {}, {:class => 'form-control custom-select'}))
     end
   end
 
   def render_profile_image_field(user, f)
     if user.persisted?
-      f.text_field :profile_image_url.titleize
+      ((f.label :profile_image_url, "Profile Image URL") + (f.text_field :profile_image_url, :class => 'form-control'))
     end
   end
 

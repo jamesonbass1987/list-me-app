@@ -1,15 +1,30 @@
 <%= form_for(user) do |f| %>
   <%= form_errors_check(user) %>
 
-  <%= f.label :email %>
-  <%= f.text_field :email %><br>
-  <%= f.label :username %>
-  <%= f.text_field :username %><br>
-  <%= f.label :password %>
-  <%= f.password_field :password %><br>
-  <%= f.label :password_confirmation %>
-  <%= f.password_field :password_confirmation %><br>
-  <%= render_admin_field(user, f) %>
-  <%= render_profile_image_field(user, f) %>
-  <%= f.submit "Sign Up", :class => 'btn btn-success' %>
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :email %>
+    <%= f.text_field :email, :class => 'form-control' %>
+  <% end %>
+
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :username %>
+    <%= f.text_field :username, :class => 'form-control' %>
+  <% end %>
+
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :password %>
+    <%= f.password_field :password, :class => 'form-control' %>
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, :class => 'form-control' %>
+  <% end %>
+
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= render_profile_image_field(user, f) %>
+  <% end %>
+
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= render_admin_field(user, f) %>
+  <% end %>
+
+  <%= f.submit :class => 'btn btn-outline-success btn-block' %>
 <% end %>

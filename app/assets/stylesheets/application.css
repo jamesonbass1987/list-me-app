@@ -50,6 +50,14 @@
   font-weight: 400;
 }
 
+ /*---USER PROFILE---*/
+
+ .profile-image {
+   height: 250px;
+   width: auto;
+   align: center;
+ }
+
  /*---LISTINGS---*/
 
  .listing-image {
