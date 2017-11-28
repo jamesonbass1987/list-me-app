@@ -53,7 +53,7 @@
 
 <% if logged_in? %>
 
-  <h5>Leave A Comment:</h5>
+  <h5>Leave A Question About The Item:</h5>
 
   <%= form_for([@listing.location, @listing, @comment]) do |f| %>
     <%= form_errors_check(@comment) %>

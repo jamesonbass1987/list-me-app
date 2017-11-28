@@ -77,9 +77,7 @@ class ListingsController < ApplicationController
 
   def validate_listings
     location_from_params = Location.friendly.find(params[:location_id])
-
-    redirect_to location_listings_path(location_from_params)
-    unless @listing && @listing.location == location_from_params
+    redirect_to location_listings_path(location_from_params) unless @listing && @listing.location == location_from_params
   end
 
   def listings_matching_query(search_term, listings)

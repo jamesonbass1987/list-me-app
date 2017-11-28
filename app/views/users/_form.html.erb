@@ -1,4 +1,4 @@
-<%= form_for(user, layout: :basic) do |f| %>
+<%= form_for(user) do |f| %>
   <%= form_errors_check(user) %>
 
   <%= f.label :email %>
@@ -11,6 +11,5 @@
   <%= f.password_field :password_confirmation %><br>
   <%= render_admin_field(user, f) %>
   <%= render_profile_image_field(user, f) %>
-
-  <%= f.submit "Sign Up" %>
+  <%= f.submit "Sign Up", :class => 'btn btn-success' %>
 <% end %>

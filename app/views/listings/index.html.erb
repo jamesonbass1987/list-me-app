@@ -21,7 +21,7 @@
     </p>
 <% end %>
 
-<%= link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money" %>
+<%= link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money", :class => 'btn btn-primary' %>
 
 <%= content_tag(:ul) do %>
   <%= listings_list(@listings) %>

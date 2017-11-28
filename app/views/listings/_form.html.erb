@@ -8,7 +8,7 @@
   <%= f.text_area :description, cols: 100, rows: 15 %><br>
 
   <%= f.label :price %>
-  <%= f.number_field :price %><br>
+  <%= f.number_field :price, :step => 0.01 %><br>
 
   <%= f.label :category %>
   <%= f.collection_select :category_id, @categories, :id, :name %><br>

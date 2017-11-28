@@ -10,7 +10,7 @@ class Listing < ApplicationRecord
 
   validates :title, presence: true
   validates :price, presence: true
-  validates :description, length: {:maximum => 500}
+  validates :description, length: {:maximum => 500}, presence: true
 
   accepts_nested_attributes_for :tags
   accepts_nested_attributes_for :listing_images
@@ -45,7 +45,7 @@ class Listing < ApplicationRecord
   end
 
   def self.highest_price_item(location)
-      find_by(:location_id => location.id).order(price: :desc).first
+      where("location_id = ?", location.id).order(price: :desc).first
   end
 
   def self.all_user_listings(user)

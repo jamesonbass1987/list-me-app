@@ -1,7 +1,5 @@
-<%= content_tag :div, "The form contains #{pluralize(form_input.errors.count, 'error')}" , :class => 'alert alert-danger' do %>
-  <%= content_tag :ul do %>
+  <%= content_tag :ul, :class => 'alert alert-danger' do %>
     <% form_input.errors.full_messages.each do |msg| %>
       <%= content_tag(:li, msg) %>
     <% end %>
   <% end %>
-<% end %>

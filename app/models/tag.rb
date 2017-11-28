@@ -7,7 +7,7 @@ class Tag < ApplicationRecord
   before_create :strip_tag
 
   def strip_tag
-    name = name.strip.downcaseå
+    self.name = self.name.strip.downcase
   end
 
 end
