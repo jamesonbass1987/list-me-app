@@ -1,8 +1,8 @@
 <%= form_for category do |f| %>
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :name %>
+    <%= f.text_field :name, :class => 'form-control'%>
+  <% end %>
 
-  <%= f.label :name %>
-  <%= f.text_field :name %><br>
-
-  <%= f.submit %>
-
+  <%= f.submit :class => 'btn btn-outline-success btn-block'%><br>
 <% end %>

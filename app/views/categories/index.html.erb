@@ -1,4 +1,4 @@
-<h1>View All Categories ADMIN VIEW</h1>
+<h1 class="heading-text">Manage Categories</h1>
 
 <%= content_tag(:ul) do %>
   <% @categories.each do |category| %>
@@ -8,4 +8,4 @@
   <% end %>
 <% end %>
 
-<%= link_to "Create New Category", new_category_path %>
+<%= link_to "Create New Category", new_category_path, :class => 'btn btn-outline-success btn-block' %>
