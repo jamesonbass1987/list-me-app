@@ -1,12 +1,8 @@
 <h1><%= full_location_name(@location) %></h1>
 
-<h3>All Listings:</h3>
-
-<%= content_tag(:ul) do %>
-  <% @listings.each do |listing| %>
-    <%= content_tag(:li, (link_to listing.overview, location_listing_path(@location, listing))) %>
-  <% end %>
-<% end %>
+<h3 class="heading-text">All Listings:</h3>
+  <%= render partial: 'listings/listings_list', locals: {listings: @listings} %>
+</div>
 
 <%= link_to "Edit", edit_location_path(@location.id), :class => 'btn btn-warning'%>
 <%= link_to "Delete Location", location_path(@location.id), :method => :delete, :class => 'btn btn-danger', :remote => 'true'%>

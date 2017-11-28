@@ -1,6 +1,13 @@
-<% listings.each do |listing| %>
-  <%= content_tag :li do %>
-    <%= listing_feature_image(listing) %>
-    <%= link_to listing_overview(listing), location_listing_path(listing.location, listing) %>
+<div class="row">
+  <%= div_for(listings, :class=>"card text-center listing-card") do |listing| %>
+      <%= image_tag 'https://dummyimage.com/400x300/000/fff', :class=>"card-img-top" %>
+      <%= content_tag :div, :class => "card-body" do %>
+        <h5 class="card-title listing-title-text"><%= listing.title %></h5>
+        <span><%= number_to_currency(listing.price) %></span>
+      <% end %>
+      <%= content_tag :div, :class => "card-footer" do %>
+        <%= link_to 'View Listing', location_listing_path(listing.location, listing.id), :class=>"btn btn-outline-success" %>
+        <%= display_owner_listing_controls(current_user, listing) %>
+      <% end %>
   <% end %>
-<% end %>
+</div>

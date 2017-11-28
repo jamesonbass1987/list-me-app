@@ -59,4 +59,11 @@ module ListingsHelper
     "#{listing.title} - #{number_to_currency(listing.price)}"
   end
 
+  def display_owner_listing_controls(user, listing)
+    if can? :edit, Listing
+      ((link_to 'Edit', edit_location_listing_path(listing.location, listing.id), :class=>"btn btn-outline-warning") + " " +
+      (link_to 'Delete', location_listing_path(listing.location, listing), :method => :delete, :class=>"btn btn-outline-danger"))
+    end
+  end
+
 end
