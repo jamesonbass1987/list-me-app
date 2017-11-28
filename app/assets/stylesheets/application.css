@@ -15,6 +15,10 @@
  @import "bootstrap-sprockets";
  @import "bootstrap";
 
+* {
+    font-family: 'Lato', sans-serif;
+}
+
  body, html {
      height: 100%;
  }
@@ -34,13 +38,15 @@
   margin: 20px;
 }
 
-.main-heading-text {
+.heading-text {
   font-family: 'Maven Pro', sans-serif;
-  font-size: 70px;
 }
 
-.main-heading-subtext {
-  font-family: 'Lato', sans-serif;
+.main-page {
+  font-size: 60px;
+}
+
+.subtext {
   font-weight: 400;
 }
 

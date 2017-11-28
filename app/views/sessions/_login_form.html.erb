@@ -1,11 +1,15 @@
 <%= form_for(user, url: '/login') do |f| %>
   <%= form_errors_check(user) %>
 
-  <%= f.label :username %>
-  <%= f.text_field :username%><br>
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :username %>
+    <%= f.text_field :username, :class => 'form-control'%>
+  <% end %>
 
-  <%= f.label :password %>
-  <%= f.password_field :password%><br>
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :password %>
+    <%= f.text_field :password, :class => 'form-control'%>
+  <% end %>
 
-  <%= f.submit 'Sign In', :class => 'btn btn-success'%>
+  <%= f.submit 'Sign In', :class => 'btn btn-outline-success btn-block'%>
 <% end %>
