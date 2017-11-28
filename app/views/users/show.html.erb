@@ -1,21 +1,31 @@
-<h1>Welcome <%= @user.username %>!</h1>
+<h1 class="heading-text">Welcome <%= @user.username %>!</h1>
 
-<%= image_tag @user.profile_image_url %>
+<%= image_tag @user.profile_image_url, :class => 'profile-image rounded-circle mx-auto d-block img-fluid' %>
 
-<%= div_for(@user) do %>
+<%= div_for(@user, :class => 'profile-text') do %>
   <strong>Email:</strong> <%= @user.email %><br>
   <strong>Username:</strong> <%= @user.username %><br>
 <% end %>
 
-<h3>Your Listings:</h3>
+<h3 class="heading-text">Your Listings:</h3>
+  <div class="row">
+    <%= div_for(@user.listings, :class=>"card text-center listing-card") do |listing| %>
+        <%= image_tag 'https://dummyimage.com/400x300/000/fff', :class=>"card-img-top" %>
+        <%= content_tag :div, :class => "card-body" do %>
+          <h5 class="card-title listing-title-text"><%= listing.title %></h5>
+          <span><%= number_to_currency(listing.price) %></span>
+        <% end %>
+        <%= content_tag :div, :class => "card-footer" do %>
+          <%= link_to 'View Listing', location_listing_path(listing.location, listing.id), :class=>"btn btn-outline-success" %>
+        <% end %>
+    <% end %>
+  </div>
+</div>
 
-<%= div_for(@user.listings) do |listing| %>
-  <%= link_to listing_overview(listing), location_listing_path(listing.location, listing.id) %>
-<% end %>
 
-<h3>Account Settings:</h3>
+<h3 class="heading-text">Account Settings:</h3>
 
-<%= link_to "Edit Profile", edit_user_path, :class => 'btn btn-warning' %>
-<%= link_to "Delete Account", user_path(@user.id), :method => :delete, :class => 'btn btn-danger'%>
+<%= link_to "Edit Profile", edit_user_path, :class => 'btn btn-block btn-outline-warning' %>
+<%= link_to "Delete Account", user_path(@user.id), :method => :delete, :class => 'btn btn-block btn-outline-danger'%>
 
 <%= display_admin_profile_tools(@user) %>
