@@ -3,7 +3,8 @@ class User < ApplicationRecord
   friendly_id :username, use: :slugged
 
   has_secure_password
-  has_many :listings, :dependent => :destroy
+  has_many :listings, dependent: :destroy
+  has_many :comments, dependent: :destroy
   belongs_to :role
 
   validates :email, presence: true, uniqueness: true, email: true #uses email_validator gem to validate email address

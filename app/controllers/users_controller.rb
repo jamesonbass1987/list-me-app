@@ -41,6 +41,8 @@ class UsersController < ApplicationController
   def destroy
     authorize! :destroy, @user
 
+    binding.pry
+
     @user.destroy
     redirect_to(root_path)
   end
