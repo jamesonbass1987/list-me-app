@@ -1,5 +1,15 @@
 <%= form_for [comment.listing.location, comment.listing, comment] do |f| %>
-  <%= f.text_area :content %><br>
-  <%= f.collection_select :comment_status_id, statuses, :id, :name %><br>
-  <%= f.submit %>
+  <%= form_errors_check(comment) %>
+
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :content, "Comment" %>
+    <%= f.text_area :content, :class => 'form-control' %>
+  <% end %>
+
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :comment_status_id, "Status" %>
+    <%= f.collection_select(:comment_status_id, statuses, :id, :name, {}, {:class => 'form-control custom-select btn'}) %>
+  <% end %>
+
+  <%= f.submit :class => 'btn btn-outline-success btn-block' %>
 <% end %>
