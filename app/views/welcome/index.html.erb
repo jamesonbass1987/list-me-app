@@ -1,5 +1,9 @@
-<h1>Welcome To List.me</h1>
+<%= content_tag :div, :class => "welcome_background_image clearfix" do %>
 
-<%= content_tag :div do %>
-  <%= render partial: 'welcome_form', locals: {locations: @locations, categories: @categories} %>
+  <%= content_tag :main, :class => "welcome_main" do  %>
+    <h1 class="cover-heading">Welcome To List.me</h1>
+    <%= content_tag :div, :class =>"inner cover" do %>
+      <%= render partial: 'welcome_form', locals: {locations: @locations, categories: @categories} %>
+    <% end %>
+  <% end %>
 <% end %>

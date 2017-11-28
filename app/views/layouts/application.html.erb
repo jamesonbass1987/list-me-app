@@ -12,45 +12,46 @@
 
     <!-- Navigation -->
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">List.me</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <div class="site-wrapper welcome_background_image ">
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <%= link_to 'Home', root_path, :class => 'nav-link' %>
-          </li>
-          <li class="nav-item">
-            <%= user_profile_link %>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              View Listings In...
-            </a>
-            <%= content_tag :div, :class => "dropdown-menu", html: "aria-labelledby => 'navbarDropdown'"  do %>
-              <% navbar_locations_list.each do |location| %>
-                <%= link_to full_location_name(location), location_listings_path(location), :class => 'dropdown-item' %>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <%= link_to 'List.me', root_path, :class => 'navbar-brand' %>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <%= link_to 'Home', root_path, :class => 'nav-link' %>
+            </li>
+            <li class="nav-item">
+              <%= user_profile_link %>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                View Listings In...
+              </a>
+              <%= content_tag :div, :class => "dropdown-menu" do %>
+                <% navbar_locations_list.each do |location| %>
+                  <%= link_to full_location_name(location), location_listings_path(location), :class => 'dropdown-item' %>
+                <% end %>
               <% end %>
-            <% end %>
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <%= user_login_links %>
-        </ul>
-      </div>
-    </nav>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <%= user_login_links %>
+          </ul>
+        </div>
+      </nav>
 
-    <% flash.each do |key, value| %>
-      <%= content_tag :div, value, class: "flash #{key}" %>
-    <% end %>
+      <% flash.each do |key, value| %>
+        <%= content_tag :div, value, class: "flash #{key}" %>
+      <% end %>
 
-    <%= content_tag :div, :class => 'container' do %>
       <%= yield %>
-    <% end %>
 
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
