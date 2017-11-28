@@ -6,6 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    binding.pry
     fb_auth ||= request.env["omniauth.auth"]
 
     if fb_auth
@@ -41,7 +42,6 @@ class SessionsController < ApplicationController
 
   def auth_by_username
     @user ||= User.find_by(username: params[:user][:username])
-
     if !@user.present? || !@user.authenticate(params[:user][:password])
       @user = User.new
       @user.errors[:base] << "Your login credentials were invalid. Please try again."

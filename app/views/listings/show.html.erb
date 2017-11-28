@@ -1,7 +1,6 @@
 <h1>Listing Overview</h1>
 
 <p><%= full_location_name(@listing.location) %></p>
-
 <h3><%= @listing.title %></h3>
 
 <% @listing.listing_images.each do |image| %>
@@ -9,21 +8,15 @@
 <% end %>
 
 <h3>Description:</h4>
-<p><%= @listing.description %></p>
-
-<p><strong>Price:</strong> <%= number_to_currency(@listing.price) %></p>
-
-<p><strong>Posted By:</strong> <%= @listing.user.username %></p>
-
-<p><strong>Category:</strong> <%= @listing.category.name %></p>
-<p><strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %></p>
-
+<%= @listing.description %><br>
+<strong>Price:</strong> <%= number_to_currency(@listing.price) %><br>
+<strong>Posted By:</strong> <%= @listing.user.username %><br>
+<strong>Category:</strong> <%= @listing.category.name %><br>
+<strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %><br>
 
 <%= delete_edit_listing_links(@listing) %>
 
-
 <h3>Comments:</h3>
-
 <% if !@listing.comments.first.content.nil? %>
   <ul>
     <% @listing.comments.each do |comment| %>
@@ -34,33 +27,16 @@
           <% if comment.user != @listing.user %>
             <strong>Status:</strong> <%= comment.comment_status.name %><br>
           <% end %>
-          <strong>Posted At:</strong> <%= comment.created_at %><br>
+            <strong>Posted At:</strong> <%= comment.created_at %><br>
 
-          <% if comment.user == current_user %>
-
-          <%= link_to("Edit Comment", edit_location_listing_comment_path(@listing.location, @listing, comment), :class => 'btn btn-info') %>
-          <%= link_to("Delete Comment", location_listing_comment_path(@listing.location, @listing, comment), :method => :delete, :class => 'btn btn-danger') %>
-
-          <% end %>
+          <%= display_comment_controls(comment) %>
         </li>
-
-
-
       <% end %>
     <% end %>
   </ul>
 <% end %>
 
 <% if logged_in? %>
-
   <h5>Leave A Question About The Item:</h5>
-
-  <%= form_for([@listing.location, @listing, @comment]) do |f| %>
-    <%= form_errors_check(@comment) %>
-    <%= f.text_area :content %><br>
-    <%= f.hidden_field :location_id, :value => @listing.location_id %>
-    <%= f.hidden_field :listing_id, :value => @listing.id %>
-    <%= f.submit %>
-  <% end %>
-
+  <%= render 'comment_form', locals: {comment: @comment, listing: @listing} %>
 <% end %>

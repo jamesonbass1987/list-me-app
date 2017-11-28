@@ -1,6 +1,5 @@
 module UsersHelper
 
-
   def render_admin_field(user, f)
     if current_user && current_user.admin?
       f.collection_select :role_id, Role.all, :id, :title
@@ -19,5 +18,4 @@ module UsersHelper
       render 'admin_tools'
     end
   end
-
 end

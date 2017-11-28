@@ -8,7 +8,6 @@
   <% end %>
 <% end %>
 
-
 <%= link_to "Edit", edit_location_path(@location.id), :class => 'btn btn-warning'%>
 <%= link_to "Delete Location", location_path(@location.id), :method => :delete, :class => 'btn btn-danger', :remote => 'true'%>
-<%= render 'locations/manage_locations_button' %>
+<%= render 'shared/manage_locations_button' %>
