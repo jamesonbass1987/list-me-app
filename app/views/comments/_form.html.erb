@@ -1,0 +1,5 @@
+<%= form_for [comment.listing.location, comment.listing, comment] do |f| %>
+  <%= f.text_area :content %><br>
+  <%= f.collection_select :comment_status_id, statuses, :id, :name %><br>
+  <%= f.submit %>
+<% end %>

@@ -6,7 +6,6 @@ class SessionsController < ApplicationController
   end
 
   def create
-    binding.pry
     fb_auth ||= request.env["omniauth.auth"]
 
     if fb_auth

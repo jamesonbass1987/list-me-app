@@ -1,6 +1,6 @@
-<%= form_for(user) do |f| %>
+<%= form_for(user, url: '/login') do |f| %>
   <%= form_errors_check(user) %>
-  
+
   <%= f.label :username %>
   <%= f.text_field :username%><br>
 

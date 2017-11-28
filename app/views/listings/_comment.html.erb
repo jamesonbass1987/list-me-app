@@ -1,0 +1,6 @@
+<li>
+  <strong><%= comment.user.username %></strong>: <%= comment.content %><br>
+  <strong>Posted At:</strong><%= comment.created_at %><br>
+  <%= display_comment_controls(comment) %>
+  <%= display_comment_status(comment) %><br>
+</li>

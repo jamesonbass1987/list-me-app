@@ -1,18 +1,18 @@
 class CommentsController < ApplicationController
-  before_action :find_comment, only: [:edit, :show, :destroy]
+  before_action :find_comment, only: [:edit, :show, :destroy, :update]
 
   def create
     @listing = Listing.find_by(id: params[:listing_id])
 
     @comment = Comment.new(comment_params)
     @comment.user = current_user
+    @comment.save
 
-    if @comment.save
-      redirect_to location_listing_path(listing.location, listing)
-    else
-      @comment.errors[:base]
-      render "listings/show"
-    end
+    redirect_to location_listing_path(@listing.location, @listing) and return
+  end
+
+  def edit
+    @statuses = CommentStatus.all
   end
 
   def update

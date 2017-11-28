@@ -17,26 +17,9 @@
 <%= delete_edit_listing_links(@listing) %>
 
 <h3>Comments:</h3>
-<% if !@listing.comments.first.content.nil? %>
-  <ul>
-    <% @listing.comments.each do |comment| %>
-      <% if !comment.content.nil? %>
-        <li>
-
-          <strong><%= comment.user.username %></strong>: <%= comment.content %><br>
-          <% if comment.user != @listing.user %>
-            <strong>Status:</strong> <%= comment.comment_status.name %><br>
-          <% end %>
-            <strong>Posted At:</strong> <%= comment.created_at %><br>
-
-          <%= display_comment_controls(comment) %>
-        </li>
-      <% end %>
-    <% end %>
-  </ul>
-<% end %>
+<%= display_listing_comments(@listing.comments) %>
 
 <% if logged_in? %>
   <h5>Leave A Question About The Item:</h5>
-  <%= render 'comment_form', locals: {comment: @comment, listing: @listing} %>
+  <%= render partial: 'listings/comment_form', locals: {listing: @listing, comment: @comment} %>
 <% end %>

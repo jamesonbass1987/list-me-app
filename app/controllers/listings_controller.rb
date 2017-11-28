@@ -27,6 +27,9 @@ class ListingsController < ApplicationController
   def new
     @location = Location.friendly.find(params[:location_id])
     @listing = @location.listings.build
+
+    authorize! :new, @listing
+
     @categories = Category.all
     build_tags_and_images(@listing)
   end
@@ -45,6 +48,7 @@ class ListingsController < ApplicationController
   end
 
   def edit
+    authorize! :edit, @listing
     @categories = Category.all
     build_tags_and_images(@listing)
   end
@@ -58,6 +62,8 @@ class ListingsController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @listing
+    
     location = @listing.location
     @listing.destroy
     redirect_to location_listings_path(location)
