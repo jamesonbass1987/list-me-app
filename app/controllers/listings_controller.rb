@@ -67,7 +67,7 @@ class ListingsController < ApplicationController
     @listing.destroy
 
     redirect_url = request.referrer.split('http://localhost:3000')[1]
-    redirect_to redirect_url_path
+    redirect_to redirect_url
   end
 
   def take_my_money

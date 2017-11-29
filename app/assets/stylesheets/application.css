@@ -118,12 +118,12 @@
 }
 
 .carousel-img {
+  height: 100%;
   width: 100%;
   margin: auto;
 }
 
 .carousel-img-smaller-scale {
-  transform: translateY(25%);
 }
 
 .listing-notification {
