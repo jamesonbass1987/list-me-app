@@ -54,7 +54,6 @@ class Listing < ApplicationRecord
     where(:user_id => user.id)
   end
 
-
   #set number of pending comments for each listing to display on
   #user show page. looks for comments with the following restrictions:
   #where user id is not the listing user owner, status is "Answer Pending"

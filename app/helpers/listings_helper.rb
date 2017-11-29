@@ -71,6 +71,6 @@ module ListingsHelper
   end
 
   def display_pending_comments_count(listing)
-    simple_format("#{listing.pending_comments_count} questions need answering!", class: 'alert alert-success listing-notification', wrapper_tag: 'div') unless (listing.user != current_user || listing.pending_comments_count == 0)
+    simple_format("#{listing.pending_comments_count} #{'Question'.pluralize(listing.pending_comments_count)} Pending!", class: 'alert alert-info listing-notification', wrapper_tag: 'div') unless (listing.user != current_user || listing.pending_comments_count == 0)
   end
 end
