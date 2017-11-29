@@ -15,6 +15,8 @@ class Listing < ApplicationRecord
   accepts_nested_attributes_for :tags
   accepts_nested_attributes_for :listing_images
 
+  attr_reader :pending_comments_count
+
   def tags_attributes=(tag_attributes)
     #parse tag_attributes passed in as hash, checking for empties
     tag_attributes.values.each do |tag_attribute|
@@ -50,6 +52,16 @@ class Listing < ApplicationRecord
 
   def self.all_user_listings(user)
     where(:user_id => user.id)
+  end
+
+
+  #set number of pending comments for each listing to display on
+  #user show page. looks for comments with the following restrictions:
+  #where user id is not the listing user owner, status is "Answer Pending"
+  #and where the id is not nil (to account for the comment on the show page that hasnt
+  #persisted yet)
+  def pending_comments_count
+    comments.count {|comment| comment.user != user && comment.comment_status.name == "Answer Pending" && !comment.id.nil?}
   end
 
 end

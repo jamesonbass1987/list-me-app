@@ -4,6 +4,7 @@
       <%= content_tag :div, :class => "card-body" do %>
         <h5 class="card-title listing-title-text"><%= listing.title %></h5>
         <span><%= number_to_currency(listing.price) %></span>
+        <%= display_pending_comments_count(listing) %>
       <% end %>
       <%= content_tag :div, :class => "card-footer" do %>
         <%= link_to 'View Listing', location_listing_path(listing.location, listing.id), :class=>"btn btn-outline-success" %>

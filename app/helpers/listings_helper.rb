@@ -38,7 +38,7 @@ module ListingsHelper
 
   def display_empty_tag_fields(tag_fields)
     if tag_fields.object.name.nil?
-      tag_fields.text_field :name, :class => 'form-control', placeholder: 'Add Tags'
+      tag_fields.text_field :name, :class => 'form-control', placeholder: 'Add Tag'
     end
   end
 
@@ -68,5 +68,9 @@ module ListingsHelper
     else
       "carousel-item"
     end
+  end
+
+  def display_pending_comments_count(listing)
+    simple_format("#{listing.pending_comments_count} questions need answering!", class: 'alert alert-success listing-notification', wrapper_tag: 'div') unless (listing.user != current_user || listing.pending_comments_count == 0)
   end
 end

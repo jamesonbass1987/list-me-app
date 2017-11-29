@@ -18,7 +18,7 @@
     <!-- Navigation -->
     <div class="container">
 
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-light bg-faded">
         <!-- Brand -->
         <a class="navbar-brand text-success" href="/">List.me</a>
 
@@ -35,7 +35,7 @@
                <%= user_profile_link %>
              </li>
              <li class="nav-item dropdown">
-                 <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <a class="nav-link dropdown-toggle" href="<%= root_path %>" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                    View Listings In...
                  </a>
                  <%= content_tag :div, :class => "dropdown-menu", :html => 'aria-labelledby="navbarDropdownMenuLink"' do %>

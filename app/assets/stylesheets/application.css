@@ -122,6 +122,11 @@
   width: 100%;
 }
 
+.listing-notification {
+  margin-bottom: -10px;
+  margin-top: 5px;
+}
+
  /*---COMMENTS---*/
 
 .media {

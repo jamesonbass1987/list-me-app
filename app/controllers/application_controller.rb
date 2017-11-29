@@ -28,10 +28,11 @@ class ApplicationController < ActionController::Base
 
   #validates that the location id passed in exists, else redirect
   def validate_location
+
     if params[:location_id]
-      location ||= Location.friendly.find(params[:location_id])
+      location ||= Location.find_by(slug: params[:location_id])
     else
-      location ||= Location.friendly.find(params[:id])
+      location ||= Location.find_by(slug: params[:id])
     end
 
     redirect_to root_path unless location

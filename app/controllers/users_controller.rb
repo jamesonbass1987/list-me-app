@@ -10,6 +10,8 @@ class UsersController < ApplicationController
 
   def show
     authorize! :show, @user
+    listing = Listing.find_by(id: 31)
+    listing.pending_comments_count
   end
 
   def new
@@ -55,9 +57,7 @@ class UsersController < ApplicationController
   #set user based on id params for views
   def set_user
     @user = User.find_by(slug: params[:id])
-    
-    if @user.nil?
-      redirect_to root_path and return
-    end
+    redirect_to root_path unless @user
   end
+
 end
