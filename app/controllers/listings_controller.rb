@@ -26,10 +26,10 @@ class ListingsController < ApplicationController
   end
 
   def new
+    authorize! :new, Listing
+    
     @location = Location.friendly.find(params[:location_id])
     @listing = @location.listings.build
-
-    authorize! :new, @listing
 
     @categories = Category.all
     build_tags_and_images(@listing)

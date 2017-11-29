@@ -24,12 +24,6 @@ module ListingsHelper
     listing_image_fields.text_field :image_url unless listing_image_fields.object[:image_url].present?
   end
 
-  def listings_list(listings)
-    if listings
-      render partial: 'listings_list', locals: {listings: listings}
-    end
-  end
-
   def listing_feature_image(listing)
     if !listing.listing_images.empty?
       image_tag(listing.listing_images.first.image_url, :class => 'listing-image')
@@ -63,6 +57,12 @@ module ListingsHelper
     if can? :manage, listing
       ((link_to 'Edit', edit_location_listing_path(listing.location, listing.id), :class=>"btn btn-outline-warning") + " " +
       (link_to 'Delete', location_listing_path(listing.location, listing), :method => :delete, :class=>"btn btn-outline-danger"))
+    end
+  end
+
+  def create_listing(location)
+    if can? :create, Listing
+       link_to("Create Listing", new_location_listing_path(location), :class => 'btn btn-outline-success btn-block')
     end
   end
 

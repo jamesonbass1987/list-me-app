@@ -1,33 +1,26 @@
-<h1>Listings in <%= full_location_name(@location) %></h1>
-
-<p>Currently viewing: <%= current_listing_filter(@listings, @location) %><p>
+<h1 class="heading-text">Listings in <%= full_location_name(@location) %></h1>
 
 <!--  Listing Search Filter -->
-<%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form') do %>
-    <p>
-      Search Listings:
-      <%= text_field_tag :search, params[:search] %>
-      <%= submit_tag "Search", :name => nil %>
-    </p>
+<%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form', :class => 'search-form') do %>
+      <%= content_tag :div, :class => 'form-inline' do %>
+        <%= text_field_tag :search, params[:search], :class => 'form-control', placeholder: 'Search Listings:' %>
+        <%= submit_tag "Search", :name => nil, :class => 'btn btn-outline-success' %>
+      <% end %>
 <% end %>
+
+<p>Currently viewing: <%= current_listing_filter(@listings, @location) %> <%= link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money" %> <p>
 
 <!--  Listing Category Filter -->
 <%= form_tag '/search' do %>
-    <p>
-      View Listings For:
-      <%= select_tag 'category_selector', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything' %>
+    <%= content_tag :div, :class => 'form-group' do %>
+      <%= label_tag :search, 'View Listings For:' %>
+      <%= select_tag 'category_selector', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything', :class => 'form-control custom-select btn' %>
       <%= hidden_field_tag :location_selector, @location.id  %>
-      <%= submit_tag "Filter" %>
+    <% end %>
+      <%= submit_tag "Filter", :class => 'btn btn-outline-primary btn-block' %>
     </p>
 <% end %>
 
-<%= link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money", :class => 'btn btn-primary' %>
+<%= render partial: 'listings_list', locals: {listings: @listings} %>
 
-<%= content_tag(:ul) do %>
-  <%= listings_list(@listings) %>
-<% end %>
-
-
-<% if can? :create, Listing %>
-<%= link_to("Create New Listing", new_location_listing_path(@location), :class => 'btn btn-primary') %>
-<% end %>
+<%= create_listing(@location) %>
