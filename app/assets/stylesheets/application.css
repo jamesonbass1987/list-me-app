@@ -24,6 +24,10 @@
      height: 100%;
  }
 
+ body {
+   background: rgb(253, 253, 253);
+ }
+
 .container {
   padding-bottom: 30px;
 }
@@ -113,22 +117,29 @@
   height:560px;
   align: center;
   margin: 0 auto;
-  background-color: black;
+  background-color: white;
   display: flex;
 }
 
-.carousel-img {
-  height: 100%;
-  width: 100%;
+.carousel-img-height-dominant{
+  height: 560px;
   margin: auto;
 }
 
-.carousel-img-smaller-scale {
+.carousel-img-width-dominant{
+  width: 672px;
+  margin: auto;
 }
 
 .listing-notification {
   margin-bottom: -10px;
   margin-top: 5px;
+}
+
+.listing-card-img {
+  max-width:280px;
+  max-height: 280px;
+  object-fit: contain;
 }
 
  /*---COMMENTS---*/

@@ -8,7 +8,8 @@
       <% end %>
 <% end %>
 
-<p>Currently viewing: <%= current_listing_filter(@listings, @location) %> <%= display_take_my_money(@listings) %> <p>
+<p>Currently viewing: <%= current_listing_filter(@listings, @location) %><p>
+<%= display_take_my_money(@listings) %>
 
 <!--  Listing Category Filter -->
 <%= form_tag '/search' do %>

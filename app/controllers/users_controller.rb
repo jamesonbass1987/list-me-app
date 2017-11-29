@@ -2,7 +2,6 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :settings]
   before_action :redirect_to_profile_if_logged_in, only: :new
 
-
   def index
     @users = User.all
     authorize! :index, current_user
@@ -40,10 +39,9 @@ class UsersController < ApplicationController
 
   def destroy
     authorize! :destroy, @user
-
     session.delete :user_id
-    @user.destroy
 
+    @user.destroy
     redirect_to(root_path)
   end
 
@@ -54,7 +52,7 @@ class UsersController < ApplicationController
 
   #set user based on id params for views
   def set_user
-    @user = User.find_by(slug: params[:id])
+    @user = (User.find_by(slug: params[:id]) || User.find_by(id: params[:id]))
     redirect_to root_path unless @user
   end
 

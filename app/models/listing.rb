@@ -10,7 +10,7 @@ class Listing < ApplicationRecord
 
   validates :title, presence: true
   validates :price, presence: true
-  validates :description, length: {:maximum => 500}, presence: true
+  validates :description, length: {:maximum => 1500}, presence: true
 
   accepts_nested_attributes_for :tags
   accepts_nested_attributes_for :listing_images
