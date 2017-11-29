@@ -43,7 +43,7 @@ class UsersController < ApplicationController
 
     session.delete :user_id
     @user.destroy
-    
+
     redirect_to(root_path)
   end
 
@@ -54,6 +54,10 @@ class UsersController < ApplicationController
 
   #set user based on id params for views
   def set_user
-    @user = User.friendly.find(params[:id])
+    @user = User.find_by(slug: params[:id])
+    
+    if @user.nil?
+      redirect_to root_path and return
+    end
   end
 end
