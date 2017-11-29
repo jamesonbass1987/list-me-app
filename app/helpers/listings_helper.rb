@@ -61,4 +61,12 @@ module ListingsHelper
       (f.label :listing_images, "Edit Current #{string} (Deselect To Remove From Listing)") + tag(:br)
     end
   end
+
+  def image_carousel_class_tag(listing, image)
+    if image == listing.listing_images.first
+      "carousel-item active"
+    else
+      "carousel-item"
+    end
+  end
 end

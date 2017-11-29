@@ -35,7 +35,6 @@ class ListingsController < ApplicationController
   end
 
   def create
-    binding.pry
     @listing = Listing.new(listing_params)
     @listing.user = current_user
 
