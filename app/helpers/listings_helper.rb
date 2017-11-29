@@ -77,4 +77,15 @@ module ListingsHelper
   def display_take_my_money(listings)
     link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money" unless listings.empty?
   end
+
+  def carousel_image_class_tag(image)
+    if image.image_url != 'listing-default-image.png'
+      image_dimensions = FastImage.size(image.image_url)
+      if (image_dimensions[0].to_f/image_dimensions[1].to_f).round(1) != 1.2
+        "d-block img-fluid carousel-img carousel-img-smaller-scale"
+      else
+        "d-block img-fluid carousel-img"
+      end
+    end
+  end
 end

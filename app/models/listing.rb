@@ -71,5 +71,4 @@ class Listing < ApplicationRecord
     self.listing_images.build(image_url: 'listing-default-image.png') unless listing_images.first.present?
   end
 
-
 end

@@ -109,17 +109,21 @@
 }
 
 .carousel {
-  width:640px;
-  height:480px;
+  width:672px;
+  height:560px;
   align: center;
   margin: 0 auto;
+  background-color: black;
+  display: flex;
 }
 
-.carousel img {
-  top: 0;
-  left: 0;
-  height: 480px;
+.carousel-img {
   width: 100%;
+  margin: auto;
+}
+
+.carousel-img-smaller-scale {
+  transform: translateY(25%);
 }
 
 .listing-notification {

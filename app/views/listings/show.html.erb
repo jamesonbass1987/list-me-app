@@ -3,14 +3,14 @@
 <h2 class="heading-text"><%= @listing.title %></h2>
 <text><%= full_location_name(@listing.location) %></text><br>
 
-<div class="carousel">
+<div class="carousel img-responsive">
 
  <div class="carousel slide" id = "listingCarousel" data-ride="carousel">
 
    <div class="carousel-inner">
      <% @listing.listing_images.each do |image| %>
         <%= content_tag :div, :class => "#{image_carousel_class_tag(@listing, image)}" do %>
-            <%= image_tag image.image_url, :class => 'd-block img-fluid' %>
+            <%= image_tag image.image_url, :class => "#{carousel_image_class_tag(image)}"%>
         <% end %>
     <% end %>
   </div>
