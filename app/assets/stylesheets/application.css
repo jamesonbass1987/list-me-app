@@ -33,6 +33,10 @@
   text-align: center;
 }
 
+.btn {
+  margin: 3px 1px;
+}
+
 /*---MAIN PAGE---*/
 .main_search_button {
   margin: 20px;
@@ -76,6 +80,11 @@
    margin: 10px 1.5%;
  }
 
+ .image-card {
+   width: 45%;
+   margin: 10px 2.5%;
+ }
+
  .listing-title-text {
    font-size: 20px;
  }
@@ -83,3 +92,11 @@
  .search-form {
    margin-bottom: 10px;
  }
+
+ .listing-checkbox {
+   text-align: center
+ }
+
+.tag-checkbox {
+  margin: 10px 0px;
+}

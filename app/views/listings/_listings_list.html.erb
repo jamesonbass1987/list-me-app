@@ -1,6 +1,6 @@
 <div class="row">
   <%= div_for(listings, :class=>"card text-center listing-card") do |listing| %>
-      <%= image_tag 'https://dummyimage.com/400x300/000/fff', :class=>"card-img-top" %>
+      <%= image_tag listing.listing_images.first.image_url, :class=>"card-img-top" %>
       <%= content_tag :div, :class => "card-body" do %>
         <h5 class="card-title listing-title-text"><%= listing.title %></h5>
         <span><%= number_to_currency(listing.price) %></span>

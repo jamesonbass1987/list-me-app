@@ -1,33 +1,7 @@
 module ListingsHelper
 
-  def render_edit_post_checkboxes(location, listing, f)
-    if !current_page?(new_location_listing_path(location, listing))
-      render partial: 'tag_field_checkboxes', locals: {listing: listing, f: f}
-    end
-  end
-
-  def render_image_post_checkboxes(location, listing, f)
-    if !current_page?(new_location_listing_path(location, listing))
-      render partial: 'image_field_checkboxes', locals: {listing: listing, f: f}
-    end
-  end
-
   def currently_in_listing_text(listing, assets)
     "None (Enter new links below)" if assets.empty?
-  end
-
-  def tag_attributes_field(tag_fields)
-    tag_fields.text_field :name unless tag_fields.object[:name].present?
-  end
-
-  def listing_images_attributes_field(listing_image_fields)
-    listing_image_fields.text_field :image_url unless listing_image_fields.object[:image_url].present?
-  end
-
-  def listing_feature_image(listing)
-    if !listing.listing_images.empty?
-      image_tag(listing.listing_images.first.image_url, :class => 'listing-image')
-    end
   end
 
   def current_listing_filter(listings, location)
@@ -49,10 +23,6 @@ module ListingsHelper
     end
   end
 
-  def listing_overview(listing)
-    "#{listing.title} - #{number_to_currency(listing.price)}"
-  end
-
   def display_owner_listing_controls(user, listing)
     if can? :manage, listing
       ((link_to 'Edit', edit_location_listing_path(listing.location, listing.id), :class=>"btn btn-outline-warning") + " " +
@@ -66,4 +36,29 @@ module ListingsHelper
     end
   end
 
+  def display_empty_tag_fields(tag_fields)
+    if tag_fields.object.name.nil?
+      tag_fields.text_field :name, :class => 'form-control', placeholder: 'Add Tags'
+    end
+  end
+
+  def display_empty_listing_image_fields(listing_images_fields)
+    if listing_images_fields.object.image_url.nil?
+      listing_images_fields.text_field :image_url, :class => 'form-control', placeholder: 'Add Image URL'
+    end
+  end
+
+  def display_listing_image_cards(listing_image)
+    content_tag :div, :class => 'card image-card' do
+      content_tag :div, :class =>'card-body text-center' do
+        image_tag(listing_image.object.image_url, :class => 'card-img-top') + listing_image.check_box
+      end
+    end
+  end
+
+  def display_edit_listing_instructions(content_type, string, f)
+    if content_type.any?
+      (f.label :listing_images, "Edit Current #{string} (Deselect To Remove From Listing)") + tag(:br)
+    end
+  end
 end

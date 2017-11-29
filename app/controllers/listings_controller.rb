@@ -27,15 +27,15 @@ class ListingsController < ApplicationController
 
   def new
     authorize! :new, Listing
-    
-    @location = Location.friendly.find(params[:location_id])
-    @listing = @location.listings.build
 
+    @location = Location.friendly.find(params[:location_id])
+    @listing = @location.listings.new
     @categories = Category.all
-    build_tags_and_images(@listing)
+
   end
 
   def create
+    binding.pry
     @listing = Listing.new(listing_params)
     @listing.user = current_user
 
@@ -51,7 +51,6 @@ class ListingsController < ApplicationController
   def edit
     authorize! :edit, @listing
     @categories = Category.all
-    build_tags_and_images(@listing)
   end
 
   def update
@@ -91,12 +90,6 @@ class ListingsController < ApplicationController
   def validate_listing
     location_from_params = Location.friendly.find(params[:location_id])
     redirect_to location_listings_path(location_from_params) unless @listing && @listing.location == location_from_params
-  end
-
-  #build additional tag and image fields for listing edit/new actions
-  def build_tags_and_images(listing)
-    5.times {listing.listing_images.build}
-    5.times {listing.tags.build}
   end
 
   #find category by category_id_filter and clear session data once done
