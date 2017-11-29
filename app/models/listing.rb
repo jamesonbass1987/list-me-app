@@ -17,6 +17,8 @@ class Listing < ApplicationRecord
 
   attr_reader :pending_comments_count
 
+  before_create :add_default_image
+
   def tags_attributes=(tag_attributes)
     #parse tag_attributes passed in as hash, checking for empties
     tag_attributes.values.each do |tag_attribute|
@@ -62,5 +64,12 @@ class Listing < ApplicationRecord
   def pending_comments_count
     comments.count {|comment| comment.user != user && comment.comment_status.name == "Answer Pending" && !comment.id.nil?}
   end
+
+
+  #add default image if none have been provided
+  def add_default_image
+    self.listing_images.build(image_url: 'listing-default-image.png') unless listing_images.first.present?
+  end
+
 
 end

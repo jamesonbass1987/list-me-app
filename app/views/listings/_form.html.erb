@@ -1,5 +1,7 @@
-<%= form_for [listing.location, listing] do |f| %>
+<%= form_for([listing.location, listing], method: method) do |f| %>
   <%= form_errors_check(listing) %>
+
+  <%= f.hidden_field :location_id %>
 
   <%= content_tag :div, :class => 'form-group' do %>
     <%= f.label :title %>
@@ -46,8 +48,6 @@
       <% end %>
     <% end %>
   <% end %>
-
-  <%= f.hidden_field :location_id, :value => listing.location.id %>
 
   <%= f.submit :class => 'btn btn-outline-success btn-block'%>
 <% end %>

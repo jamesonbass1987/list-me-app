@@ -8,7 +8,7 @@
       <% end %>
 <% end %>
 
-<p>Currently viewing: <%= current_listing_filter(@listings, @location) %> <%= link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money" %> <p>
+<p>Currently viewing: <%= current_listing_filter(@listings, @location) %> <%= display_take_my_money(@listings) %> <p>
 
 <!--  Listing Category Filter -->
 <%= form_tag '/search' do %>

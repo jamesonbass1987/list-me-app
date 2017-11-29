@@ -10,8 +10,6 @@ class UsersController < ApplicationController
 
   def show
     authorize! :show, @user
-    listing = Listing.find_by(id: 31)
-    listing.pending_comments_count
   end
 
   def new

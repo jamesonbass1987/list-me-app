@@ -1,7 +1,7 @@
 class ListingsController < ApplicationController
   before_action :set_listing, only: [:show, :edit, :update, :destroy]
   before_action :validate_location
-  before_action :validate_listing, only: [:show, :edit, :create, :destroy]
+  before_action :validate_listing, only: [:show, :edit, :destroy]
 
   def index
 
@@ -29,7 +29,7 @@ class ListingsController < ApplicationController
     authorize! :new, Listing
 
     @location = Location.friendly.find(params[:location_id])
-    @listing = @location.listings.new
+    @listing = Listing.new(location_id: @location.id)
     @categories = Category.all
 
   end
@@ -65,14 +65,20 @@ class ListingsController < ApplicationController
 
     location = @listing.location
     @listing.destroy
-    redirect_to location_listings_path(location)
+
+    redirect_url = request.referrer.split('http://localhost:3000')[1]
+    redirect_to redirect_url_path
   end
 
   def take_my_money
     location = Location.friendly.find(params[:id])
     listing = Listing.highest_price_item(location)
 
-    redirect_to location_listing_path(listing.location, listing)
+    if listing
+      redirect_to location_listing_path(listing.location, listing) and return
+    else
+      redirect_to location_listings_path(location)
+    end
   end
 
   private
@@ -112,4 +118,5 @@ class ListingsController < ApplicationController
       listing.tags.any?{|tag| tag.name.include?(search_term.downcase)}
     end
   end
+
 end
