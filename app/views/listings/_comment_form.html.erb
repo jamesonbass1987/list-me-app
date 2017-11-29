@@ -1,7 +1,10 @@
 <%= form_for([listing.location, listing, comment]) do |f| %>
   <%= form_errors_check(comment) %>
-  <%= f.text_area :content, :required => 'true' %><br>
+  <%= content_tag :div, :class => 'form-group' do %>
+    <%= f.label :content, "Leave A Comment" %>
+    <%= f.text_area :content, :class => 'form-control', required: true %>
+  <% end %>
   <%= f.hidden_field :location_id, :value => listing.location_id %>
   <%= f.hidden_field :listing_id, :value => listing.id %>
-  <%= f.submit %>
+  <%= f.submit :class => 'btn btn-outline-success btn-block' %>
 <% end %>

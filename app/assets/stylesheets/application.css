@@ -34,7 +34,7 @@
 }
 
 .btn {
-  margin: 3px 1px;
+  margin: 8px 1px;
 }
 
 /*---MAIN PAGE---*/
@@ -61,6 +61,11 @@
    height: 250px;
    width: auto;
    align: center;
+ }
+
+ .profile-image-small {
+   height: 50px;
+   width: auto;
  }
 
  .profile-text {
@@ -111,5 +116,12 @@
 .carousel img {
   top: 0;
   left: 0;
-  min-width: 100%;
+  height: 480px;
+  width: 100%;
+}
+
+ /*---COMMENTS---*/
+
+.media {
+  margin: 8px 0px;
 }

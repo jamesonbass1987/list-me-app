@@ -18,8 +18,8 @@ module ListingsHelper
 
   def delete_edit_listing_links(listing)
     if can? :destroy, listing
-      ((link_to 'Delete', location_listing_path(@listing.location, @listing), :method => :delete, :class => 'btn btn-danger') + " " +
-      (link_to "Edit", edit_location_listing_path(@listing.location, @listing), :class => 'btn btn-warning'))
+      ((link_to "Edit", edit_location_listing_path(@listing.location, @listing), :class => 'btn btn-outline-warning btn-block') + " " +
+      (link_to 'Delete', location_listing_path(@listing.location, @listing), :method => :delete, :class => 'btn btn-outline-danger btn-block'))
     end
   end
 

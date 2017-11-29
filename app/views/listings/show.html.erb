@@ -1,3 +1,5 @@
+<%= delete_edit_listing_links(@listing) %>
+
 <h2 class="heading-text"><%= @listing.title %></h2>
 <text><%= full_location_name(@listing.location) %></text><br>
 
@@ -30,19 +32,19 @@
 </div>
 
 
-<h3>Description:</h4>
-<%= @listing.description %><br>
-<strong>Price:</strong> <%= number_to_currency(@listing.price) %><br>
-<strong>Posted By:</strong> <%= @listing.user.username %><br>
-<strong>Category:</strong> <%= @listing.category.name %><br>
-<strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %><br>
+<h3 class="heading-text">Description:</h3>
+<p><%= @listing.description %></p>
 
-<%= delete_edit_listing_links(@listing) %>
+<span><strong>Price:</strong> <%= number_to_currency(@listing.price) %></span><br>
+<span><strong>Category:</strong> <%= @listing.category.name %></span><br>
+<span><strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %></span><br>
+<span><strong>Posted By:</strong> <%= @listing.user.username %></span><br>
 
-<h3>Comments:</h3>
+<h3 class="heading-text">Comments:</h3>
+
 <%= display_listing_comments(@listing.comments) %>
 
 <% if logged_in? %>
-  <h5>Leave A Question About The Item:</h5>
+  <h5 class="heading-text">Leave A Question About The Item:</h5>
   <%= render partial: 'listings/comment_form', locals: {listing: @listing, comment: @comment} %>
 <% end %>
