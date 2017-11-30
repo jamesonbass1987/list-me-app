@@ -39,6 +39,8 @@
 <span><strong>Category:</strong> <%= @listing.category.name %></span><br>
 <span><strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %></span><br>
 <span><strong>Posted By:</strong> <%= @listing.user.username %></span><br>
+<span><%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'}  %></span>
+
 
 <h3 class="heading-text">Comments:</h3>
 

@@ -1,7 +1,9 @@
 module CommentsHelper
 
   def display_listing_comments(comments)
-    if !comments.first.nil? && !comments.first.content.nil?
+    if comments.first.nil? || comments.first.content.nil?
+      "There doesn't seem to be anything here."
+    else
       render partial: 'listings/listing_comments', locals: {comments: comments}
     end
   end
