@@ -1,4 +1,4 @@
-<h1 class="heading-text">Edit Profile</h1>
+<%= tag.h1("Edit Profile", :class => 'heading-text') %>
 
 <%= image_tag @user.profile_image_url, :class => 'profile-image rounded-circle mx-auto d-block img-fluid' %><%= tag(:br) %>
 <%= render 'sign_up_form', user: @user %>
