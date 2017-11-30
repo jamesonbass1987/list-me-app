@@ -1,3 +1,2 @@
-<h1 class="heading-text">Create Listing</h1>
-
+<%= tag.h1("Create Listing", class: 'heading-text' %>
 <%= render partial: 'form', locals: {listing: @listing, categories: @categories, method: 'post'} %>

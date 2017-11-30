@@ -3,8 +3,8 @@
 <%= image_tag @user.profile_image_url, :class => 'profile-image rounded-circle mx-auto d-block img-fluid' %>
 
 <%= div_for(@user, :class => 'profile-text') do %>
-  <strong>Email:</strong> <%= @user.email %><br>
-  <strong>Username:</strong> <%= @user.username %><br>
+  <strong>Email:</strong> <%= @user.email %><%= tag(:br) %>
+  <strong>Username:</strong> <%= @user.username %><%= tag(:br) %>
 <% end %>
 
 <h3 class="heading-text">Your Listings:</h3>

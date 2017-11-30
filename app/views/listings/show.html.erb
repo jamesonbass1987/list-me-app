@@ -1,51 +1,39 @@
-<h2 class="heading-text"><%= @listing.title %></h2>
-<text><%= full_location_name(@listing.location) %></text><br>
+<%= tag.h2(@listing.title, :class => 'heading-text') %>
+<%= tag.text(full_location_name(@listing.location)) %> <%= tag(:br) %>
 
-<div class="carousel img-responsive">
-
- <div class="carousel slide" id = "listingCarousel" data-ride="carousel">
-
-   <div class="carousel-inner">
-     <% @listing.listing_images.each do |image| %>
-        <%= content_tag :div, :class => "#{image_carousel_class_tag(@listing, image)}" do %>
-            <%= image_tag image.image_url, :class => "#{carousel_image_class_tag(image)}"%>
-        <% end %>
+<%= content_tag(:div, :class => "carousel img-responsive") do %>
+  <%= content_tag(:div, :class => "carousel slide", :id => "listingCarousel", :'data-ride' => 'carousel') do %>
+    <%= content_tag(:div, :class => "carousel-inner") do %>
+       <% @listing.listing_images.each do |image| %>
+          <%= content_tag :div, :class => "#{image_carousel_class_tag(@listing, image)}" do %>
+              <%= image_tag image.image_url, :class => "#{carousel_image_class_tag(image)}"%>
+          <% end %>
+      <% end %>
     <% end %>
-  </div>
+    <%= content_tag(:div, :class => "carousel-controls") do %>
+      <a class="carousel-control-prev" href="#listingCarousel" role="button" data-slide="prev">
+         <%= tag.span("", :class => 'carousel-control-prev-icon', :'aria-hidden' => 'true') %>
+         <%= tag.span('Previous', :class => 'sr-only') %>
+      </a>
+       <a class="carousel-control-next" href="#listingCarousel" role="button" data-slide="next">
+         <%= tag.span("", :class => 'carousel-control-next-icon', :'aria-hidden' => 'true') %>
+         <%= tag.span('Next', :class => 'sr-only') %>
+       </a>
+    <% end %>
+  <% end %>
+<% end %>
 
-  <div class="carousel-controls">
-    <a class="carousel-control-prev" href="#listingCarousel" role="button" data-slide="prev">
-       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-       <span class="sr-only">Previous</span>
-     </a>
+<%= tag.h3('Description:', class: 'heading-text') %>
+<%= tag.p(@listing.description) %>
 
-   <a class="carousel-control-next" href="#listingCarousel" role="button" data-slide="next">
-     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-     <span class="sr-only">Next</span>
-   </a>
-  </div>
+<%= tag.strong('Price:') %> <%= tag.text(number_to_currency(@listing.price)) %> <%= tag(:br) %>
+<%= tag.strong('Category:') %> <%= tag.text(@listing.category.name) %> <%= tag(:br) %>
+<%= tag.strong('Tags:') %> <%= tag.text(@listing.tags.collect{|tag| tag.name}.join(", ")) %><%= tag(:br) %>
+<%= tag.strong('Posted By:') %> <%= tag.text(@listing.user.username) %><%= tag(:br) %>
 
- </div>
-
-</div>
-
-
-<h3 class="heading-text">Description:</h3>
-<p><%= @listing.description %></p>
-
-<span><strong>Price:</strong> <%= number_to_currency(@listing.price) %></span><br>
-<span><strong>Category:</strong> <%= @listing.category.name %></span><br>
-<span><strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %></span><br>
-<span><strong>Posted By:</strong> <%= @listing.user.username %></span><br>
-<span><%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'} %></span>
+<%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'} %>
 <%= delete_edit_listing_links(@listing) %>
 
-
-<h3 class="heading-text">Comments:</h3>
-
+<%= tag.h3('Comments:', class: 'heading-text') %>
 <%= display_listing_comments(@listing.comments) %>
-
-<% if logged_in? %>
-  <h5 class="heading-text">Leave A Question About The Item:</h5>
-  <%= render partial: 'listings/comment_form', locals: {listing: @listing, comment: @comment} %>
-<% end %>
+<%= comment_form(@listing, @comment) %>

@@ -9,7 +9,7 @@
   <% end %>
 
   <%= content_tag :div, :class => 'form-group' do %>
-    <%= f.label :description %><br>
+    <%= f.label :description %><%= tag(:br) %>
     <%= f.text_area :description, cols: 100, rows: 10, :class => 'form-control' %>
   <% end %>
 

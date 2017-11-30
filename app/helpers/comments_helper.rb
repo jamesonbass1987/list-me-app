@@ -27,4 +27,10 @@ module CommentsHelper
     end
   end
 
+  def comment_form(listing, comment)
+    if logged_in?
+     render partial: 'listings/comment_form', locals: {listing: @listing, comment: @comment}
+    end
+  end
+
 end

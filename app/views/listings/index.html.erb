@@ -1,4 +1,4 @@
-<h1 class="heading-text">Listings in <%= full_location_name(@location) %></h1>
+<%= tag.h1("Listings in #{full_location_name(@location)}", :class => 'heading-text') %>
 
 <!--  Listing Search Filter -->
 <%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form', :class => 'search-form') do %>
@@ -8,8 +8,7 @@
       <% end %>
 <% end %>
 
-<p>Currently viewing: <%= current_listing_filter(@listings, @location) %><p>
-<%= display_take_my_money(@listings) %>
+<%= tag.p("Currently Viewing: #{current_listing_filter(@listings, @location)}") %>
 
 <!--  Listing Category Filter -->
 <%= form_tag '/search' do %>
@@ -19,9 +18,9 @@
       <%= hidden_field_tag :location_selector, @location.id  %>
     <% end %>
       <%= submit_tag "Filter", :class => 'btn btn-outline-primary btn-block' %>
-    </p>
 <% end %>
 
-<%= render partial: 'listings_list', locals: {listings: @listings} %>
+<%= display_take_my_money(@listings) %>
 
+<%= render partial: 'listings_list', locals: {listings: @listings} %>
 <%= create_listing(@location) %>

@@ -5,7 +5,7 @@
       <img class="align-self-center mr-3 profile-image-small rounded-circle" src="<%= comment.user.profile_image_url %>" alt="Profile Image">
       <div class="media-body">
         <h6 class="mt-0"><strong>Posted at</strong> <%= comment.created_at %> by <%= comment.user.username %></h6>
-        <span><%= comment.content %></span><br>
+        <span><%= comment.content %></span><%= tag(:br) %>
         <span><%= display_comment_status(comment) %></span>
         <span><%= display_comment_controls(comment) %></span>
       </div>
