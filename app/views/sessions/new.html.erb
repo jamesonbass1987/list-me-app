@@ -1,5 +1,4 @@
-<h1 class="heading-text page-headings">Sign In</h1>
+<%= tag.h1("Sign In", :class => 'heading-text page-headings') %>
 
 <%= render partial: 'login_form', locals: {user: @user} %><%= tag(:br) %>
-
 <%= render 'shared/facebook_login_button' %>

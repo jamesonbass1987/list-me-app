@@ -1,6 +1,6 @@
-<h1><%= full_location_name(@location) %></h1>
+<%= tag.h1(full_location_name(@location), :class => 'heading-text') %>
 
-<h3 class="heading-text">All Listings:</h3>
+<%= tag.h3('All Listings', :class => 'heading-text') %>
 <%= render partial: 'listings/listings_list', locals: {listings: @listings} %>
 
 <%= link_to "Edit Location", edit_location_path(@location.id), :class => 'btn btn-outline-warning btn-block'%>
