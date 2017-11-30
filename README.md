@@ -11,7 +11,7 @@ Sign up with a valid email, username, and password or via Facebook. Once logged 
 
 ```shell
 git clone https://github.com/jamesonbass/list-me-app.git
-cd HikeIt
+cd list-me-app
 bundle install
 rails db:migrate
 rails s
