@@ -1,5 +1,3 @@
-<%= delete_edit_listing_links(@listing) %>
-
 <h2 class="heading-text"><%= @listing.title %></h2>
 <text><%= full_location_name(@listing.location) %></text><br>
 
@@ -39,7 +37,8 @@
 <span><strong>Category:</strong> <%= @listing.category.name %></span><br>
 <span><strong>Tags:</strong> <%= @listing.tags.collect{|tag| tag.name}.join(", ") %></span><br>
 <span><strong>Posted By:</strong> <%= @listing.user.username %></span><br>
-<span><%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'}  %></span>
+<span><%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'} %></span>
+<%= delete_edit_listing_links(@listing) %>
 
 
 <h3 class="heading-text">Comments:</h3>
