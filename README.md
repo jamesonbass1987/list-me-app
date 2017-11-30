@@ -1,24 +1,22 @@
-# README
+# List.me ##
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+List.me is a Rails classifieds web application that allows a User to post and view listings of items for sale.
 
-Things you may want to cover:
+## Usage ##
 
-* Ruby version
+After cloning and installing use command ```rails s``` to start a server and type into your browser ```localhost:3000```
+Sign up with a valid email, username, and password or via Facebook. Once logged in you can interact with other users listings, and manage your own listings.
 
-* System dependencies
+## Installation ##
 
-* Configuration
+```shell
+git clone https://github.com/jamesonbass/list-me-app.git
+cd HikeIt
+bundle install
+rails db:migrate
+rails s
+```
 
-* Database creation
+## Contributing ##
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Bug reports and pull requests are welcome on GitHub at https://github.com/jamesonbass1987/list-me-app.
