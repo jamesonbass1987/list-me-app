@@ -31,7 +31,6 @@ class ListingsController < ApplicationController
     @location = Location.friendly.find(params[:location_id])
     @listing = Listing.new(location_id: @location.id)
     @categories = Category.all
-
   end
 
   def create
@@ -66,8 +65,7 @@ class ListingsController < ApplicationController
     location = @listing.location
     @listing.destroy
 
-    redirect_url = request.referrer.split('http://localhost:3000')[1]
-    redirect_to redirect_url
+    redirect_back fallback_location: location_listings_path(location)
   end
 
   def take_my_money

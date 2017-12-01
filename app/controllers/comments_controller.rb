@@ -2,13 +2,14 @@ class CommentsController < ApplicationController
   before_action :find_comment, only: [:edit, :show, :destroy, :update]
 
   def create
-    @listing = Listing.find_by(id: params[:listing_id])
+    listing = Listing.find_by(id: params[:listing_id])
 
     @comment = Comment.new(comment_params)
     @comment.user = current_user
-    @comment.save
 
-    redirect_to location_listing_path(@listing.location, @listing) and return
+    if @comment.save
+      comments_redirect(listing)
+    end
   end
 
   def edit
@@ -27,7 +28,7 @@ class CommentsController < ApplicationController
     listing = @comment.listing
     @comment.destroy!
 
-    redirect_to(location_listing_path(listing.location, listing))
+    redirect_back fallback_location: location_listing_path(listing.location, listing)
   end
 
   private
@@ -38,5 +39,9 @@ class CommentsController < ApplicationController
   #sets comment for views based on id param
   def find_comment
     @comment = Comment.find_by(id: params[:id])
+  end
+
+  def comments_redirect(listing)
+    redirect_back fallback_location: location_listing_path(listing.location, listing)
   end
 end

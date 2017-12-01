@@ -20,7 +20,7 @@ class CategoriesController < ApplicationController
     authorize! :create, @category
 
     if @category.save
-      redirect_to categories_path
+      categories_redirect
     else
       render :new
     end
@@ -32,7 +32,7 @@ class CategoriesController < ApplicationController
 
   def update
     if @category.update_attributes(category_params)
-      redirect_to categories_path
+      categories_redirect
     else
       render 'edit'
     end
@@ -40,7 +40,7 @@ class CategoriesController < ApplicationController
 
   def destroy
     @category.destroy
-    redirect_to categories_path
+    redirect_back fallback_location: categories_path
   end
 
   private
@@ -51,5 +51,9 @@ class CategoriesController < ApplicationController
   #sets category based on id params for appropriate views
   def set_category
     @category = Category.find_by(id: params[:id])
+  end
+
+  def categories_redirect
+    redirect_back fallback_location: categories_path
   end
 end
