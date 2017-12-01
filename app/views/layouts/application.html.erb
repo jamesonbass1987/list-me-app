@@ -15,7 +15,7 @@
   <%= content_tag :body do %>
     <%= content_tag :div, :class => 'container' do %>
         <%= render 'layouts/navbar' %>
-        <%= content_tag :div, :class => 'container' do %>
+        <%= content_tag :div, :class => 'container-fluid' do %>
           <%= render 'layouts/flash_notice' %>
           <%= yield %>
         <% end %>

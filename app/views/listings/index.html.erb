@@ -1,5 +1,6 @@
 <%= tag.h1("Listings in #{full_location_name(@location)}", :class => 'heading-text') %>
 
+
 <!--  Listing Search Filter -->
 <%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form', :class => 'search-form') do %>
       <%= content_tag :div, :class => 'form-inline' do %>
