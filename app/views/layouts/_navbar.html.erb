@@ -11,6 +11,9 @@
   <%= content_tag :div, :class => "navbar-collapse collapse", :id => "navbarNavDropdown" do %>
     <%= content_tag :ul, :class => "navbar-nav mr-auto" do %>
       <%= content_tag :li, :class => "nav-item" do %>
+         <%= link_to 'List.me', root_path, :class => 'navbar-brand' %>
+       <% end %>
+      <%= content_tag :li, :class => "nav-item" do %>
          <%= link_to 'Home', root_path, :class => 'nav-link' %>
        <% end %>
        <%= content_tag :li, :class => "nav-item" do %>

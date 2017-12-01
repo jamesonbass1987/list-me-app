@@ -1,8 +1,10 @@
-<%= content_tag :div, :class => "welcome_background_image clearfix" do %>
-  <%= content_tag :main, :class => "welcome_main" do  %>
-    <%= tag.h1 'Welcome to List.me', :class => "heading-text main" %>
-    <%= content_tag :div, :class =>"inner cover" do %>
-      <%= render partial: 'welcome_form', locals: {locations: @locations, categories: @categories} %>
+<%= content_tag :div, :class => "welcome_container darken-overlay img-fluid" do %>
+  <%= content_tag :div do %>
+    <%= content_tag :main, :class => "welcome_main" do  %>
+      <%= tag.h1 'Welcome to List.me', :class => "heading-text main-page" %>
+      <%= content_tag :div, :class =>"inner cover" do %>
+        <%= render partial: 'welcome_form', locals: {locations: @locations, categories: @categories} %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

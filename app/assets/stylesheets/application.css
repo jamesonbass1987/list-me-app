@@ -16,12 +16,12 @@
  @import "bootstrap";
 
 * {
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;;
 }
 
  body, html {
-     height: 100%;
+   height: 100%;
  }
 
  body {
@@ -32,13 +32,27 @@
   padding-bottom: 30px;
 }
 
- .welcome_main {
+.welcome_main {
   padding: 10rem 1.5rem;
   text-align: center;
+  color: #fff;
+}
+
+.welcome_text_small {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .btn {
   margin: 8px 1px;
+}
+
+.navbar-brand {
+  color: #5cb85c  !important;
+}
+
+.small-visible {
+  display: none;
 }
 
 /*---MAIN PAGE---*/
@@ -54,12 +68,36 @@
 }
 
 .main-page {
-  font-size: 60px;
+  font-size: 40px;
+  color: #fff;
 }
 
 .subtext {
   font-weight: 400;
 }
+
+.welcome_main {
+  color: white;
+}
+
+.welcome_container {
+  background: url("list-me-welcome-background.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+}
+
+.darken_overlay:first-child {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+
 
  /*---USER PROFILE---*/
 
@@ -166,17 +204,6 @@
  /*---MEDIA QUERIES---*/
 
 
-@media (max-width: 576px) {
-
-  .heading-text {
-    font-size: 30px;
-  }
-
-  .listing-title-text{
-    font-size: 8px;
-  }
-
-}
 
 @media (max-width: 768px) {
 
@@ -184,8 +211,38 @@
     font-size: 30px;
   }
 
+  .welcome_container {
+    background: none;
+  }
+
+  .main-page, .subtext {
+    font-size: 30px;
+    color: #5cb85c;
+  }
+
+  .small-visible {
+    display: block;
+  }
+
+}
+
+@media (max-width: 992px) {
+
+  .heading-text {
+    font-size: 35px;
+  }
+
+  .welcome_container {
+    background: none;
+  }
+
   .listing-title-text{
-    font-size: 16px;
+    font-size: 20px;
+  }
+
+  .main-page, .subtext {
+    font-size: 35px;
+    color: #5cb85c;
   }
 
 }
