@@ -11,14 +11,14 @@
       <% end %>
     <% end %>
     <%= content_tag(:div, :class => "carousel-controls") do %>
-      <a class="carousel-control-prev" href="#listingCarousel" role="button" data-slide="prev">
+      <%= link_to "#listingCarousel", class: "carousel-control-prev carousel-buttons", role: "button", 'data-slide': 'prev' do  %>
          <%= tag.span("", :class => 'carousel-control-prev-icon', :'aria-hidden' => 'true') %>
          <%= tag.span('Previous', :class => 'sr-only') %>
-      </a>
-       <a class="carousel-control-next" href="#listingCarousel" role="button" data-slide="next">
+      <% end %>
+      <%= link_to "#listingCarousel", class: "carousel-control-next carousel-buttons", role: "button", 'data-slide': 'next' do  %>
          <%= tag.span("", :class => 'carousel-control-next-icon', :'aria-hidden' => 'true') %>
          <%= tag.span('Next', :class => 'sr-only') %>
-       </a>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

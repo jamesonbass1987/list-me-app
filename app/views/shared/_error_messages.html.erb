@@ -1,5 +1,5 @@
-  <%= content_tag :ul, :class => 'alert alert-danger' do %>
-    <% form_input.errors.full_messages.each do |msg| %>
-      <%= content_tag(:li, msg) %>
-    <% end %>
+<%= content_tag :ul, :class => 'alert alert-danger' do %>
+  <% form_input.errors.full_messages.each do |msg| %>
+    <%= content_tag(:li, msg) %>
   <% end %>
+<% end %>
