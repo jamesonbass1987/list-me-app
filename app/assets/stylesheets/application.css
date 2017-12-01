@@ -142,8 +142,50 @@
   object-fit: contain;
 }
 
+.card {
+  background: #fff;
+	box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.card-img-top {
+  padding-top: 10px;
+  height: 200px;
+}
+
+.edit-listing-card {
+  max-width: 300px;
+}
+
+
  /*---COMMENTS---*/
 
 .media {
   margin: 8px 0px;
+}
+
+
+ /*---MEDIA QUERIES---*/
+
+
+@media (max-width: 576px) {
+
+  .heading-text {
+    font-size: 30px;
+  }
+
+  .listing-title-text{
+    font-size: 8px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .heading-text {
+    font-size: 30px;
+  }
+
+  .listing-title-text{
+    font-size: 16px;
+  }
+
 }

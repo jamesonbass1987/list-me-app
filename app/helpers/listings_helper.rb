@@ -49,9 +49,9 @@ module ListingsHelper
   end
 
   def display_listing_image_cards(listing_image)
-    content_tag :div, :class => 'card image-card' do
+    content_tag :div, :class => 'card image-card edit-listing-card' do
       content_tag :div, :class =>'card-body text-center' do
-        image_tag(listing_image.object.image_url, :class => 'card-img-top') + listing_image.check_box
+        image_tag(listing_image.object.image_url, :class => 'mx-auto d-block card-img-top listing-card-img img-responsive ') + listing_image.check_box
       end
     end
   end
