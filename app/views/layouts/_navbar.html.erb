@@ -1,0 +1,32 @@
+<!-- Navigation -->
+
+<%= content_tag :nav, :class => "navbar navbar-expand-lg navbar-light bg-faded" do %>
+  <!-- Brand -->
+  <% link_to "List.me", root_path, :class => "navbar-brand text-success" %>
+
+  <%= content_tag :button, class: "navbar-toggler" ,type: "button", 'data-toggle': "collapse", 'data-target': "#navbarNavDropdown", 'aria-controls': "navbarNavDropdown", 'aria-expanded': "false", 'aria-label': "Toggle navigation" do %>
+      <%= tag.span('', :class => "navbar-toggler-icon") %>
+  <% end %>
+
+  <%= content_tag :div, :class => "navbar-collapse collapse", :id => "navbarNavDropdown" do %>
+    <%= content_tag :ul, :class => "navbar-nav mr-auto" do %>
+      <%= content_tag :li, :class => "nav-item" do %>
+         <%= link_to 'Home', root_path, :class => 'nav-link' %>
+       <% end %>
+       <%= content_tag :li, :class => "nav-item" do %>
+         <%= user_profile_link %>
+       <% end %>
+       <%= content_tag :li, :class => "nav-item dropdown" do %>
+            <%= link_to('View Listings In...', root_path, id: "navbarDropdownMenuLink", class: "nav-link dropdown-toggle", 'aria-expanded': 'false', 'aria-haspopup': 'true', 'data-toggle': "dropdown") %>
+          <%= content_tag :div, :class => "dropdown-menu", :html => 'aria-labelledby="navbarDropdownMenuLink"' do %>
+             <% navbar_locations_list.each do |location| %>
+               <%= link_to full_location_name(location), location_listings_path(location), :class => 'dropdown-item' %>
+             <% end %>
+         <% end %>
+       <% end %>
+     <% end %>
+    <%= content_tag :ul, :class => 'navbar-nav' do %>
+      <%= user_login_links %>
+    <% end %>
+  <% end %>
+<% end %>
