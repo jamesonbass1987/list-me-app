@@ -23,7 +23,7 @@ module CommentsHelper
 
   def display_comment_status(comment)
     if comment.user != @listing.user
-      "<strong>Status:</strong> #{comment.comment_status.name}".html_safe
+      tag.strong("Status: ") + comment.comment_status.name
     end
   end
 
