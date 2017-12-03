@@ -15,7 +15,7 @@ module CommentsHelper
 
   def owner_controls(comment)
     if comment.user == current_user
-      tag(:br) + link_to("Edit Comment", edit_location_listing_comment_path(@listing.location, @listing, comment), :class => 'btn btn-outline-warning') +
+      link_to("Edit Comment", edit_location_listing_comment_path(@listing.location, @listing, comment), :class => 'btn btn-outline-warning') +
       link_to("Delete Comment", location_listing_comment_path(@listing.location, @listing, comment), :method => :delete, :class => 'btn btn-outline-danger')
     end
   end
@@ -29,7 +29,7 @@ module CommentsHelper
 
   def display_comment_status(comment, listing)
     if comment.user != listing.user
-      tag.strong("Status: ") + comment.comment_status.name
+      tag(:br) + tag.strong("Status: ") + comment.comment_status.name
     end
   end
 

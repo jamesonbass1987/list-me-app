@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
   #checks for a session id
   def logged_in?
     !!current_user

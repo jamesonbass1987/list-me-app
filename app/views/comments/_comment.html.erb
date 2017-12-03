@@ -5,17 +5,15 @@
         <%= image_tag(comment.user.profile_image_url, :alt => 'Profile Image', :class => 'align-self-center mr-3 profile-image-small rounded-circle') %>
         <%= content_tag :div, :class => 'media-body' do %>
           <%= tag.h6("Posted at #{comment.created_at} by #{comment.user.username} #{display_in_reply_to_if_reply(comment)}" , :class => 'mt-0') %>
-          <%= tag.span(comment.content) %> <%= tag(:br) %>
+          <%= tag.span(comment.content) %>
           <%= tag.span(display_comment_status(comment, @listing)) %> <%= tag(:br) %>
           <%= tag.span(owner_controls(comment)) %>
           <%= tag.span(reply_controls(comment)) %>
         <% end %>
       <% end %>
-      <% if comment.comments.present? && !current_page?(action: 'new') %>
         <% comment.comments.each do |reply| %>
-          <%= render partial: 'comments/comment', locals: {comment: reply} %>
+          <%= render partial: 'comments/comment', locals: {comment: reply} unless current_page?(action: 'new') %>
         <% end %>
-      <% end %>
     <% end %>
   <% end %>
 <% end %>
