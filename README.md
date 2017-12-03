@@ -20,3 +20,8 @@ rails s
 ## Contributing ##
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/jamesonbass1987/list-me-app.
+
+
+## License ##
+
+The gem is available as open source under the terms of the [MIT License](https://github.com/jamesonbass1987/list-me-app/blob/master/LICENSE).

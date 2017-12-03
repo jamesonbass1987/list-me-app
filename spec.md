@@ -10,8 +10,8 @@ Specs:
 - [x] Include a class level ActiveRecord scope method (model object & class method name and URL to see the working feature e.g. User.most_recipes URL: /users/most_recipes) | Listing model has a class method to find highest price item, which in conjunction with the 'take_my_money' url brings users to the highest price item in that location
 - [x] Include a nested form writing to an associated model using a custom attribute writer (form URL, model name e.g. /recipe/new, Item) | Listings have custom attribute writers for listing images and tags
 - [x] Include signup (how e.g. Devise) | Signup via email and/or Facebook Oauth
-- [x] Include login (how e.g. Devise) | Signup via email and/or Facebook Oauth
-- [x] Include logout (how e.g. Devise) | Signup via email and/or Facebook Oauth
+- [x] Include login (how e.g. Devise) | Login via email and/or Facebook Oauth
+- [x] Include logout (how e.g. Devise) | Logout via email and/or Facebook Oauth
 - [x] Include third party signup/login (how e.g. Devise/OmniAuth) | Signup via email and/or Facebook Oauth
 - [x] Include nested resource show or index (URL e.g. users/2/recipes) | Location/:id/Listings
 - [x] Include nested resource "new" form (URL e.g. recipes/1/ingredients) | New listings nested and attached to locations
