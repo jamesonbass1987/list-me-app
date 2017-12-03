@@ -63,7 +63,20 @@ class Listing < ApplicationRecord
   #and where the id is not nil (to account for the comment on the show page that hasnt
   #persisted yet)
   def pending_comments_count
-    comments.count {|comment| comment.user != user && comment.comment_status.name == "Answer Pending" && !comment.id.nil?}
+
+
+
+  end
+
+  def traverse_and_count_pending_status(node)
+    while node.comments.present
+      comments.collect do |comment|
+        if (comment.status == "Answer Pending" && !comment.id.nil?)
+          comment
+          traverse_and_count_pending_status(comment)
+        end
+      end
+    end
   end
 
 

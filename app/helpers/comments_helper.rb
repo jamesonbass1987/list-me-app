@@ -27,8 +27,8 @@ module CommentsHelper
   end
 
 
-  def display_comment_status(comment)
-    if comment.user
+  def display_comment_status(comment, listing)
+    if comment.user != listing.user
       tag.strong("Status: ") + comment.comment_status.name
     end
   end
