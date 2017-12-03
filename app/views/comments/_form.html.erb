@@ -1,5 +1,5 @@
-<%= form_for [comment.listing.location, comment.listing, comment] do |f| %>
-  <%= form_errors_check(comment) %>
+<%= form_for [listing.location, listing, commentable] do |f| %>
+  <%= form_errors_check(commentable) %>
 
   <%= content_tag :div, :class => 'form-group' do %>
     <%= f.label :content, "Comment" %>

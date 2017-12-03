@@ -16,12 +16,15 @@ class CommentsController < ApplicationController
   end
 
   def edit
+    binding.pry
+    @listing = comment_parent_listing(@commentable)
     @statuses = CommentStatus.all
   end
 
   def update
-    if @comment.update_attributes(comment_params)
-      redirect_back fallback_location: location_listing_path(listing.location, listing)
+    if @commentable.update_attributes(comment_params)
+      listing = comment_parent_listing(@commentable)
+      redirect_to location_listing_path(listing.location, listing)
     else
       render 'edit'
     end
@@ -51,6 +54,8 @@ class CommentsController < ApplicationController
     comment_parent_listing(comment.commentable)
   end
 
+  #set @comment variable, if statement is based on whether it is a comment on a listing, or a reply to another
+  #comment (where commenteable would be present)
   def set_new_comment_variable(commentable)
     if commentable.present?
       @comment = commentable.comments.create(comment_params)
