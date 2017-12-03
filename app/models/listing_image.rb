@@ -1,6 +1,6 @@
 class ListingImage < ApplicationRecord
   belongs_to :listing
-  
+
   validates :image_url, presence: true
   validate :is_an_image_url
 
