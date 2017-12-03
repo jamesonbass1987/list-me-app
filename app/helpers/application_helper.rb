@@ -6,4 +6,12 @@ module ApplicationHelper
     end
   end
 
+  def page_classes
+    if current_page?(root_path)
+      "welcome_container img_responsive"
+    else
+      "container-fluid"
+    end
+  end
+
 end
