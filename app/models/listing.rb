@@ -16,8 +16,6 @@ class Listing < ApplicationRecord
   accepts_nested_attributes_for :tags
   accepts_nested_attributes_for :listing_images
 
-  attr_reader :pending_comments_count
-
   before_create :add_default_image
 
   def tags_attributes=(tag_attributes)
@@ -56,29 +54,6 @@ class Listing < ApplicationRecord
   def self.all_user_listings(user)
     where(:user_id => user.id)
   end
-
-  #set number of pending comments for each listing to display on
-  #user show page. looks for comments with the following restrictions:
-  #where user id is not the listing user owner, status is "Answer Pending"
-  #and where the id is not nil (to account for the comment on the show page that hasnt
-  #persisted yet)
-  def pending_comments_count
-
-
-
-  end
-
-  def traverse_and_count_pending_status(node)
-    while node.comments.present
-      comments.collect do |comment|
-        if (comment.status == "Answer Pending" && !comment.id.nil?)
-          comment
-          traverse_and_count_pending_status(comment)
-        end
-      end
-    end
-  end
-
 
   #add default image if none have been provided
   def add_default_image

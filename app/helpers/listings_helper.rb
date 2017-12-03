@@ -70,10 +70,6 @@ module ListingsHelper
     end
   end
 
-  def display_pending_comments_count(listing)
-    simple_format("#{listing.pending_comments_count} #{'Question'.pluralize(listing.pending_comments_count)} Pending!", class: 'alert alert-info listing-notification', wrapper_tag: 'div') unless (listing.user != current_user || listing.pending_comments_count == 0)
-  end
-
   def display_take_my_money(listings)
     link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money", :class => "btn btn-outline-success btn-block" unless listings.empty?
   end

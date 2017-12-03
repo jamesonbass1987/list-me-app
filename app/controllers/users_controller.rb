@@ -3,8 +3,8 @@ class UsersController < ApplicationController
   before_action :redirect_to_profile_if_logged_in, only: :new
 
   def index
-    @users = User.all
     authorize! :index, current_user
+    @users = User.all
   end
 
   def show
