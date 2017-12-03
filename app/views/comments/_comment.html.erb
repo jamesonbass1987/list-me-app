@@ -4,7 +4,7 @@
       <%= content_tag :div, :class => 'media' do %>
         <%= image_tag(comment.user.profile_image_url, :alt => 'Profile Image', :class => 'align-self-center mr-3 profile-image-small rounded-circle') %>
         <%= content_tag :div, :class => 'media-body' do %>
-          <%= tag.h6("Posted at #{comment.created_at} by #{comment.user.username}" , :class => 'mt-0') %>
+          <%= tag.h6("Posted at #{comment.created_at} by #{comment.user.username} #{display_in_reply_to_if_reply(comment)}" , :class => 'mt-0') %>
           <%= tag.span(comment.content) %> <%= tag(:br) %>
           <%= tag.span(display_comment_status(comment)) %> <%= tag(:br) %>
           <%= tag.span(owner_controls(comment)) %>

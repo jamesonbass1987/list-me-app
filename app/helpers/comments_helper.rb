@@ -21,7 +21,7 @@ module CommentsHelper
   end
 
   def reply_controls(comment)
-    if comment.user != current_user && !current_page?(action: 'new')
+    if !current_page?(action: 'new')
       link_to("Reply", new_comment_comment_path(comment), :class => 'btn btn-outline-info')
     end
   end
@@ -44,6 +44,12 @@ module CommentsHelper
       comment.comments.each do |reply|
         render partial: 'comments/comment', locals: {comment: reply}
       end
+    end
+  end
+
+  def display_in_reply_to_if_reply(comment)
+    if comment.commentable_type == 'Comment'
+      "(Replying to #{comment.commentable.user.username}) "
     end
   end
 
