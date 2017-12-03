@@ -56,6 +56,7 @@ class ListingsController < ApplicationController
     if @listing.update_attributes(listing_params)
       redirect_to location_listing_path(@listing.location, @listing)
     else
+      @categories = Category.all
       render 'edit'
     end
   end

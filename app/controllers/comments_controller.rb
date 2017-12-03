@@ -62,6 +62,7 @@ class CommentsController < ApplicationController
       @comment = Comment.new(comment_params)
       @commentable = @comment.commentable = Listing.find_by(params[:listing_id])
     end
+    
     @comment.user = current_user
   end
 

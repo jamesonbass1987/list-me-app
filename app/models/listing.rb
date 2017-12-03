@@ -31,6 +31,7 @@ class Listing < ApplicationRecord
   end
 
   def listing_images_attributes=(listing_images_attributes)
+
     #parse tag_attributes passed in as hash, checking for empties
     listing_images_attributes.values.each do |listing_image_attribute|
       if listing_image_attribute[:image_url].present?
