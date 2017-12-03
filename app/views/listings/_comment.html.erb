@@ -1,6 +1,0 @@
-<%= content_tag :li do %>
-  <% tag.strong(comment.user.username) %> <%= comment.content %> <%= tag(:br) %>
-  <% tag.strong('Posted At:') %> <%= comment.created_at %> <%= tag(:br) %>
-  <%= display_comment_controls(comment) %> <%= tag(:br) %>
-  <%= display_comment_status(comment) %> <%= tag(:br) %>
-<% end %>

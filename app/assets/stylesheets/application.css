@@ -98,8 +98,6 @@
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-
-
  /*---USER PROFILE---*/
 
  .profile-image {
@@ -201,6 +199,15 @@
   margin: 8px 0px;
 }
 
+.comment-box {
+  padding-left: 5px;
+  padding-bottom: 5px;
+}
+
+.comment-border {
+  border-style: dotted;
+}
+
 
  /*---MEDIA QUERIES---*/
 
@@ -223,6 +230,12 @@
 
   .small-visible {
     display: block;
+  }
+
+  .everything-btn {
+    margin-bottom: -9px;
+    margin-top: -5px;
+
   }
 
 }

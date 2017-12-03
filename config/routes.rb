@@ -18,10 +18,15 @@ Rails.application.routes.draw do
 
   get '/locations/:id/listings/take_my_money' => 'listings#take_my_money'
   resources :locations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+
   resources :locations, only: [:show] do
     resources :listings do
       resources :comments, only: [:create, :update, :destroy, :edit]
     end
+  end
+
+  resources :comments do
+    resources :comments
   end
 
   #catch all other paths that a user may eroneously type in and redirect to root
