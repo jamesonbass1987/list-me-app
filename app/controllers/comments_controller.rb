@@ -7,18 +7,12 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @comment = @commentable.comments.create(comment_params)
-    @comment.user = current_user
+    set_new_comment_variable(@commentable)
 
     if @comment.save
-      if @comment.commentable_type == 'Listing'
-        redirect_back fallback_location: location_listing_path(@comment.commentable.location, @comment.commentable)
-      else
-        listing = Listing.find_by(id: params[:comment][:listing_id])
-        redirect_to location_listing_path(listing.location, listing)
-      end
+      listing = comment_parent_listing(@comment)
+      redirect_to location_listing_path(listing.location, listing)
     end
-
   end
 
   def edit
@@ -34,11 +28,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-
-    if @commentable.commentable_type == 'Listing'
-      listing = @commentable.commentable
-    else
-    end
+    listing = comment_parent_listing(@commentable)
 
     @commentable.destroy!
     redirect_back fallback_location: location_listing_path(listing.location, listing)
@@ -51,14 +41,24 @@ class CommentsController < ApplicationController
 
   #sets comment for views based on id param of a comment or listing
   def find_commentable
-    @commentable = Comment.find_by_id(params[:id]) if params[:id]
-    @commentable = Comment.find_by_id(params[:comment_id]) if params[:comment_id]
+    @commentable = Comment.find_by(id: params[:id]) if params[:id]
+    @commentable = Comment.find_by(id: params[:comment_id]) if params[:comment_id]
   end
 
   #recursively traverses through comment tree for parent listing to set @listing variable
   def comment_parent_listing(comment)
     return comment.commentable if comment.commentable_type == 'Listing'
     comment_parent_listing(comment.commentable)
+  end
+
+  def set_new_comment_variable(commentable)
+    if commentable.present?
+      @comment = commentable.comments.create(comment_params)
+    else
+      @comment = Comment.new(comment_params)
+      @commentable = @comment.commentable = Listing.find_by(params[:listing_id])
+    end
+    @comment.user = current_user
   end
 
 end
