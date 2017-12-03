@@ -8,7 +8,6 @@ class CommentsController < ApplicationController
 
   def create
     set_new_comment_variable(@commentable)
-
     if @comment.save
       listing = comment_parent_listing(@comment)
       redirect_to location_listing_path(listing.location, listing)
@@ -16,7 +15,6 @@ class CommentsController < ApplicationController
   end
 
   def edit
-    binding.pry
     @listing = comment_parent_listing(@commentable)
     @statuses = CommentStatus.all
   end
@@ -44,8 +42,9 @@ class CommentsController < ApplicationController
 
   #sets comment for views based on id param of a comment or listing
   def find_commentable
-    @commentable = Comment.find_by(id: params[:id]) if params[:id]
-    @commentable = Comment.find_by(id: params[:comment_id]) if params[:comment_id]
+    @commentable ||= Comment.find_by(id: params[:id]) if params[:id]
+    @commentable ||= Comment.find_by(id: params[:comment_id]) if params[:comment_id]
+    @commentable ||= Listing.find_by(id: params[:listing_id]) if params[:listing_id]
   end
 
   #recursively traverses through comment tree for parent listing to set @listing variable
