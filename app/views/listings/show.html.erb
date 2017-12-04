@@ -31,7 +31,6 @@
 <%= delete_edit_listing_links(@listing) %>
 
 <%= tag.h3('Comments:', class: 'heading-text') %>
-<%= render @listing.comments %>
-
-<%= tag.h4("Leave A Question For The Seller:", :class => 'heading-text') %>
+<%= display_listing_comments(@listing.comments) %>
+<%= display_comment_form_heading %>
 <%= display_listing_comment_form(@comment) %>

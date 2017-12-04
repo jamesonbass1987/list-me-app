@@ -1,9 +1,10 @@
 module CommentsHelper
 
   def display_listing_comments(comments)
-    if comments.first.nil? || comments.first.content.nil?
-      "There doesn't seem to be anything here."
+    if comments.first.id.present?
+      render comments
     else
+      tag.text("There doesn't seem to be anything here.") + tag(:br)
     end
   end
 
@@ -30,6 +31,8 @@ module CommentsHelper
   def display_listing_comment_form(comment)
     if logged_in?
       render partial: 'comments/comment_form', locals: {comment: comment, statuses: nil}
+    else
+      tag.strong(link_to "Log In", login_path) + " or " + tag.strong(link_to "Sign Up", signup_path) + " to ask the seller a question."
     end
   end
 

@@ -48,4 +48,10 @@ module ListingsHelper
     link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money", :class => "btn btn-outline-success btn-block" unless listings.empty?
   end
 
+  def display_comment_form_heading
+    if logged_in?
+      tag.h4("Leave A Question For The Seller:", :class => 'heading-text')
+    end
+  end
+
 end
