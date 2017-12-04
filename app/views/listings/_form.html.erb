@@ -14,8 +14,8 @@
   <% end %>
 
   <%= content_tag :div, :class => 'form-group' do %>
-    <%= f.label :price %>
-    <%= f.number_field :price, :step => 0.01, :class => 'form-control' %>
+    <%= f.label :price, 'Price ($)' %>
+    <%= f.number_field(:price, :value => number_with_precision(listing.price, precision: 2), :step => 0.01, :min => 0, :class => 'form-control') %>
   <% end %>
 
   <%= content_tag :div, :class => 'form-group' do %>
