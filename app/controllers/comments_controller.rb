@@ -1,27 +1,29 @@
 class CommentsController < ApplicationController
-  before_action :find_commentable
+  before_action :find_commentable, only: [:new, :create]
 
   def new
-    @comment = @commentable.comments.build
-    @listing = comment_parent_listing(@comment)
+    @comment = @commentable.comments.new(user: current_user)
   end
 
   def create
-    set_new_comment_variable(@commentable)
+    @comment = @commentable.comments.create(comment_params)
+    @comment.user = current_user
+
     if @comment.save
-      listing = comment_parent_listing(@comment)
+      listing = parent_listing_for(@comment)
       redirect_to location_listing_path(listing.location, listing)
     end
   end
 
   def edit
-    @listing = comment_parent_listing(@commentable)
+    @comment = Comment.find_by(id: params[:id])
     @statuses = CommentStatus.all
   end
 
   def update
-    if @commentable.update_attributes(comment_params)
-      listing = comment_parent_listing(@commentable)
+    @comment = Comment.find_by(id: params[:id])
+    if @comment.update_attributes(comment_params)
+      listing = parent_listing_for(@comment)
       redirect_to location_listing_path(listing.location, listing)
     else
       render 'edit'
@@ -29,10 +31,11 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    listing = comment_parent_listing(@commentable)
+    comment = Comment.find_by(id: params[:id])
+    listing = parent_listing_for(comment)
 
-    @commentable.destroy!
-    redirect_back fallback_location: location_listing_path(listing.location, listing)
+    comment.destroy!
+    redirect_to location_listing_path(listing.location, listing)
   end
 
   private
@@ -40,30 +43,19 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:content, :user_id, :comment_status_id, :commentable_type, :commentable_id)
   end
 
-  #sets comment for views based on id param of a comment or listing
+  #sets comment for views based on commentable_type of comment or listing
   def find_commentable
-    @commentable ||= Comment.find_by(id: params[:id]) if params[:id]
-    @commentable ||= Comment.find_by(id: params[:comment_id]) if params[:comment_id]
-    @commentable ||= Listing.find_by(id: params[:listing_id]) if params[:listing_id]
+    @commentable ||= Comment.find_by(id: params[:comment_id])
+    @commentable ||= Comment.find_by(id: params[:comment][:commentable_id]) if params[:comment] && params[:comment][:commentable_type] == 'Comment'
+    @commentable ||= Listing.find_by(id: params[:comment][:commentable_id]) if params[:comment] && params[:comment][:commentable_type] == 'Listing'
+
+    redirect_if_commentable_invalid(@commentable)
   end
 
-  #recursively traverses through comment tree for parent listing to set @listing variable
-  def comment_parent_listing(comment)
-    return comment.commentable if comment.commentable_type == 'Listing'
-    comment_parent_listing(comment.commentable)
-  end
-
-  #set @comment variable, if statement is based on whether it is a comment on a listing, or a reply to another
-  #comment (where commenteable would be present)
-  def set_new_comment_variable(commentable)
-    if commentable.present?
-      @comment = commentable.comments.create(comment_params)
-    else
-      @comment = Comment.new(comment_params)
-      @commentable = @comment.commentable = Listing.find_by(params[:listing_id])
+  #redirect if no commentable parent is found
+  def redirect_if_commentable_invalid(commentable)
+    if commentable.nil?
+      redirect_back fallback_location: root_path
     end
-    
-    @comment.user = current_user
   end
-
 end

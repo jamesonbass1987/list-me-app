@@ -1,0 +1,7 @@
+<%= form_for comment do |f| %>
+  <%= form_errors_check(comment) %>
+  <%= display_comment_form_statuses(f, statuses) %>
+  <%= f.hidden_field :commentable_id, value: comment.commentable.id %>
+  <%= f.hidden_field :commentable_type, value: comment.commentable_type %>
+  <%= render partial: 'comments/comment_content', locals: {f:f} %>
+<% end %>

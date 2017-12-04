@@ -1,9 +1,0 @@
-<%= form_for commentable_form_header(commentable, comment) do |f| %>
-  <%= display_comment_form_statuses(statuses, f) %>
-
-  <%= content_tag :div, :class => 'form-group' do %>
-     <%= f.text_area :content, placeholder: "Add a Reply...", :class => 'form-control', required: true %>
-  <% end %>
-  <%= f.hidden_field :listing_id, :value => listing.id %>
-  <%= f.submit "Reply", :class => 'btn btn-outline-success btn-block'  %>
-<% end %>

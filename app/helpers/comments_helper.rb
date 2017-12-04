@@ -9,8 +9,8 @@ module CommentsHelper
 
   def owner_controls(comment)
     if comment.user == current_user
-      link_to("Edit Comment", edit_location_listing_comment_path(@listing.location, @listing, comment), :class => 'btn btn-outline-warning') +
-      link_to("Delete Comment", location_listing_comment_path(@listing.location, @listing, comment), :method => :delete, :class => 'btn btn-outline-danger')
+      link_to("Edit Comment", edit_comment_path(comment), :class => 'btn btn-outline-warning') +
+      link_to("Delete Comment", comment_path(comment), :method => :delete, :class => 'btn btn-outline-danger')
     end
   end
 
@@ -21,15 +21,15 @@ module CommentsHelper
   end
 
 
-  def display_comment_status(comment, listing)
-    if comment.user != listing.user
+  def display_comment_status(comment)
+    if comment.user != parent_listing_for(comment).user
       tag(:br) + tag.strong("Status: ") + comment.comment_status.name
     end
   end
 
-  def display_listing_comment_form(listing, comment)
+  def display_listing_comment_form(comment)
     if logged_in?
-      render partial: 'listings/listing_comment_form', locals: {location: listing.location, listing: listing, comment: comment}
+      render partial: 'comments/comment_form', locals: {comment: comment, statuses: nil}
     end
   end
 
@@ -43,7 +43,7 @@ module CommentsHelper
     render comments unless current_page?(action: 'new')
   end
 
-  def display_comment_form_statuses(statuses, f)
+  def display_comment_form_statuses(f, statuses)
     if statuses.present?
       content_tag :div, :class => 'form-group' do
         f.label :comment_status_id, "Status"
@@ -52,11 +52,11 @@ module CommentsHelper
     end
   end
 
-  def commentable_form_header(commentable, comment)
-    if commentable.commentable_type == 'Listing'
-      "commentable.location, commentable, comment"
+  def reply_placeholder
+    if current_page?(controller: 'comments', action: 'new')
+      'Leave a reply...'
     else
-      "commentable, comment"
+      'Ask a question...'
     end
   end
 

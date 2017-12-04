@@ -20,9 +20,7 @@ Rails.application.routes.draw do
   resources :locations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
 
   resources :locations, only: [:show] do
-    resources :listings do
-      resources :comments, only: [:create, :update, :destroy, :edit]
-    end
+    resources :listings
   end
 
   resources :comments do

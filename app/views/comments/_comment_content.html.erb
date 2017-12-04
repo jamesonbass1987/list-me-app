@@ -1,5 +1,5 @@
 <%= content_tag :div, :class => 'form-group' do %>
-  <%= f.text_area :content, :class => 'form-control', :required => true %>
+  <%= f.text_area(:content, :class => 'form-control', :required => true, :placeholder => reply_placeholder) %>
 <% end %>
 
 <%= f.submit :class => 'btn btn-outline-success btn-block' %>

@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  helper_method :current_user, :logged_in?, :navbar_locations_list
+  helper_method :current_user, :logged_in?, :navbar_locations_list, :parent_listing_for
 
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = exception.message
@@ -39,6 +39,12 @@ class ApplicationController < ActionController::Base
   #sets navbar dropdown locations list variable
   def navbar_locations_list
     Location.all
+  end
+
+  #recursively traverses through comment tree for parent listing to set @listing variable
+  def parent_listing_for(comment)
+    return comment.commentable if comment.commentable_type == 'Listing'
+    parent_listing_for(comment.commentable)
   end
 
 end

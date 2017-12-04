@@ -22,7 +22,6 @@ class ListingsController < ApplicationController
   end
 
   def show
-    @comments = @listing.comments
     @comment = @listing.comments.build
   end
 

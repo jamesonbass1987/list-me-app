@@ -1,2 +1,3 @@
 <%= tag.h1("Edit Listing", :class => 'heading-text') %>
-<%= render partial: 'form', locals: {listing: @listing, categories: @categories, method: 'patch'} %>
+
+<%= render partial: 'form', locals: {listing: @listing, commentable: @commentable, statuses: @statuses} %>
