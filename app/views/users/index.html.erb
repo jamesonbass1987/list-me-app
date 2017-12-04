@@ -1,5 +1,5 @@
 <%= tag.h1("Manage Users", :class => 'heading-text') %>
 
-<%= div_for(@users) do |user| %>
-  <%= link_to user.username, user_path(user) %>
+<%= content_tag :ul do %>
+  <%= render @users %>
 <% end %>

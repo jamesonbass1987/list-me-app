@@ -1,7 +1,10 @@
 <%= tag.h1(full_location_name(@location), :class => 'heading-text') %>
 
 <%= tag.h3('All Listings', :class => 'heading-text') %>
-<%= render partial: 'listings/listings_list', locals: {listings: @listings} %>
+
+<%= content_tag :div, :class => 'row' do %>
+  <%= render @listings %>
+<% end %>
 
 <%= link_to "Edit Location", edit_location_path(@location.id), :class => 'btn btn-outline-warning btn-block'%>
 <%= link_to "Delete Location", location_path(@location.id), :method => :delete, :class => 'btn btn-outline-danger btn-block', :remote => 'true'%>

@@ -11,9 +11,7 @@
           <%= tag.span(reply_controls(comment)) %>
         <% end %>
       <% end %>
-        <% comment.comments.each do |reply| %>
-          <%= render partial: 'comments/comment', locals: {comment: reply} unless current_page?(action: 'new') %>
-        <% end %>
+        <%= render_replies(comment.comments)  %>
     <% end %>
   <% end %>
 <% end %>

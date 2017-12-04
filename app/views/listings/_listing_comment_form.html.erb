@@ -1,0 +1,5 @@
+<%= form_for([location, listing, comment]) do |f| %>
+  <%= form_errors_check(comment) %>
+  <%= f.hidden_field :location_id, :value => listing.location_id %>
+  <%= render partial: 'comments/comment_content', locals: {f:f} %>
+<% end %>

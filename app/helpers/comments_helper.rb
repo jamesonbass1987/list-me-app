@@ -7,12 +7,6 @@ module CommentsHelper
     end
   end
 
-  def display_comment(comment)
-    if !comment.id.nil?
-      render partial: 'listings/comment', locals: {comment: comment}
-    end
-  end
-
   def owner_controls(comment)
     if comment.user == current_user
       link_to("Edit Comment", edit_location_listing_comment_path(@listing.location, @listing, comment), :class => 'btn btn-outline-warning') +
@@ -21,7 +15,7 @@ module CommentsHelper
   end
 
   def reply_controls(comment)
-    if !current_page?(action: 'new')
+    if !current_page?(action: 'new') && logged_in?
       link_to("Reply", new_comment_comment_path(comment), :class => 'btn btn-outline-info')
     end
   end
@@ -33,17 +27,9 @@ module CommentsHelper
     end
   end
 
-  def display_comment_form(listing, comment)
+  def display_listing_comment_form(listing, comment)
     if logged_in?
-     render partial: 'listings/comment_form', locals: {location: listing.location, listing: listing, comment: comment}
-    end
-  end
-
-  def display_comment_replies(comment)
-    if comment.comments.present? && !current_page?(action: 'new')
-      comment.comments.each do |reply|
-        render partial: 'comments/comment', locals: {comment: reply}
-      end
+      render partial: 'listings/listing_comment_form', locals: {location: listing.location, listing: listing, comment: comment}
     end
   end
 
@@ -51,6 +37,10 @@ module CommentsHelper
     if comment.commentable_type == 'Comment'
       "(Replying to #{comment.commentable.user.username}) "
     end
+  end
+
+  def render_replies(comments)
+    render comments unless current_page?(action: 'new')
   end
 
 end

@@ -7,7 +7,10 @@
 <% end %>
 
 <%= tag.h3("Your Listings:", :class => 'heading-text') %>
-<%= render partial: 'listings/listings_list', locals: {listings: @user.listings} %>
+
+<%= content_tag :div, :class => 'row' do %>
+  <%= render @user.listings %>
+<% end %>
 
 <%= tag.h3("Account Settings:", :class => 'heading-text') %>
 <%= link_to "Edit Profile", edit_user_path, :class => 'btn btn-block btn-outline-warning' %>

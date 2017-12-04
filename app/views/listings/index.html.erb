@@ -22,5 +22,7 @@
 <% end %>
 
 <%= display_take_my_money(@listings) %>
-<%= render partial: 'listings_list', locals: {listings: @listings} %>
+<%= content_tag :div, :class => 'row' do %>
+  <%= render @listings %>
+<% end %>
 <%= create_listing(@location) %>

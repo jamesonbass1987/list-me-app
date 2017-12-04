@@ -1,0 +1,11 @@
+<%= content_tag(:div, :class=>"card text-center listing-card text-centered") do %>
+  <%= image_tag listing.listing_images.first.image_url, :class=>"mx-auto d-block card-img-top listing-card-img img-responsive" %>
+  <%= content_tag :div, :class => "card-body" do %>
+    <%= tag.h5(listing.title, :class => "card-title listing-title-text" ) %>
+    <%= tag.span(number_to_currency(listing.price)) %>
+  <% end %>
+  <%= content_tag :div, :class => "card-footer" do %>
+    <%= link_to 'View Listing', location_listing_path(listing.location, listing.id), :class=>"btn btn-outline-success" %>
+    <%= display_owner_listing_controls(current_user, listing) %>
+  <% end %>
+<% end %>

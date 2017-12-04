@@ -1,9 +1,0 @@
-<%= form_for([location, listing, comment]) do |f| %>
-  <%= form_errors_check(comment) %>
-  <%= content_tag :div, :class => 'form-group' do %>
-    <%= tag.h4("Leave A Question For The Seller:", :class => 'heading-text') %>
-    <%= f.text_area :content, :class => 'form-control', required: true %>
-  <% end %>
-  <%= f.hidden_field :location_id, :value => listing.location_id %>
-  <%= f.submit :class => 'btn btn-outline-success btn-block' %>
-<% end %>

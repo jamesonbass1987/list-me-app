@@ -41,6 +41,7 @@
     <%= f.collection_check_boxes :tag_ids, listing.tags, :id, :name do |tag| %>
         <%= tag.check_box(class:'tag-checkbox')  %> <%= tag.object.name %> <%= tag(:br) %>
     <% end %>
+    
     <%= f.label :tags, "Add New Tags" %>
     <%= content_tag :div, :class => 'form-inline' do %>
       <%= f.fields_for :tags, 10.times{listing.tags.build} do |tag_fields| %>

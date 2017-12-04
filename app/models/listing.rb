@@ -45,11 +45,11 @@ class Listing < ApplicationRecord
   end
 
   def self.listings_in_category(category, location)
-      where("category_id = :category_id AND location_id = :location_id", category_id: category.id, location_id: location.id)
+    where("category_id = :category_id AND location_id = :location_id", category_id: category.id, location_id: location.id)
   end
 
   def self.highest_price_item(location)
-      where("location_id = ?", location.id).order(price: :desc).first
+    where("location_id = ?", location.id).order(price: :desc).first
   end
 
   def self.all_user_listings(user)
