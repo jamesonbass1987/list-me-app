@@ -26,7 +26,7 @@ class ListingsController < ApplicationController
   end
 
   def new
-    authorize! :new, Listing
+    authorize! :new, @listing
 
     @location = Location.friendly.find(params[:location_id])
     @listing = Listing.new(location_id: @location.id)
@@ -34,6 +34,7 @@ class ListingsController < ApplicationController
   end
 
   def create
+    authorize! :create, Listing
     @listing = Listing.new(listing_params)
     @listing.user = current_user
 

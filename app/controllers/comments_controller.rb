@@ -2,6 +2,7 @@ class CommentsController < ApplicationController
   before_action :find_commentable, only: [:new, :create]
 
   def new
+    authorize! :new, Comment
     @comment = @commentable.comments.new(user: current_user)
   end
 
@@ -16,8 +17,11 @@ class CommentsController < ApplicationController
   end
 
   def edit
+    authorize! :edit, Comment
     @comment = Comment.find_by(id: params[:id])
     @statuses = CommentStatus.all
+
+    redirect_to root_path if @comment.nil?
   end
 
   def update
@@ -31,6 +35,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, Comment
     comment = Comment.find_by(id: params[:id])
     listing = parent_listing_for(comment)
 
