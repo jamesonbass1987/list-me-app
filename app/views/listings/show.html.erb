@@ -4,11 +4,7 @@
 <%= content_tag(:div, :class => "carousel img-responsive") do %>
   <%= content_tag(:div, :class => "carousel slide", :id => "listingCarousel", :'data-ride' => 'carousel') do %>
     <%= content_tag(:div, :class => "carousel-inner") do %>
-       <% @listing.listing_images.each do |image| %>
-          <%= content_tag :div, :class => "#{image_carousel_class_tag(@listing, image)}" do %>
-              <%= image_tag image.image_url, :class => "#{carousel_image_class_tag(image)}"%>
-          <% end %>
-      <% end %>
+      <%= render @listing.listing_images %>
     <% end %>
     <%= content_tag(:div, :class => "carousel-controls") do %>
       <%= link_to "#listingCarousel", class: "carousel-control-prev carousel-buttons", role: "button", 'data-slide': 'prev' do  %>

@@ -43,4 +43,21 @@ module CommentsHelper
     render comments unless current_page?(action: 'new')
   end
 
+  def display_comment_form_statuses(statuses, f)
+    if statuses.present?
+      content_tag :div, :class => 'form-group' do
+        f.label :comment_status_id, "Status"
+        f.collection_select(:comment_status_id, statuses, :id, :name, {}, {:class => 'form-control custom-select btn'})
+      end
+    end
+  end
+
+  def commentable_form_header(commentable, comment)
+    if commentable.commentable_type == 'Listing'
+      "commentable.location, commentable, comment"
+    else
+      "commentable, comment"
+    end
+  end
+
 end

@@ -1,2 +1,2 @@
 <%= tag.h1("Edit Comment", :class => 'heading-text') %>
-<%= render partial: 'form', locals: {commentable: @commentable, listing: @listing, statuses: @statuses} %>
+<%= render partial: 'commentable_form', locals: {commentable: @commentable, comment: @comment, listing: @listing, statuses: @statuses} %>
