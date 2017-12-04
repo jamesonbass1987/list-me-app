@@ -36,13 +36,11 @@ module ListingsHelper
     end
   end
 
-
   def display_edit_listing_instructions(content_type, string, f)
     if content_type.any?
       (f.label :listing_images, "Edit Current #{string} (Deselect To Remove From Listing)") + tag(:br)
     end
   end
-
 
   def display_take_my_money(listings)
     link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money", :class => "btn btn-outline-success btn-block" unless listings.empty?

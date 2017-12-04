@@ -23,8 +23,8 @@ Rails.application.routes.draw do
     resources :listings
   end
 
-  resources :comments do
-    resources :comments
+  resources :comments, except: [:index, :show] do
+    resources :comments, except: [:index, :show]
   end
 
   #catch all other paths that a user may eroneously type in and redirect to root
