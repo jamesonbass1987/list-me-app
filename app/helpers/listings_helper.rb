@@ -30,7 +30,7 @@ module ListingsHelper
     end
   end
 
-  def create_listing(location)
+  def create_listing_link(location)
     if can? :create, Listing
        link_to("Create Listing", new_location_listing_path(location), :class => 'btn btn-outline-success btn-block')
     end
