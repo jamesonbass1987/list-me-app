@@ -6,14 +6,9 @@
     <%= f.text_field :email, :class => 'form-control' %>
   <% end %>
 
-  <%= content_tag :div, :class => 'form-group' do %>
-    <%= f.label :username %>
-    <%= f.text_field :username, :class => 'form-control' %>
-  <% end %>
+  <%= render partial: 'username_password_fields', locals: {f: f} %>
 
   <%= content_tag :div, :class => 'form-group' do %>
-    <%= f.label :password %>
-    <%= f.password_field :password, :class => 'form-control' %>
     <%= f.label :password_confirmation %>
     <%= f.password_field :password_confirmation, :class => 'form-control' %>
   <% end %>
