@@ -1,3 +1,4 @@
+<!-- Listing Index Heading -->
 <%= tag.h1("Listings in #{full_location_name(@location)}", :class => 'heading-text') %>
 
 
@@ -21,7 +22,10 @@
       <%= submit_tag "Filter", :class => 'btn btn-outline-primary btn-block' %>
 <% end %>
 
+<!-- Listing Links -->
 <%= display_take_my_money(@listings) %>
+
+<!-- Rendered Listings -->
 <%= content_tag :div, :class => 'row' do %>
   <%= render @listings %>
 <% end %>

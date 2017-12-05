@@ -1,6 +1,8 @@
+<!--  Listing Heading -->
 <%= tag.h2(@listing.title, :class => 'heading-text') %>
 <%= tag.text(full_location_name(@listing.location)) %> <%= tag(:br) %>
 
+<!-- Listing image carousel -->
 <%= content_tag(:div, :class => "carousel img-responsive") do %>
   <%= content_tag(:div, :class => "carousel slide", :id => "listingCarousel", :'data-ride' => 'carousel') do %>
     <%= content_tag(:div, :class => "carousel-inner") do %>
@@ -19,6 +21,7 @@
   <% end %>
 <% end %>
 
+<!-- Listing Information-->
 <%= tag.h3('Description:', class: 'heading-text') %>
 <%= tag.p(@listing.description) %>
 
@@ -27,9 +30,11 @@
 <%= tag.strong('Tags:') %> <%= tag.text(@listing.tags.collect{|tag| tag.name}.join(", ")) %><%= tag(:br) %>
 <%= tag.strong('Posted By:') %> <%= tag.text(@listing.user.username) %><%= tag(:br) %>
 
+<!-- Listing Actions -->
 <%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'} %>
 <%= delete_edit_listing_links(@listing) %>
 
+<!-- Listing Comments Section -->
 <%= tag.h3('Comments:', class: 'heading-text') %>
 <%= display_listing_comments(@listing.comments) %>
 <%= display_comment_form_heading %>
