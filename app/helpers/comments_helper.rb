@@ -16,7 +16,7 @@ module CommentsHelper
   end
 
   def reply_controls(comment)
-    if !current_page?(action: 'new') && logged_in?
+    if !current_page?(action: 'new') || !controller_name == 'comments' && logged_in?
       link_to("Reply", new_comment_comment_path(comment), :class => 'btn btn-outline-info')
     end
   end

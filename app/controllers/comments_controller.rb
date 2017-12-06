@@ -9,10 +9,18 @@ class CommentsController < ApplicationController
   def create
     @comment = @commentable.comments.create(comment_params)
     @comment.user = current_user
+    @listing = parent_listing_for(@comment)
 
     if @comment.save
-      listing = parent_listing_for(@comment)
       redirect_to location_listing_path(listing.location, listing)
+
+    #if save unsuccessful and routing from reply page, render comments#new, otherwise
+    #route back to listing with errors
+    
+    elsif request.referer.include?('/comments/new')
+      render 'new'
+    else
+      render 'listings/show'
     end
   end
 
