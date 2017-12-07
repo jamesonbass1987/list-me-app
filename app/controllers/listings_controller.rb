@@ -4,7 +4,6 @@ class ListingsController < ApplicationController
   before_action :validate_listing, only: [:show, :edit, :destroy]
 
   def index
-
     @location = Location.friendly.find(params[:location_id])
     @categories = Category.all
 
@@ -26,7 +25,7 @@ class ListingsController < ApplicationController
   end
 
   def new
-    authorize! :new, @listing
+    authorize! :new, Listing
 
     @location = Location.friendly.find(params[:location_id])
     @listing = Listing.new(location_id: @location.id)
@@ -35,6 +34,7 @@ class ListingsController < ApplicationController
 
   def create
     authorize! :create, Listing
+
     @listing = Listing.new(listing_params)
     @listing.user = current_user
 
