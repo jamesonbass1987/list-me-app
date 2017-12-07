@@ -11,16 +11,18 @@ class CommentsController < ApplicationController
     @comment.user = current_user
     @listing = parent_listing_for(@comment)
 
-    if @comment.save
-      redirect_to location_listing_path(listing.location, listing)
+    #if save successful, redirect to listing page. if save unsuccessful
+    #and routing from reply page, render comments#new, otherwise route
+    #back to listing with errors
 
-    #if save unsuccessful and routing from reply page, render comments#new, otherwise
-    #route back to listing with errors
-    
-    elsif request.referer.include?('/comments/new')
-      render 'new'
+    if @comment.save
+      redirect_to location_listing_path(@listing.location, @listing)
     else
-      render 'listings/show'
+      if request.referer.include?('/comments/new')
+        render 'new'
+      else
+        render 'listings/show'
+      end
     end
   end
 
