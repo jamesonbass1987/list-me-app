@@ -3,12 +3,12 @@ class Ability
 
   def initialize(user)
     can :read, Listing
-
+    can :show, User
+    
     if user.present?
       can :manage, Listing, user_id: user.id
       can :manage, ListingImage, user_id: user.id
       can :create, Tag
-      can :show, User
       can :manage, User, id: user.id
       cannot :index, User
       cannot :manage, Category
