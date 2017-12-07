@@ -1,6 +1,6 @@
 <!--  Listing Heading -->
 <%= tag.h2(@listing.title, :class => 'heading-text') %>
-<%= tag.text(full_location_name(@listing.location)) %> <%= tag(:br) %>
+<%= tag.text(@listing.location.full_location_name) %> <%= tag(:br) %>
 
 <!-- Listing image carousel -->
 <%= content_tag(:div, :class => "carousel img-responsive") do %>
