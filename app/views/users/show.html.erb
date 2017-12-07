@@ -1,22 +1,22 @@
 <!-- User Heading -->
-<%= tag.h1("Welcome #{@user.username}!", :class => 'heading-text') %>
+<%= tag.h1(display_user_heading(@user), :class => 'heading-text') %>
 <%= image_tag @user.profile_image_url, :class => 'profile-image rounded-circle mx-auto d-block img-fluid' %>
 
 <!-- User Information -->
 <%= div_for(@user, :class => 'profile-text') do %>
   <%= tag.strong("Email:") %> <%= @user.email %><%= tag(:br) %>
   <%= tag.strong("Username:") %> <%= @user.username %><%= tag(:br) %>
+  <%= tag.strong("Rating:") %> <%= display_user_rating(@user) %><%= tag(:br) %>
+  <%= tag.strong(display_rating_dropdown(@user)) %>
 <% end %>
 
 <!-- User Listings -->
-<%= tag.h3("Your Listings:", :class => 'heading-text') %>
+<%= tag.h3("#{@user.username}'s Listings:", :class => 'heading-text') %>
 
 <%= content_tag :div, :class => 'row' do %>
   <%= render @user.listings %>
 <% end %>
 
 <!-- User Controls -->
-<%= tag.h3("Account Settings:", :class => 'heading-text') %>
-<%= link_to "Edit Profile", edit_user_path, :class => 'btn btn-block btn-outline-warning' %>
-<%= link_to "Delete Account", user_path(@user.id), :method => :delete, :class => 'btn btn-block btn-outline-danger', data: { confirm: 'Are you sure you want to delete your profile?' }%>
+<%= display_user_profile_tools(@user) %>
 <%= display_admin_profile_tools(@user) %>

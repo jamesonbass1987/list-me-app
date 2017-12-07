@@ -28,7 +28,7 @@
 <%= tag.strong('Price:') %> <%= tag.text(number_to_currency(@listing.price)) %> <%= tag(:br) %>
 <%= tag.strong('Category:') %> <%= tag.text(@listing.category.name) %> <%= tag(:br) %>
 <%= tag.strong('Tags:') %> <%= tag.text(@listing.tags.collect{|tag| tag.name}.join(", ")) %><%= tag(:br) %>
-<%= tag.strong('Posted By:') %> <%= tag.text(@listing.user.username) %><%= tag(:br) %>
+<%= tag.strong('Posted By:') %> <%= tag.text(link_to @listing.user.username, user_path(@listing.user)) %> <%= tag.text(display_user_rating(@listing.user)) %><%= tag(:br) %>
 
 <!-- Listing Actions -->
 <%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'} %>

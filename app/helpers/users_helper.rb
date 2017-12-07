@@ -19,4 +19,34 @@ module UsersHelper
       render 'admin_tools'
     end
   end
+
+  def display_user_profile_tools(user)
+    if user == current_user
+      tag.h3("Account Settings:", :class => 'heading-text') +
+      link_to("Edit Profile", edit_user_path, :class => 'btn btn-block btn-outline-warning') +
+      link_to("Delete Account", user_path(user.id), :method => :delete, :class => 'btn btn-block btn-outline-danger', data: { confirm: 'Are you sure you want to delete your profile?' })
+    end
+  end
+
+  def display_user_heading(user)
+    if user == current_user
+      "Welcome #{@user.username}!"
+    else
+      "#{@user.username}'s Profile"
+    end
+  end
+
+  def display_user_rating(user)
+    if user.rating > 0
+      "(#{user.rating})"
+    else
+      "(No Ratings Yet)"
+    end
+  end
+
+  def display_rating_dropdown(user)
+    if user != current_user && logged_in?
+      render partial: 'user_rating', locals: {user: @user}
+    end
+  end
 end

@@ -1,0 +1,7 @@
+<%= form_for user, url: {action: "user_rating", params: {id: user.id}} do |f| %>
+
+  <%= f.label :rating, "Leave A Rating:" %>
+  <%= f.select :rating, [1,2,3,4,5] %>
+
+  <%= f.submit "Submit" %>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171202211330) do
+ActiveRecord::Schema.define(version: 20171207195300) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -109,6 +109,8 @@ ActiveRecord::Schema.define(version: 20171202211330) do
     t.string "username"
     t.string "slug"
     t.integer "role_id", default: 1
+    t.decimal "rating", default: "0.0"
+    t.integer "rating_count", default: 0
   end
 
   create_table "zipcodes", force: :cascade do |t|

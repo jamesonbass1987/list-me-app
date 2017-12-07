@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get '/auth/facebook/callback' => 'sessions#create'
   resources :sessions, only: [:create, :destroy]
 
+  patch '/users/:id/user_rating' => 'users#user_rating'
   resources :users
   resources :categories
 
