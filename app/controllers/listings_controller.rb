@@ -25,7 +25,7 @@ class ListingsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @listing }
+      format.json { render json: @listing, include: ['comments.comments.**', 'listing_images', 'user', 'location', 'category', 'tags'] }
     end
   end
 
