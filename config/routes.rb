@@ -27,8 +27,6 @@ Rails.application.routes.draw do
     resources :comments, except: [:index, :show]
   end
 
-  get '/listing_image/:id' => 'listing_images#show'
-
   #catch all other paths that a user may eroneously type in and redirect to root
   get '*path' => redirect('/')
 end
