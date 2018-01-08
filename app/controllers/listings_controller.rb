@@ -18,6 +18,11 @@ class ListingsController < ApplicationController
     else
       @listings = @location.listings
     end
+
+    respond_to do |format| 
+      format.html { render 'index' }
+      format.json { render json: { :listings => @listings, :location => @location } }
+    end
   end
 
   def show
