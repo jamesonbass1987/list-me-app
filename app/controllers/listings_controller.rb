@@ -22,6 +22,11 @@ class ListingsController < ApplicationController
 
   def show
     @comment = @listing.comments.build
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @listing }
+    end
   end
 
   def new

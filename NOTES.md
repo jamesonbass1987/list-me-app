@@ -17,4 +17,10 @@ Must translate the JSON responses into Javascript Model Objects. The Model Objec
 Borrowing from the previous example, instead of plainly taking the JSON response of the newly created comment and appending it to the DOM, you would create a Comment prototype object and add a function to that prototype to perhaps concatenate (format) the comments authors first and last name. You would then use the object to append the comment information to the DOM.
 
 - Listings Edit/Create Page (Adding/Removing Image Links Or Tags)
-- Listing Comments New Page
+- Listing Comments New/Edit
+
+
+Active Model Serializers For - 
+- Listing
+- Comments
+- Listing_Comments
