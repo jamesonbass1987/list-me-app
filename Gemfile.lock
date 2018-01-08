@@ -54,11 +54,11 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
-    autoprefixer-rails (7.1.6)
+    autoprefixer-rails (7.2.4)
       execjs
     bcrypt (3.1.11)
     bindex (0.5.0)
-    bootstrap (4.0.0.beta2.1)
+    bootstrap (4.0.0.beta3)
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.3, < 2)
       sass (>= 3.5.2)
@@ -155,7 +155,7 @@ GEM
     omniauth-oauth2 (1.4.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
-    popper_js (1.12.5)
+    popper_js (1.12.9)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -292,6 +292,7 @@ DEPENDENCIES
   selenium-webdriver
   spring
   spring-watcher-listen (~> 2.0.0)
+  sprockets-rails
   sqlite3
   turbolinks (~> 5)
   tzinfo-data

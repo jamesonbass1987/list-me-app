@@ -1,4 +1,4 @@
-<%= form_for comment do |f| %>
+<%= form_for comment, :html => {:id => "js-listing-comment"} do |f| %>
   <%= form_errors_check(comment) %>
   <%= display_comment_form_statuses(f, statuses) %>
   <%= f.hidden_field :commentable_id, value: comment.commentable.id %>

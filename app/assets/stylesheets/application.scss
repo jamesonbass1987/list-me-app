@@ -12,7 +12,6 @@
  *
  */
 
- @import "bootstrap-sprockets";
  @import "bootstrap";
 
 * {
@@ -79,6 +78,11 @@
 
 .welcome_main {
   color: white;
+}
+
+.welcome_button {
+  width: 30%;
+  display: inline;
 }
 
 .welcome_container {
