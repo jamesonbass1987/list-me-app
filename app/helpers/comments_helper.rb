@@ -8,7 +8,8 @@ module CommentsHelper
     end
   end
 
-  def owner_controls(comment)
+  def owner_controls(comment_id)
+    binding.pry
     if can? :edit, comment
       link_to("Edit Comment", edit_comment_path(comment), :class => 'btn btn-outline-warning') +
       link_to("Delete Comment", comment_path(comment), :method => :delete, :class => 'btn btn-outline-danger')
