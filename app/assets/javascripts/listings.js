@@ -2,13 +2,13 @@ class Comment {
     constructor(comment) {
         this.id = comment.id
         this.content = comment.content
-        this.owner_username = comment.user.username
-        this.owner_profile_image_url = comment.user.profile_image_url
-        this.owner_rating = comment.user.rating
+        this.ownerUsername = comment.user.username
+        this.ownerProfileImageUrl = comment.user.profile_image_url
+        this.ownerRating = comment.user.rating
         this.status = comment.comment_status.name
-        this.created_at = comment.created_at
-        this.commentable_type = comment.commentable_type
-        this.commentable_id = comment.commentable_id
+        this.createdAt = comment.created_at
+        this.commentableType = comment.commentable_type
+        this.commentableId = comment.commentable_id
     }
 }
 
@@ -38,23 +38,26 @@ function getComments(){
     $.getJSON( listingCommentsPath, {
         id: location
     }, function(response){
-       response.forEach(function(comment_data){
-           debugger;
-           let comment = new Comment(comment_data)
-           displayComment(comment)
-       })
+        for(let i = 0; i < response.length; i++){
+            buildComments(response[i])
+        }
     })
 }
 
-function displayComment(comment){
-    let comment_template = HandlebarsTemplates['comments'](comment);
+function buildComments(commentParent){
+        debugger;
+        let newComment = new Comment(commentParent)
+        let commentTemplate = HandlebarsTemplates['comments'](newComment);
 
-    debugger;
-    if (comment.commentable_type === "Listing"){
-        $("#js-listing-comments").append(comment_template)
-    }  else {
-        $(`#comment-${commentable_id}`).append(comment_template)
-        comment.commentsdisplayComment()
-    }
+        if (newComment.commentableType === 'Listing'){ 
+            $("#js-listing-comments").append(commentTemplate)
+        } else if (newComment.commentableType === "Comment") {
+            $(`#comment-${newComment.commentableId}`).append(commentTemplate)
+        }
+        debugger;
+
+        if (commentParent.comments.length >= 1){
+            commentParent.comments.forEach(comment => buildComments(comment));
+        }
 
 }

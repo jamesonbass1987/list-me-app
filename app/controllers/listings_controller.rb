@@ -32,7 +32,8 @@ class ListingsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @listing, include: ['listing_images', 'user', 'location', 'category', 'tags'] }
+      format.json { render json: @listing, include: '**' }
+      # , include: ['listing_images', 'user', 'location', 'category', 'tags']
     end
   end
 
@@ -96,7 +97,7 @@ class ListingsController < ApplicationController
   # API CALLS
   def listing_comments
     comments = @listing.comments
-    render json: comments, include: ['id', 'content', 'created_at', 'commentable_id', 'commentable_type', 'comments.comments.*']
+    render json: comments
   end
 
 
