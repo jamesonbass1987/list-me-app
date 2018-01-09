@@ -27,6 +27,9 @@ Rails.application.routes.draw do
     resources :comments, except: [:index, :show]
   end
 
+  # API CALLS
+  get '/locations/new-york-ny/listings/:id/listing_comments' => 'listings#listing_comments'
+
   #catch all other paths that a user may eroneously type in and redirect to root
   get '*path' => redirect('/')
 end

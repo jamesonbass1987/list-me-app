@@ -14,16 +14,21 @@ class CommentsController < ApplicationController
     #if save successful, redirect to listing page. if save unsuccessful
     #and routing from reply page, render comments#new, otherwise route
     #back to listing with errors
+    @comment.save
+    render json: @comment, status: 201
 
-    if @comment.save
-      redirect_to location_listing_path(@listing.location, @listing)
-    else
-      if request.referer.include?('/comments/new')
-        render 'new'
-      else
-        render 'listings/show'
-      end
-    end
+    # if @comment.save
+    #   respond_to do |format|
+    #     format.html { redirect_to location_listing_path(@listing.location, @listing) }
+    #     format.json { render json: @comment, status: 201 }
+    #   end
+    # else
+    #   if request.referer.include?('/comments/new')
+    #     render 'new'
+    #   else
+    #     render 'listings/show'
+    #   end
+    # end
   end
 
   def edit
