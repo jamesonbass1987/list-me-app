@@ -96,7 +96,7 @@ class ListingsController < ApplicationController
   # API CALLS
   def listing_comments
     comments = @listing.comments
-    render json: comments, include: ['comments.**']
+    render json: comments, include: ['comments.**', 'user', 'comment_status']
   end
 
 
