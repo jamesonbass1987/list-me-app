@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
     #and routing from reply page, render comments#new, otherwise route
     #back to listing with errors
     @comment.save
-    render json: @comment, status: 201
+    render json: @comment, status: 201, include: 'comments.comments**'
 
     # if @comment.save
     #   respond_to do |format|
@@ -78,4 +78,5 @@ class CommentsController < ApplicationController
       redirect_back fallback_location: root_path
     end
   end
+
 end

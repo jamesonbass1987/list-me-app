@@ -39,9 +39,22 @@ function getComments(){
         id: location
     }, function(response){
        response.forEach(function(comment_data){
-            let new_comment = new Comment(comment_data)
-            let comment_template = HandlebarsTemplates['comments'](new_comment);
-            $("#js-listing-comments").append(comment_template)
+           debugger;
+           let comment = new Comment(comment_data)
+           displayComment(comment)
        })
     })
+}
+
+function displayComment(comment){
+    let comment_template = HandlebarsTemplates['comments'](comment);
+
+    debugger;
+    if (comment.commentable_type === "Listing"){
+        $("#js-listing-comments").append(comment_template)
+    }  else {
+        $(`#comment-${commentable_id}`).append(comment_template)
+        comment.commentsdisplayComment()
+    }
+
 }
