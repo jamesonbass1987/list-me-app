@@ -6,6 +6,5 @@ class ListingSerializer < ActiveModel::Serializer
   belongs_to :location
   
   has_many :listing_images
-  has_many :comments, as: :commentable, serializer: CommentSerializer
   has_many :tags
 end
