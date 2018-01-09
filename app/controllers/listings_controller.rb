@@ -28,11 +28,9 @@ class ListingsController < ApplicationController
   end
 
   def show
-    # @comment = @listing.comments.build
-
     respond_to do |format|
       format.html
-      format.json { render json: @listing }
+      format.json { render json: @listing, include: ['comments.**', 'listing_images', 'location'] }
     end
   end
 

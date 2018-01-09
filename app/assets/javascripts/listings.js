@@ -45,7 +45,6 @@ function getComments(){
 }
 
 function buildComments(commentParent){
-        debugger;
         let newComment = new Comment(commentParent)
         let commentTemplate = HandlebarsTemplates['comments'](newComment);
 
@@ -54,7 +53,6 @@ function buildComments(commentParent){
         } else if (newComment.commentableType === "Comment") {
             $(`#comment-${newComment.commentableId}`).append(commentTemplate)
         }
-        debugger;
 
         if (commentParent.comments.length >= 1){
             commentParent.comments.forEach(comment => buildComments(comment));
