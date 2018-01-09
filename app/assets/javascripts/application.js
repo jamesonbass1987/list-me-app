@@ -16,3 +16,5 @@
 //= require turbolinks
 //= require bootstrap
 //= require cable
+//= require handlebars
+//= require_tree ./templates

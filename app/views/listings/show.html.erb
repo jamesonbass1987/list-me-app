@@ -41,26 +41,3 @@
 <%= display_comment_form_heading %>
 <%= display_listing_comment_form(@comment) %> -->
 
-
-<script id="comment-template" type="text/comment-template">
-  <div class="border border-top-0 border-right-0 comment-border comment-box">
-    <div class="media">
-      <img src="{{owner_profile_image_url}}" alt="Profile Image" class="align-self-center mr-3 profile-image-small rounded-circle">
-      <div class="media-body">
-        <h6 class="mt-0">Posted at {{created_at}} by {{owner_username}}</h6>
-        <div>
-          {{content}}
-        </div>
-        <div>
-          {{status}}
-        </div>
-        <div>
-          {{owner_controls}}
-        </div>
-        <div>
-          {{reply_controls}}
-        </div>
-      </div>
-    </div>
-  </div>
-</script>
