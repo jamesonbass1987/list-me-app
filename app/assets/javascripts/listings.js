@@ -26,10 +26,16 @@ class Listing {
         this.title = listing.title;
         this.description = listing.description;
         this.price = listing.price;
-        this.location_city = listing.location.city
-        this.location_state = listing.location.state
-        this.primary_image = listing.listing_images[0].image_url
-        this.listing_images_array = []
+        this.locationCity = listing.location.city;
+        this.locationState = listing.location.state;
+        this.primaryImage = listing.listing_images[0].image_url;
+        this.listingImagesArray = [];
+        this.tagsArray = [];
+        this.userEmail = listing.user.email
+        this.username = listing.user.username
+        this.userProfileImage = listing.user.profile_image_url
+        this.userRating = listing.user.rating
+        this.userId = listing.user.id
     }
 
 }
@@ -54,13 +60,21 @@ function loadListing(){
 }
 
 function buildListing(listingParams){
-    newListing = new Listing(listingParams)
-    listingImageArray = listingParams.listing_images
+    let newListing = new Listing(listingParams);
+    let listingImageArray = listingParams.listing_images;
+    let tagsArray = listingParams.tags
 
-    for(let i = 1; i < listingParams.listing_Images; i++){
-        newListing.listing_images_array.push(listingImagesArray[i].image_url)
+    for(let i = 1; i < listingImageArray.length; i++){
+        newListing.listingImagesArray.push(listingImageArray[i].image_url)
     }
 
+    for (let i = 0; i < tagsArray.length; i++) {
+        newListing.tagsArray.push(tagsArray[i].name)
+    }
+
+    let listingTemplate = HandlebarsTemplates['listing'](newListing);
+
+    $('#js-listing').append(listingTemplate)
 }
 
 

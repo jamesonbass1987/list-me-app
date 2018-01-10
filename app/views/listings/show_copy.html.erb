@@ -1,0 +1,41 @@
+<!--  Listing Heading -->
+<%= tag.h2(@listing.title, :class => 'heading-text') %>
+<%= tag.text(@listing.location.full_location_name) %> <%= tag(:br) %>
+
+<!-- Listing image carousel -->
+<%= content_tag(:div, :class => "carousel img-responsive") do %>
+  <%= content_tag(:div, :class => "carousel slide", :id => "listingCarousel", :'data-ride' => 'carousel') do %>
+    <%= content_tag(:div, :class => "carousel-inner") do %>
+      <%= render @listing.listing_images %>
+    <% end %>
+    <%= content_tag(:div, :class => "carousel-controls") do %>
+      <%= link_to "#listingCarousel", class: "carousel-control-prev carousel-buttons", role: "button", 'data-slide': 'prev' do  %>
+         <%= tag.span("", :class => 'carousel-control-prev-icon', :'aria-hidden' => 'true') %>
+         <%= tag.span('Previous', :class => 'sr-only') %>
+      <% end %>
+      <%= link_to "#listingCarousel", class: "carousel-control-next carousel-buttons", role: "button", 'data-slide': 'next' do  %>
+         <%= tag.span("", :class => 'carousel-control-next-icon', :'aria-hidden' => 'true') %>
+         <%= tag.span('Next', :class => 'sr-only') %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<!-- Listing Information-->
+<%= tag.h3('Description:', class: 'heading-text') %>
+<%= tag.p(@listing.description) %>
+
+<%= tag.strong('Price:') %> <%= tag.text(number_to_currency(@listing.price)) %> <%= tag(:br) %>
+<%= tag.strong('Category:') %> <%= tag.text(@listing.category.name) %> <%= tag(:br) %>
+<%= tag.strong('Tags:') %> <%= tag.text(@listing.tags.collect{|tag| tag.name}.join(", ")) %><%= tag(:br) %>
+<%= tag.strong('Posted By:') %> <%= tag.text(link_to @listing.user.username, user_path(@listing.user)) %> <%= tag.text(display_user_rating(@listing.user)) %><%= tag(:br) %>
+
+<!-- Listing Actions -->
+<%= mail_to @listing.user.email, 'Contact Seller', html_options = {class: 'btn btn-outline-primary btn-block'} %>
+<%= delete_edit_listing_links(@listing) %>
+
+<!-- Listing Comments Section -->
+<%= tag.h3('Comments:', class: 'heading-text') %>
+<%= content_tag(:div, nil, id: 'js-listing-comments') %>
+
+
