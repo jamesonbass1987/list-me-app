@@ -1,6 +1,7 @@
 let currentUser;
 let locationListingIds;
 let currentListingId;
+let currentLocationListingsPath = window.location.pathname.split('/').slice(0, -1).join('/')
 
 // CLASS CONSTRUCTORS //
 
@@ -59,6 +60,7 @@ $(document).ready(function () {
     loggedInUser();
     
     //Load listing
+    findCurrentListing();
     loadListing();
 
     //Load Location Listing ID's for Next/Prev Listing Buttons
@@ -75,15 +77,21 @@ function loggedInUser() {
 
 // LISTING FUNCTIONS //
 
+function findCurrentListing(){
+    currentListingId = window.location.pathname.split('/')[4];
+}
+
 function loadListing(){
+
+    $('#js-listing, #js-listing-comments').empty();
+
     // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
-    const listingPath = window.location.pathname + '&ajax=1';
-    $.getJSON(listingPath, function (response) {
+    $.getJSON(`${currentLocationListingsPath}/${currentListingId}?ajax=1`, function (response) {
         buildListing(response);
         currentListingId = response.id
+        loadComments();
     });
 
-    loadComments();
 }
 
 function buildListing(listingParams){
@@ -117,14 +125,18 @@ function loadLocationListingArray(){
 // COMMENT FUNCTIONS //
 
 function loadComments() {
-    const listingCommentsPath = window.location.pathname + '/listing_comments';
     const location = window.location.pathname.split('/')[2];
 
-    $.getJSON(listingCommentsPath, {
+    $.getJSON(`${currentLocationListingsPath}/${currentListingId}/listing_comments`, {
         id: location
     }, function (response) {
-        for (let i = 0; i < response.length; i++) {
-            buildComments(response[i]);
+
+        if (response.length === 0){
+            $("#js-listing-comments").append('<p>No comments have been added. Log in to ask the seller a question!</p>')
+        } else {
+            for (let i = 0; i < response.length; i++) {
+                buildComments(response[i]);
+            }
         }
     });
 }
@@ -167,20 +179,20 @@ function buildCommentControls(newComment) {
 $(document).ready(function(){
 
     $('#js-next-listing').click(function(event) {
-        alert("You clicked me next!")
-
-        
-
         event.preventDefault();
+        //find current index of listing on page inside the location listing ids array, load next listing id
+        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
+        //next index
+        let listingIdIndex = locationListingIds.indexOf(currentListingId)
+        let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length]
+        // set current listing id to next listing in array
+        currentListingId = nextListingId;
+        loadListing();
     });
 
-    $('#js-prev-listing').click(function (event) {
+    $('#js-prev-listing').click(function(event) {
         alert("You clicked prev!")
         event.preventDefault();
     });
 
 })
-
-function findListing(){
-    const currentListingId = window.location.pathname.split('/')[-1];
-}
