@@ -15,7 +15,7 @@ module ApplicationHelper
   end
 
   def controller_js_include_tag
-    javascript_include_tag "#{controller_name}", "data-turbolinks-track": "reload" unless controller_name == 'welcome'
+    javascript_include_tag "#{controller_name}", "data-turbolinks-track": "reload" if controller_name == 'listings'
   end
 
 end

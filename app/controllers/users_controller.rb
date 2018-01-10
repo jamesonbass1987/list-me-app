@@ -58,6 +58,15 @@ class UsersController < ApplicationController
     redirect_to user_path(@user)
   end
 
+  # API CALLS
+
+  def logged_in_user
+    respond_to do |format|
+      format.json {render json: current_user}
+      format.html {redirect_to root_path}
+    end
+  end
+
   private
   def user_params
     params.require(:user).permit(:email, :username, :slug, :password, :password_confirmation, :profile_image_url, :role, :role_id, :rating, :rating_count)

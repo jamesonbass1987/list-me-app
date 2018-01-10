@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :current_user, :logged_in?, :navbar_locations_list, :parent_listing_for
-
+  
+  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = exception.message
     redirect_to root_url
@@ -46,5 +47,9 @@ class ApplicationController < ActionController::Base
     return comment.commentable if comment.commentable_type == 'Listing'
     parent_listing_for(comment.commentable)
   end
+
+  def record_not_found(error)
+    render :json => {:error => error.message}, :status => :not_found
+  end 
 
 end

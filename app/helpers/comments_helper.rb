@@ -8,21 +8,6 @@ module CommentsHelper
     end
   end
 
-  def owner_controls(comment_id)
-    binding.pry
-    if can? :edit, comment
-      link_to("Edit Comment", edit_comment_path(comment), :class => 'btn btn-outline-warning') +
-      link_to("Delete Comment", comment_path(comment), :method => :delete, :class => 'btn btn-outline-danger')
-    end
-  end
-
-  def reply_controls(comment)
-    if (!current_page?(action: 'new') || !controller_name == 'comments') && logged_in?
-      link_to("Reply", new_comment_comment_path(comment), :class => 'btn btn-outline-info')
-    end
-  end
-
-
   def display_comment_status(comment)
     if comment.user != parent_listing_for(comment).user
       tag(:br) + tag.strong("Status: ") + comment.comment_status.name

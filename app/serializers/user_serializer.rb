@@ -1,6 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :profile_image_url, :rating
+  attributes :id, :username, :profile_image_url, :rating, :role
 
-  has_many :listings
-  has_many :comments
+  belongs_to :role
 end
