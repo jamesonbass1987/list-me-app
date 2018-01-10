@@ -14,21 +14,55 @@ class Comment {
         this.commentableId = comment.commentable_id
     }
 
-    status(){
+    status() {
         return this.status_id === 1 ? "Answer Pending" : "Resolved";
     }
 
 }
 
+class Listing {
+    constructor(listing){
+        this.id = listing.id;
+        this.title = listing.title;
+        this.description = listing.description;
+        this.price = listing.price;
+        this.location_city = listing.location.city
+        this.location_state = listing.location.state
+        this.primary_image = listing.listing_images[0].image_url
+        this.listing_images_array = []
+    }
 
-$('.listings.show').ready(function(){
+}
+
+$('.listings.show').ready(function () {
+    //Load listing and comments
+    loadListing();
+    loadComments();
+
     //Add event listeners on page load
-    newCommentSubmit();
-    getComments();
+    // newCommentSubmit();
 
     //Check for logged in user
     loggedInUser();
 })
+
+function loadListing(){
+    const listingPath = window.location.pathname;
+    $.getJSON(listingPath, function (response) {
+        buildListing(response);
+    });
+}
+
+function buildListing(listingParams){
+    newListing = new Listing(listingParams)
+    listingImageArray = listingParams.listing_images
+
+    for(let i = 1; i < listingParams.listing_Images; i++){
+        newListing.listing_images_array.push(listingImagesArray[i].image_url)
+    }
+
+}
+
 
 function loggedInUser() {
     $.getJSON('/logged_in_user', function (resp) {
@@ -36,50 +70,50 @@ function loggedInUser() {
     });
 }
 
-function newCommentSubmit(){
-    $("#js-listing-comment").submit(function (event) {
-        event.preventDefault();
+// function newCommentSubmit() {
+//     $("#js-listing-comment").submit(function (event) {
+//         event.preventDefault();
 
-        let comment_values = $(this).serialize();
-        $.post('/comments', comment_values).done(function(data){
-            getComments();
-        });
-    });
-}
+//         let comment_values = $(this).serialize();
+//         $.post('/comments', comment_values).done(function (data) {
+//             getComments();
+//         });
+//     });
+// }
 
-function getComments(){
+function loadComments() {
     const listingCommentsPath = window.location.pathname + '/listing_comments';
     const location = window.location.pathname.split('/')[2];
 
-    $.getJSON( listingCommentsPath, {
+    $.getJSON(listingCommentsPath, {
         id: location
-    }, function(response){
-        for(let i = 0; i < response.length; i++){
+    }, function (response) {
+        for (let i = 0; i < response.length; i++) {
             buildComments(response[i]);
         }
     });
 }
 
-function buildComments(commentParent){
+function buildComments(commentParent) {
     let newComment = new Comment(commentParent);
     let commentTemplate = HandlebarsTemplates['comments'](newComment);
 
-    if (newComment.commentableType === 'Listing'){ 
+    if (newComment.commentableType === 'Listing') {
         $("#js-listing-comments").append(commentTemplate);
     } else if (newComment.commentableType === "Comment") {
         $(`#comment-${newComment.commentableId}`).append(commentTemplate);
     };
 
-    if (currentUser !== null){
+    if (currentUser !== null) {
         buildCommentControls(newComment);
     }
 
-    if (commentParent.comments.length >= 1){
+    if (commentParent.comments.length >= 1) {
         commentParent.comments.forEach(comment => buildComments(comment));
     };
 }
 
-function buildCommentControls(newComment){
+function buildCommentControls(newComment) {
     if (currentUser.id === newComment.ownerId || currentUser.role.title === 'admin') {
         owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${newComment.id}` });
 
