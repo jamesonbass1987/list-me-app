@@ -162,6 +162,17 @@
   display: flex;
 }
 
+
+#listingCarousel {
+  margin: 0 auto;
+  float: none;
+}
+
+.carousel-img{
+  height: 560px;
+  margin: auto;
+}
+
 .carousel-img-height-dominant{
   height: 560px;
   margin: auto;

@@ -1,4 +1,5 @@
 let currentUser;
+let locationListingIds = []
 
 // CLASS CONSTRUCTORS //
 
@@ -50,14 +51,17 @@ class Comment {
     }
 }
 
-// PAGE LOAD FUNCTION AND EVENT HANDLERS //
+// PAGE LOAD FUNCTIONS//
 
-$('.listing.show').ready(function () {
+$(document).ready(function () {
     //Check for logged in user
     loggedInUser();
     
     //Load listing
     loadListing();
+
+    //Load Location Listing ID's
+    loadLocationListingArray();
 })
 
 // GENERAL PAGE FUNCTIONS //
@@ -95,6 +99,10 @@ function buildListing(listingParams){
 
     let listingTemplate = HandlebarsTemplates['listing'](newListing);
     $('#js-listing').append(listingTemplate)
+}
+
+function loadLocationListingArray(){
+    
 }
 
 // COMMENT FUNCTIONS //
@@ -144,3 +152,19 @@ function buildCommentControls(newComment) {
         $(`#comment-${newComment.id}-controls`).append(reply_controls_template);
     };
 }
+
+// EVENT LISTENERS //
+
+$(document).ready(function(){
+
+    $('#js-next-listing').click(function(event) {
+        alert("You clicked me next!")
+        event.preventDefault();
+    });
+
+    $('#js-prev-listing').click(function (event) {
+        alert("You clicked prev!")
+        event.preventDefault();
+    });
+
+})

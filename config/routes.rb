@@ -28,8 +28,9 @@ Rails.application.routes.draw do
   end
 
   # API CALLS
-  get '/locations/new-york-ny/listings/:id/listing_comments' => 'listings#listing_comments'
+  get '/locations/:id/listings/:id/listing_comments' => 'listings#listing_comments'
   get '/logged_in_user' => 'users#logged_in_user'
+  get '/locations/:id/listings/listing_ids' => 'listings#listing_ids'
 
   #catch all other paths that a user may eroneously type in and redirect to root
   get '*path' => redirect('/')
