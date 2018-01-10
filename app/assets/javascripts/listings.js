@@ -1,25 +1,5 @@
 let currentUser;
 
-class Comment {
-    constructor(comment) {
-        this.id = comment.id
-        this.content = comment.content
-        this.ownerUsername = comment.user.username
-        this.ownerId = comment.user.id
-        this.ownerProfileImageUrl = comment.user.profile_image_url
-        this.ownerRating = comment.user.rating
-        this.status_id = comment.comment_status_id
-        this.createdAt = comment.created_at
-        this.commentableType = comment.commentable_type
-        this.commentableId = comment.commentable_id
-    }
-
-    status() {
-        return this.status_id === 1 ? "Answer Pending" : "Resolved";
-    }
-
-}
-
 class Listing {
     constructor(listing){
         this.id = listing.id;
@@ -40,7 +20,28 @@ class Listing {
 
 }
 
-$('.listings.show').ready(function () {
+class Comment {
+    constructor(comment) {
+        this.id = comment.id
+        this.content = comment.content
+        this.ownerUsername = comment.user.username
+        this.ownerId = comment.user.id
+        this.ownerProfileImageUrl = comment.user.profile_image_url
+        this.ownerRating = comment.user.rating
+        this.status_id = comment.comment_status_id
+        this.createdAt = comment.created_at
+        this.commentableType = comment.commentable_type
+        this.commentableId = comment.commentable_id
+    }
+
+    status() {
+        return this.status_id === 1 ? "Answer Pending" : "Resolved";
+    }
+
+}
+
+
+$(document).ready(function () {
     //Load listing and comments
     loadListing();
     loadComments();
@@ -73,7 +74,6 @@ function buildListing(listingParams){
     }
 
     let listingTemplate = HandlebarsTemplates['listing'](newListing);
-
     $('#js-listing').append(listingTemplate)
 }
 
@@ -83,17 +83,6 @@ function loggedInUser() {
         currentUser = resp;
     });
 }
-
-// function newCommentSubmit() {
-//     $("#js-listing-comment").submit(function (event) {
-//         event.preventDefault();
-
-//         let comment_values = $(this).serialize();
-//         $.post('/comments', comment_values).done(function (data) {
-//             getComments();
-//         });
-//     });
-// }
 
 function loadComments() {
     const listingCommentsPath = window.location.pathname + '/listing_comments';
