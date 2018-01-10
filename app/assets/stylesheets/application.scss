@@ -50,6 +50,11 @@
   color: #5cb85c  !important;
 }
 
+.navbar {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
+}
+
 .small-visible {
   display: none;
 }
@@ -162,6 +167,19 @@
   display: flex;
 }
 
+.listing-buttons {
+  margin-top: -15px;
+  margin-bottom: -10px;
+}
+
+.prev-btn {
+  text-align: left !important;
+  padding-left: 0;
+}
+
+.next-btn {
+  text-align: right !important;
+}
 
 #listingCarousel {
   margin: 0 auto;
@@ -169,6 +187,7 @@
 }
 
 .carousel-img{
+  width: auto;
   height: 560px;
   margin: auto;
 }
