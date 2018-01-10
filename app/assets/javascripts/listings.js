@@ -1,5 +1,6 @@
 let currentUser;
-let locationListingIds = []
+let locationListingIds;
+let currentListingId;
 
 // CLASS CONSTRUCTORS //
 
@@ -60,7 +61,7 @@ $(document).ready(function () {
     //Load listing
     loadListing();
 
-    //Load Location Listing ID's
+    //Load Location Listing ID's for Next/Prev Listing Buttons
     loadLocationListingArray();
 })
 
@@ -79,6 +80,7 @@ function loadListing(){
     const listingPath = window.location.pathname + '&ajax=1';
     $.getJSON(listingPath, function (response) {
         buildListing(response);
+        currentListingId = response.id
     });
 
     loadComments();
@@ -102,7 +104,14 @@ function buildListing(listingParams){
 }
 
 function loadLocationListingArray(){
-    
+    const listingsPath = window.location.pathname.split("/").slice(0, -1).join('/') 
+    const location = window.location.pathname.split('/')[2];
+
+    $.getJSON(listingsPath + '/listing_ids', {
+        id: location
+    }, function (response) {
+        locationListingIds = response
+    });
 }
 
 // COMMENT FUNCTIONS //
@@ -159,6 +168,9 @@ $(document).ready(function(){
 
     $('#js-next-listing').click(function(event) {
         alert("You clicked me next!")
+
+        
+
         event.preventDefault();
     });
 
@@ -168,3 +180,7 @@ $(document).ready(function(){
     });
 
 })
+
+function findListing(){
+    const currentListingId = window.location.pathname.split('/')[-1];
+}

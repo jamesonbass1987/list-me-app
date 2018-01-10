@@ -3,6 +3,20 @@ class ListingsController < ApplicationController
   before_action :validate_location, except: [:listing_comments]
   before_action :validate_listing, only: [:show, :edit, :destroy]
 
+  # API CALLS
+  def listing_comments
+    comments = @listing.comments
+    render json: comments, include: ['comments.**', 'user', 'comment_status']
+  end
+
+  def listing_ids
+  location = Location.friendly.find(params[:id])
+  listing_ids = []
+  location.listings.select(:id).map{|listing| listing_ids.push(listing.id) }    
+  render json: listing_ids
+  end
+
+
   # REST ROUTES
 
   def index
@@ -89,12 +103,6 @@ class ListingsController < ApplicationController
     else
       redirect_to location_listings_path(location)
     end
-  end
-
-  # API CALLS
-  def listing_comments
-    comments = @listing.comments
-    render json: comments, include: ['comments.**', 'user', 'comment_status']
   end
 
 
