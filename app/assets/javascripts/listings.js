@@ -8,16 +8,20 @@ class Comment {
         this.ownerId = comment.user.id
         this.ownerProfileImageUrl = comment.user.profile_image_url
         this.ownerRating = comment.user.rating
-        this.status = comment.comment_status.name
+        this.status_id = comment.comment_status_id
         this.createdAt = comment.created_at
         this.commentableType = comment.commentable_type
         this.commentableId = comment.commentable_id
     }
 
+    status(){
+        return this.status_id === 1 ? "Answer Pending" : "Resolved";
+    }
+
 }
 
 
-$(function(){
+$('.listings.show').ready(function(){
     //Add event listeners on page load
     newCommentSubmit();
     getComments();
