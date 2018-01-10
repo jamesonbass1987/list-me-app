@@ -1,10 +1,13 @@
 let currentUser;
 
+// CLASS CONSTRUCTORS //
+
 class Listing {
     constructor(listing){
         this.id = listing.id;
         this.title = listing.title;
         this.description = listing.description;
+        this.category = listing.category.name
         this.price = listing.price;
         this.locationCity = listing.location.city;
         this.locationState = listing.location.state;
@@ -16,6 +19,14 @@ class Listing {
         this.userProfileImage = listing.user.profile_image_url
         this.userRating = listing.user.rating
         this.userId = listing.user.id
+    }
+
+    tags() {
+        return this.tagsArray.join(', ');
+    }
+
+    formattedPrice(){
+        return '$' + Number(this.price).toFixed(2)
     }
 
 }
@@ -37,27 +48,36 @@ class Comment {
     status() {
         return this.status_id === 1 ? "Answer Pending" : "Resolved";
     }
-
 }
 
+// PAGE LOAD FUNCTION AND EVENT HANDLERS //
 
-$(document).ready(function () {
-    //Load listing and comments
-    loadListing();
-    loadComments();
-
-    //Add event listeners on page load
-    // newCommentSubmit();
-
+$('.listing.show').ready(function () {
     //Check for logged in user
     loggedInUser();
+    
+    //Load listing
+    loadListing();
 })
 
+// GENERAL PAGE FUNCTIONS //
+
+function loggedInUser() {
+    $.getJSON('/logged_in_user', function (resp) {
+        currentUser = resp;
+    });
+}
+
+// LISTING FUNCTIONS //
+
 function loadListing(){
-    const listingPath = window.location.pathname;
+    // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
+    const listingPath = window.location.pathname + '&ajax=1';
     $.getJSON(listingPath, function (response) {
         buildListing(response);
     });
+
+    loadComments();
 }
 
 function buildListing(listingParams){
@@ -77,12 +97,7 @@ function buildListing(listingParams){
     $('#js-listing').append(listingTemplate)
 }
 
-
-function loggedInUser() {
-    $.getJSON('/logged_in_user', function (resp) {
-        currentUser = resp;
-    });
-}
+// COMMENT FUNCTIONS //
 
 function loadComments() {
     const listingCommentsPath = window.location.pathname + '/listing_comments';

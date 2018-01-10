@@ -27,14 +27,10 @@
     <h3 class="heading-text">Description:</h3>
     <p>{{description}}</p>
 
-    <strong>Price:</strong> <text>{{price}}</text> <br>
+    <strong>Price:</strong> <text>{{formattedPrice}}</text> <br>
     <strong>Category:</strong> <text>{{category}}</text> <br>
     <strong>Tags:</strong>
-    <text>
-        {{#each tagsArray}}
-            {{this}}
-        {{/each}}
-    </text><br>
+    <text>{{tags}}</text><br>
     <strong>Posted By:</strong> <text><a href="/users/{{username}}">{{username}}</a></text> <text>(5.0)</text><br />
 
     <!-- Listing Actions -->
