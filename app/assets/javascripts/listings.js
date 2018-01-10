@@ -191,8 +191,15 @@ $(document).ready(function(){
     });
 
     $('#js-prev-listing').click(function(event) {
-        alert("You clicked prev!")
         event.preventDefault();
+        //find current index of listing on page inside the location listing ids array, load next listing id
+        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
+        //next index
+        let listingIdIndex = locationListingIds.indexOf(currentListingId)
+        let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("")
+        // set current listing id to prev listing in array
+        currentListingId = parseInt(prevListingId);
+        loadListing();
     });
 
 })
