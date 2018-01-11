@@ -26,8 +26,8 @@
 <%= display_take_my_money(@listings) %>
 
 <!-- Rendered Listings -->
-
-<%= content_tag :div, nil, :class=>'listings-index row' %>
-
+<%= content_tag :div, :class => 'row' do %>
+  <%= render @listings %>
+<% end %>
 
 <%= create_listing_link(@location) %>

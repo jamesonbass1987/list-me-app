@@ -32,12 +32,12 @@ class ListingsController < ApplicationController
     elsif params[:search].present?
       filter_listings_by_search
     else
-      @listings = @location.listings
+      @listings = @location.listings  
     end
 
     respond_to do |format| 
       format.html { render 'index' }
-      format.json { render json: { :listings => @listings, :location => @location } }
+      format.json { render json: @listings, each_serializer: ListingsIndexSerializer }
     end
   end
 
