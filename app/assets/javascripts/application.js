@@ -15,7 +15,6 @@
 //= require jquery_ujs 
 //= require jquery-readyselector
 //= require rails-ujs
-//= require turbolinks
 //= require popper
 //= require bootstrap
 //= require handlebars

@@ -49,7 +49,7 @@ class Listing < ApplicationRecord
   end
 
   def self.highest_price_item(location)
-    where("location_id = ?", location.id).order(price: :desc).first
+    where("location_id = ?", location.id).order(price: :desc).select(:id).first
   end
 
   def self.all_user_listings(user)

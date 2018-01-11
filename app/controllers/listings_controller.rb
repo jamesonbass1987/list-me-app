@@ -43,7 +43,7 @@ class ListingsController < ApplicationController
 
   def show
     respond_to do |format|
-      format.html
+      format.html { render 'show' }
       format.json { render json: @listing, include: ['comments.**', 'listing_images', 'location', 'user', 'category'] }
     end
   end
@@ -97,9 +97,8 @@ class ListingsController < ApplicationController
   def take_my_money
     location = Location.friendly.find(params[:id])
     listing = Listing.highest_price_item(location)
-
     if listing
-      redirect_to location_listing_path(listing.location, listing) and return
+      redirect_to location_listing_path(location, listing) and return
     else
       redirect_to location_listings_path(location)
     end

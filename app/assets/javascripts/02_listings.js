@@ -49,7 +49,7 @@ class Listing extends BaseListing {
 
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
-$(document).on('turbolinks:load', function(){
+$(document).ready(function(){
     //Check for logged in user
     loggedInUser();
 
