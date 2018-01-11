@@ -7,26 +7,17 @@ let listingsPath = window.location.pathname.split("/").slice(0, -1).join('/')
 let currentLocation = window.location.pathname.split('/')[2];;
 let currentLocationListingsPath = window.location.pathname.split('/').slice(0, -1).join('/')
 
-// CLASS CONSTRUCTOR //
+// CLASS CONSTRUCTORS //
 
 class BaseListing {
     constructor(listing){
         this.id = listing.id;
         this.title = listing.title;
         this.description = listing.description;
-        // this.category = listing.category.name
         this.price = listing.price;
-        // this.locationCity = listing.location.city;
-        // this.locationState = listing.location.state;
         this.locationSlug = listing.location.slug
         this.primaryImage = listing.listing_images[0].image_url;
-        // this.listingImagesArray = [];
-        // this.tagsArray = [];
-        // this.userEmail = listing.user.email
-        // this.username = listing.user.username
-        // this.userProfileImage = listing.user.profile_image_url
-        // this.userRating = listing.user.rating
-        // this.userId = listing.user.id
+        this.user_id = listing.user_id
     }
 
     tagsList() {
@@ -39,15 +30,15 @@ class BaseListing {
 
 }
 
-class Listing extends BaseListing {
+class Listing {
     constructor(listing) {
-        // this.id = listing.id;
-        // this.title = listing.title;
-        // this.description = listing.description;
+        this.id = listing.id;
+        this.title = listing.title;
+        this.description = listing.description;
         this.category = listing.category.name
-        // this.price = listing.price;
-        // this.locationCity = listing.location.city;
-        // this.locationState = listing.location.state;
+        this.price = listing.price;
+        this.locationCity = listing.location.city;
+        this.locationState = listing.location.state;
         this.primaryImage = listing.listing_images[0].image_url;
         this.listingImagesArray = [];
         this.tagsArray = [];
@@ -161,7 +152,6 @@ function buildListing(listingParams){
 }
 
 function loadLocationListingArray(){
-
     $.getJSON(listingsPath + '/listing_ids', {
         id: currentLocation
     }, function(response) {
@@ -176,7 +166,6 @@ function loadListings(){
     $.getJSON(listingsPath + '/listings', {
         id: currentLocation
     }, function(response){
-        debugger;
         response.forEach(function(listing){
             buildListingsIndex(listing);
         })
@@ -188,8 +177,15 @@ function buildListingsIndex(listing){
     let listingTemplate = HandlebarsTemplates['listing_index'](newListing);
     $('.listings-index').append(listingTemplate)
 
-    // if (currentUser || currentUser.role.title === 'admin') {
-    //     listing_controls_template = HandlebarsTemplates['listing_index_controls']();
-    //     $(`#comment-${newComment.id}-footer`).append(listing_controls_template);
-    // };
+    if (currentUser !== null) {
+        buildListingIndexControls(newListing);
+    }
+}
+
+function buildListingIndexControls(listing){
+    if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
+        listing_controls_template = HandlebarsTemplates['listing_index_controls']();
+
+        $(`#listing-${listing.id}-footer`).append(listing_controls_template);
+    };
 }
