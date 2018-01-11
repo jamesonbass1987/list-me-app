@@ -27,7 +27,7 @@ class ListingsController < ApplicationController
     #category filter, and search filter. Based on which is used,
     #the appropriate method is called to filter listings
 
-    if params[:categoryFilter].present?
+    if params[:categoryFilter].present? || session[:categoryFilter].present?
       filter_listings_by_category
     elsif params[:searchQuery].present?
       filter_listings_by_search
@@ -124,7 +124,7 @@ class ListingsController < ApplicationController
 
   #find category by category_id_filter and clear session data once done
   def filter_listings_by_category
-    category_filter = Category.find_by(id: params[:categoryFilter])
+    category_filter = Category.find_by(id: (params[:categoryFilter] || session[:categoryFilter]))
     @listings = Listing.listings_in_category(category_filter, @location)
   end
 

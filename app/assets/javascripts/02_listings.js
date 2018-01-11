@@ -5,7 +5,7 @@ let currentListingId;
 let listingsPath;
 let currentLocation = window.location.pathname.split('/')[2];;
 let currentLocationListingsPath = window.location.pathname.split('/').slice(0, -1).join('/')
-let currentListingFilter;
+let currentListingFilter = "Everything";
 
 // CLASS CONSTRUCTORS //
 
@@ -189,6 +189,8 @@ function loadListings(searchQuery, categoryFilter){
         response.forEach(function(listing){
             buildListingsIndex(listing);
         })
+
+        setCurrentListingFilter(response);
     });
 }
 
@@ -239,6 +241,18 @@ function filterListingsEvent(){
         event.preventDefault();
         let categoryFilter = $(this).serializeArray()[2].value
         loadListings(undefined, categoryFilter)
-        $("#listings-filter").empty().append($(this).find(":selected").text())
+        currentListingFilter = $(this).find(":selected").text()
+        $("#listings-filter").empty().append(currentListingFilter)
     });
+}
+
+function setCurrentListingFilter(listings){
+    let categoryCheck = 0;
+    for(let i = 0; i < (listings.length - 1); i++){
+        listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : categoryCheck
+    }
+
+    categoryCheck < 0 ? currentListingFilter = 'Everything' : currentListingFilter = listings[0].category.name
+
+    $("#listings-filter").empty().append(currentListingFilter)
 }
