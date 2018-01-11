@@ -91,7 +91,10 @@ class ListingsController < ApplicationController
     location = @listing.location
     @listing.destroy
 
-    redirect_back fallback_location: location_listings_path(location)
+    respond_to do |format|
+      format.html {redirect_back fallback_location: location_listings_path(location) and return}
+      format.json {render json: {:status => 500}.to_json}
+    end
   end
 
   def take_my_money

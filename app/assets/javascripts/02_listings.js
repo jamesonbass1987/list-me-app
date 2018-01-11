@@ -193,11 +193,23 @@ function buildListingsIndex(listing){
 }
 
 function buildListingIndexControls(listing){
-
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
     };
+
+    $(`#listing-${listing.id}-delete`).on('click', function(event){
+        event.preventDefault();
+        $.ajax({
+            url: `${currentLocationListingsPath}/listings/${listing.id}`,
+            type: 'DELETE',
+            dataType: "json",
+            success: function(response){
+                debugger;
+                loadListings();
+            }
+        })
+    })
 }
 
 function searchListingsEvent(){
@@ -242,7 +254,5 @@ function setCurrentListingFilter(listings){
     } else {
         currentListingFilter = "There doesn't seem to be anything here. Please try another filter."
     }
-    
-
     $("#listings-filter").empty().append(currentListingFilter);
 }
