@@ -11,11 +11,13 @@
 // about supported directives.
 //
 //= require jquery3
+//= require jquery.turbolinks
 //= require jquery_ujs 
+//= require jquery-readyselector
 //= require rails-ujs
+//= require turbolinks
 //= require popper
 //= require bootstrap
-//= require cable
 //= require handlebars
-//= require_tree .
 //= require_tree ./templates
+//= require_tree .

@@ -42,8 +42,8 @@ module ListingsHelper
     end
   end
 
-  def display_take_my_money(listings)
-    link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money", :class => "btn btn-outline-success btn-block" unless listings.empty?
+  def display_take_my_money()
+    link_to "Show me the best #{@location.city} has to offer.", "/locations/#{@location.id}/listings/take_my_money", :class => "btn btn-outline-success btn-block" 
   end
 
   def display_comment_form_heading

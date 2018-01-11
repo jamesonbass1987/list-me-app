@@ -1,5 +1,4 @@
 // GLOBAL VARIABLE DECLARATIONS //
-
 let currentUser;
 let locationListingIds;
 let currentListingId;
@@ -61,51 +60,55 @@ class Listing {
 
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
-$('.listings.index').ready(function() {    
-    // Load location listings
+$(".listings.index").ready(function() {  
+    //Check for logged in user
+    loggedInUser();
+    //Load location listings
     loadListings();
+    //Attach event listeners
+    searchListingsEvent();
 })
 
 
 // LISTING SHOW PAGE LOAD FUNCTIONS/EVENT LISTENERS//
 
-$('.listings.show').ready(function () {
-    //Check for logged in user
-    loggedInUser();
-    
-    //Load listing
-    findCurrentListing();
-    loadListing();
+// $(".listings.show").ready(function () {
+//     //Check for logged in user
+//     loggedInUser();
 
-    //Load Location Listing ID's for Next/Prev Listing Buttons
-    loadLocationListingArray();
+//     //Load listing
+//     findCurrentListing();
+//     loadListing();
 
-    //Event Listeners
-    $('#js-next-listing').click(function (event) {
-        event.preventDefault();
-        //find current index of listing on page inside the location listing ids array, load next listing id
-        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
-        //next index
-        let listingIdIndex = locationListingIds.indexOf(currentListingId)
-        let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length]
-        // set current listing id to next listing in array
-        currentListingId = nextListingId;
-        loadListing();
-    });
+//     //Load Location Listing ID's for Next/Prev Listing Buttons
+//     loadLocationListingArray();
 
-    $('#js-prev-listing').click(function (event) {
-        event.preventDefault();
-        //find current index of listing on page inside the location listing ids array, load next listing id
-        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
-        //next index
-        let listingIdIndex = locationListingIds.indexOf(currentListingId)
-        let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("")
-        // set current listing id to prev listing in array
-        currentListingId = parseInt(prevListingId);
-        loadListing();
-    });
+//     //Event Listeners
+//     $('#js-next-listing').click(function (event) {
+//         event.preventDefault();
+//         //find current index of listing on page inside the location listing ids array, load next listing id
+//         //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
+//         //next index
+//         let listingIdIndex = locationListingIds.indexOf(currentListingId)
+//         let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length]
+//         // set current listing id to next listing in array
+//         currentListingId = nextListingId;
+//         loadListing();
+//     });
 
-})
+//     $('#js-prev-listing').click(function (event) {
+//         event.preventDefault();
+//         //find current index of listing on page inside the location listing ids array, load next listing id
+//         //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
+//         //next index
+//         let listingIdIndex = locationListingIds.indexOf(currentListingId)
+//         let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("")
+//         // set current listing id to prev listing in array
+//         currentListingId = parseInt(prevListingId);
+//         loadListing();
+//     });
+
+// })
 
 // SHOW PAGE GENERAL FUNCTIONS //
 
@@ -162,10 +165,12 @@ function loadLocationListingArray(){
 
 // INDEX LISTINGS FUNCTIONS
 
-function loadListings(){
+//searchQuery is an optional argument passed in via listing search function
+function loadListings(searchQuery){
     $.getJSON(listingsPath + '/listings', {
-        id: currentLocation
+        searchQuery: searchQuery
     }, function(response){
+        $('.listings-index').empty();
         response.forEach(function(listing){
             buildListingsIndex(listing);
         })
@@ -184,8 +189,25 @@ function buildListingsIndex(listing){
 
 function buildListingIndexControls(listing){
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
-        listing_controls_template = HandlebarsTemplates['listing_index_controls']();
+        listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
 
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
     };
+}
+
+function searchListingsEvent(){
+    $("#listings-search-submit").on('click', function(event){
+        event.preventDefault();
+        //submit form
+        $("#search-form").submit();
+
+        //reset button and prevent default
+        $("#search-form")[0].reset();
+    })
+
+    $('#search-form').on('submit', function (event) {
+        event.preventDefault();
+        let searchQuery = $(this).serializeArray()[1].value
+        loadListings(searchQuery)
+    });
 }

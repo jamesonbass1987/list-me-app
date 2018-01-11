@@ -34,8 +34,6 @@ Rails.application.routes.draw do
     resources :comments, except: [:index, :show]
   end
 
-
-
   #catch all other paths that a user may eroneously type in and redirect to root
-  get '*path' => redirect('/')
+  # get '*path' => redirect('/')
 end

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
     <%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 
   </head>
   <%= content_tag :body, :class => "#{controller_name} #{action_name}" do %>
@@ -20,6 +21,5 @@
         <% end %>
     <% end %>
     
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   <% end %>
 </html>

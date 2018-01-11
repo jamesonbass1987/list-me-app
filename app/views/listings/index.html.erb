@@ -6,11 +6,11 @@
 <%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form', :class => 'search-form') do %>
       <%= content_tag :div, :class => 'form-inline' do %>
         <%= text_field_tag :search, params[:search], :class => 'form-control', placeholder: 'Search Listings:' %>
-        <%= submit_tag "Search", :name => nil, :class => 'btn btn-outline-success' %>
+        <%= submit_tag "Search", :name => nil, :id => 'listings-search-submit', :class => 'btn btn-outline-success' %>
       <% end %>
 <% end %>
 
-<%= tag.p("Currently Viewing: #{current_listing_filter(@listings, @location)}") %>
+<%= content_tag(:p, "Currently Viewing: ", :id => 'listings-filter') %>
 
 <!--  Listing Category Filter -->
 <%= form_tag '/search' do %>
@@ -23,7 +23,7 @@
 <% end %>
 
 <!-- Listing Links -->
-<%= display_take_my_money(@listings) %>
+<%= display_take_my_money %>
 
 <!-- Rendered Listings -->
 

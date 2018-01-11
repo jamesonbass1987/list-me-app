@@ -29,10 +29,10 @@ class ListingsController < ApplicationController
 
     if session[:category_id_filter].present?
       filter_listings_by_category
-    elsif params[:search].present?
+    elsif params[:searchQuery].present?
       filter_listings_by_search
     else
-      @listings = @location.listings  
+      @listings = @location.listings 
     end
 
     respond_to do |format| 
@@ -131,7 +131,7 @@ class ListingsController < ApplicationController
 
   #find category by search term and clear session data once done
   def filter_listings_by_search
-    search_term = params[:search].strip
+    search_term = params[:searchQuery].strip
     @listings = listings_matching_query(search_term, @location.listings)
   end
 
