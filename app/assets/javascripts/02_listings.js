@@ -177,7 +177,6 @@ function loadListings(searchQuery, categoryFilter){
         response.forEach(function(listing){
             buildListingsIndex(listing);
         })
-
         setCurrentListingFilter(response);
     });
 }
@@ -194,6 +193,7 @@ function buildListingsIndex(listing){
 }
 
 function buildListingIndexControls(listing){
+
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
@@ -228,17 +228,21 @@ function filterListingsEvent(){
         event.preventDefault();
         let categoryFilter = $(this).serializeArray()[2].value;
         loadListings(undefined, categoryFilter);
-        currentListingFilter = $(this).find(":selected").text();
-        $("#listings-filter").empty().append(currentListingFilter);
     });
 }
 
 function setCurrentListingFilter(listings){
-    let categoryCheck = 0;
-    for(let i = 0; i < (listings.length - 1); i++){
-        listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : i;
+    
+    if (listings.length !== 0){
+        let categoryCheck = 0;
+        for (let i = 0; i < (listings.length - 1); i++) {
+            listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : i;
+        }
+        currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name;
+    } else {
+        currentListingFilter = "There doesn't seem to be anything here. Please try another filter."
     }
+    
 
-    currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name;
     $("#listings-filter").empty().append(currentListingFilter);
 }
