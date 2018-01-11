@@ -6,7 +6,7 @@
 <%= form_tag(location_listings_path(@location), :method => 'get', id: 'search-form', :class => 'search-form') do %>
       <%= content_tag :div, :class => 'form-inline' do %>
         <%= text_field_tag :search, params[:search], :class => 'form-control', placeholder: 'Search Listings:' %>
-        <%= submit_tag "Search", :name => nil, :id => 'listings-search-submit', :class => 'btn btn-outline-success' %>
+        <%= link_to "Search", '#', :name => nil, :id => 'listings-search-submit', :class => 'btn btn-outline-success' %>
       <% end %>
 <% end %>
 
@@ -19,7 +19,7 @@
       <%= select_tag 'category_selector', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything', :class => 'form-control custom-select btn' %>
       <%= hidden_field_tag :location_selector, @location.id  %>
     <% end %>
-      <%= submit_tag "Filter", :id => 'listings-filter-submit', :class => 'btn btn-outline-primary btn-block' %>
+      <%= link_to "Filter", "#", :id => 'listings-filter-submit', :class => 'btn btn-outline-primary btn-block' %>
 <% end %>
 
 <!-- Listing Links -->

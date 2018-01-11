@@ -233,9 +233,6 @@ function filterListingsEvent(){
         event.preventDefault();
         //submit form
         $("#listings-filter-form").submit();
-
-        //reset button and prevent default
-        $("#listings-filter-form")[0].reset();
     })
 
     $('#listings-filter-form').on('submit', function (event) {
