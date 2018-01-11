@@ -30,23 +30,19 @@ class BaseListing {
 
 }
 
-class Listing {
+class Listing extends BaseListing {
     constructor(listing) {
-        this.id = listing.id;
-        this.title = listing.title;
-        this.description = listing.description;
+        super(listing, listing);
+    
         this.category = listing.category.name
-        this.price = listing.price;
         this.locationCity = listing.location.city;
         this.locationState = listing.location.state;
-        this.primaryImage = listing.listing_images[0].image_url;
         this.listingImagesArray = [];
         this.tagsArray = [];
         this.userEmail = listing.user.email
         this.username = listing.user.username
         this.userProfileImage = listing.user.profile_image_url
         this.userRating = listing.user.rating
-        this.userId = listing.user.id
     }
 
     tagsList() {
@@ -54,7 +50,7 @@ class Listing {
     }
 
     formattedPrice() {
-        return '$' + Number(this.price).toFixed(2)
+        return '$' + Number(this.price).toFixed(2);
     }
 
 }
@@ -102,8 +98,8 @@ function loadListingsShow(){
             //find current index of listing on page inside the location listing ids array, load next listing id
             //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
             //next index
-            let listingIdIndex = locationListingIds.indexOf(currentListingId)
-            let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length]
+            let listingIdIndex = locationListingIds.indexOf(currentListingId);
+            let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
             // set current listing id to next listing in array
             currentListingId = nextListingId;
             loadListing();
@@ -114,8 +110,8 @@ function loadListingsShow(){
             //find current index of listing on page inside the location listing ids array, load next listing id
             //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
             //next index
-            let listingIdIndex = locationListingIds.indexOf(currentListingId)
-            let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("")
+            let listingIdIndex = locationListingIds.indexOf(currentListingId);
+            let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
             // set current listing id to prev listing in array
             currentListingId = parseInt(prevListingId);
             loadListing();
@@ -127,7 +123,7 @@ function loadListingsShow(){
 // SHOW PAGE GENERAL FUNCTIONS //
 
 function loggedInUser() {
-    $.getJSON('/logged_in_user', function (resp) {
+    $.getJSON('/logged_in_user', function (resp){
         currentUser = resp;
     });
 }
@@ -180,7 +176,7 @@ function loadLocationListingArray(){
 //searchQuery and categoryFilter are optional arguments passed in via listing search function
 //and listings filter function
 function loadListings(searchQuery, categoryFilter){
-    listingsPath = window.location.pathname.split("/").slice(0, -1).join('/') 
+    listingsPath = window.location.pathname.split("/").slice(0, -1).join('/');
     $.getJSON(listingsPath + '/listings', {
         searchQuery: searchQuery,
         categoryFilter: categoryFilter
@@ -225,8 +221,8 @@ function searchListingsEvent(){
 
     $('#search-form').on('submit', function (event) {
         event.preventDefault();
-        let searchQuery = $(this).serializeArray()[1].value
-        loadListings(searchQuery, undefined)
+        let searchQuery = $(this).serializeArray()[1].value;
+        loadListings(searchQuery, undefined);
     });
 }
 
@@ -239,20 +235,20 @@ function filterListingsEvent(){
 
     $('#listings-filter-form').on('submit', function (event) {
         event.preventDefault();
-        let categoryFilter = $(this).serializeArray()[2].value
-        loadListings(undefined, categoryFilter)
-        currentListingFilter = $(this).find(":selected").text()
-        $("#listings-filter").empty().append(currentListingFilter)
+        let categoryFilter = $(this).serializeArray()[2].value;
+        loadListings(undefined, categoryFilter);
+        currentListingFilter = $(this).find(":selected").text();
+        $("#listings-filter").empty().append(currentListingFilter);
     });
 }
 
 function setCurrentListingFilter(listings){
     let categoryCheck = 0;
     for(let i = 0; i < (listings.length - 1); i++){
-        listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : categoryCheck
+        listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : i;
     }
 
-    categoryCheck < 0 ? currentListingFilter = 'Everything' : currentListingFilter = listings[0].category.name
+    currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name
 
-    $("#listings-filter").empty().append(currentListingFilter)
+    $("#listings-filter").empty().append(currentListingFilter);
 }
