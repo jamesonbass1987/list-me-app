@@ -196,7 +196,6 @@ function buildListingsIndex(listing){
 function buildListingIndexControls(listing){
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
-
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
     };
 }
@@ -240,7 +239,6 @@ function setCurrentListingFilter(listings){
         listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : i;
     }
 
-    currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name
-
+    currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name;
     $("#listings-filter").empty().append(currentListingFilter);
 }
