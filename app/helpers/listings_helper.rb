@@ -4,18 +4,6 @@ module ListingsHelper
     "None (Enter new links below)" if assets.empty?
   end
 
-  def current_listing_filter(listings, location)
-    if listings == location.listings && location.listings.present?
-      "Everything. The whole shebang. The whole kit and caboodle."
-    else
-      if listings.present?
-        listings.first.category.name
-      else
-        "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything here."
-      end
-    end
-  end
-
   def delete_edit_listing_links(listing)
     if can? :destroy, listing
       ((link_to "Edit", edit_location_listing_path(@listing.location, @listing), :class => 'btn btn-outline-warning btn-block') + " " +

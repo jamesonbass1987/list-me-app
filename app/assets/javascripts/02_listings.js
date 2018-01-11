@@ -239,21 +239,6 @@ function filterListingsEvent(){
         event.preventDefault();
         let categoryFilter = $(this).serializeArray()[2].value
         loadListings(undefined, categoryFilter)
+        $("#listings-filter").empty().append($(this).find(":selected").text())
     });
 }
-
-
-
-// translate to js from ruby
-
-//   def current_listing_filter(listings, location)
-//     if listings == location.listings && location.listings.present?
-//       "Everything. The whole shebang. The whole kit and caboodle."
-//     else
-//       if listings.present?
-//         listings.first.category.name
-//       else
-//         "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything here."
-//       end
-//     end
-//   end

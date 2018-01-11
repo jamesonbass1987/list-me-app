@@ -10,7 +10,7 @@
       <% end %>
 <% end %>
 
-<%= content_tag(:p, "Currently Viewing: ", :id => 'listings-filter') %>
+<p>Currently Viewing: <span id="listings-filter">Everything</span></p>
 
 <!--  Listing Category Filter -->
 <%= form_tag('/search', id: 'listings-filter-form') do %>
