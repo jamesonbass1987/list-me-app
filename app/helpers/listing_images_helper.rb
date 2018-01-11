@@ -1,7 +1,7 @@
 module ListingImagesHelper
 
   def carousel_image_class_tag(image)
-    if image.image_url.present? && image.image_url != 'listing-default-image.png'
+    if image.image_url.present? && image.image_url != 'https://i.imgur.com/5dIK7VL.jpg'
       image_dimensions = FastImage.size(image.image_url)
       if image_dimensions[0] > image_dimensions[1]
         "d-block img-fluid carousel-img-width-dominant"

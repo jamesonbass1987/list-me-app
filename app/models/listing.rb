@@ -58,7 +58,7 @@ class Listing < ApplicationRecord
 
   #add default image if none have been provided
   def add_default_image
-    self.listing_images.build(image_url: 'listing-default-image.png') unless listing_images.first.present?
+    self.listing_images.build(image_url: 'https://i.imgur.com/5dIK7VL.jpg') unless listing_images.first.present?
   end
 
 end

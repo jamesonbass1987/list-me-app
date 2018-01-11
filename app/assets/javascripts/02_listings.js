@@ -205,7 +205,6 @@ function buildListingIndexControls(listing){
             type: 'DELETE',
             dataType: "json",
             success: function(response){
-                debugger;
                 loadListings();
             }
         })
