@@ -20,10 +20,6 @@ class BaseListing {
         this.user_id = listing.user_id
     }
 
-    tagsList() {
-        return this.tagsArray.join(', ');
-    }
-
     formattedPrice(){
         return '$' + Number(this.price).toFixed(2)
     }
@@ -47,10 +43,6 @@ class Listing extends BaseListing {
 
     tagsList() {
         return this.tagsArray.join(', ');
-    }
-
-    formattedPrice() {
-        return '$' + Number(this.price).toFixed(2);
     }
 
 }
