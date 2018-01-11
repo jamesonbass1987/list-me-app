@@ -5,6 +5,7 @@ let currentListingId;
 let listingsPath;
 let currentLocation = window.location.pathname.split('/')[2];;
 let currentLocationListingsPath = window.location.pathname.split('/').slice(0, -1).join('/')
+let currentListingFilter;
 
 // CLASS CONSTRUCTORS //
 
@@ -77,6 +78,7 @@ function loadListingsIndex(){
         loadListings();
         //Attach event listeners
         searchListingsEvent();
+        filterListingsEvent();
     })
 }
 
@@ -137,7 +139,6 @@ function findCurrentListing(){
 }
 
 function loadListing(){
-
     $('#js-listing, #js-listing-comments').empty();
     // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
     $.getJSON(`${currentLocationListingsPath}/${currentListingId}?ajax=1`, function (response) {
@@ -176,11 +177,13 @@ function loadLocationListingArray(){
 
 // INDEX LISTINGS FUNCTIONS
 
-//searchQuery is an optional argument passed in via listing search function
-function loadListings(searchQuery){
+//searchQuery and categoryFilter are optional arguments passed in via listing search function
+//and listings filter function
+function loadListings(searchQuery, categoryFilter){
     listingsPath = window.location.pathname.split("/").slice(0, -1).join('/') 
     $.getJSON(listingsPath + '/listings', {
-        searchQuery: searchQuery
+        searchQuery: searchQuery,
+        categoryFilter: categoryFilter
     }, function(response){
         $('.listings-index').empty();
         response.forEach(function(listing){
@@ -221,6 +224,39 @@ function searchListingsEvent(){
     $('#search-form').on('submit', function (event) {
         event.preventDefault();
         let searchQuery = $(this).serializeArray()[1].value
-        loadListings(searchQuery)
+        loadListings(searchQuery, undefined)
     });
 }
+
+function filterListingsEvent(){
+    $("#listings-filter-submit").on('click', function(event){
+        event.preventDefault();
+        //submit form
+        $("#listings-filter-form").submit();
+
+        //reset button and prevent default
+        $("#listings-filter-form")[0].reset();
+    })
+
+    $('#listings-filter-form').on('submit', function (event) {
+        event.preventDefault();
+        let categoryFilter = $(this).serializeArray()[2].value
+        loadListings(undefined, categoryFilter)
+    });
+}
+
+
+
+// translate to js from ruby
+
+//   def current_listing_filter(listings, location)
+//     if listings == location.listings && location.listings.present?
+//       "Everything. The whole shebang. The whole kit and caboodle."
+//     else
+//       if listings.present?
+//         listings.first.category.name
+//       else
+//         "Nothing..zilch..nada..zero. Unfortunately nobody is selling anything here."
+//       end
+//     end
+//   end

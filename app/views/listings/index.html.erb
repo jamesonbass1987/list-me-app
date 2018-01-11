@@ -13,13 +13,13 @@
 <%= content_tag(:p, "Currently Viewing: ", :id => 'listings-filter') %>
 
 <!--  Listing Category Filter -->
-<%= form_tag '/search' do %>
+<%= form_tag('/search', id: 'listings-filter-form') do %>
     <%= content_tag :div, :class => 'form-group' do %>
       <%= label_tag :search, 'View Listings For:' %>
       <%= select_tag 'category_selector', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything', :class => 'form-control custom-select btn' %>
       <%= hidden_field_tag :location_selector, @location.id  %>
     <% end %>
-      <%= submit_tag "Filter", :class => 'btn btn-outline-primary btn-block' %>
+      <%= submit_tag "Filter", :id => 'listings-filter-submit', :class => 'btn btn-outline-primary btn-block' %>
 <% end %>
 
 <!-- Listing Links -->
