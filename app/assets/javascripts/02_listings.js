@@ -4,7 +4,7 @@ let locationListingIds;
 let currentListingId;
 let listingsPath;
 let currentLocation = window.location.pathname.split('/')[2];;
-let currentLocationListingsPath = window.location.pathname.split('/').slice(0, -1).join('/')
+let currentLocationListingsPath = window.location.pathname
 let currentListingFilter = "Everything";
 
 // CLASS CONSTRUCTORS //
@@ -129,7 +129,7 @@ function findCurrentListing(){
 function loadListing(){
     $('#js-listing, #js-listing-comments').empty();
     // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
-    $.getJSON(`${currentLocationListingsPath}/${currentListingId}?ajax=1`, function (response) {
+    $.getJSON(`${currentLocationListingsPath}?ajax=1`, function (response) {
         buildListing(response);
         currentListingId = response.id;
         loadComments();
@@ -152,10 +152,17 @@ function buildListing(listingParams){
 
     let listingTemplate = HandlebarsTemplates['listing'](newListing);
     $('#js-listing').append(listingTemplate);
+
+    if (currentUser.id === newListing.user_id || currentUser.role.title === 'admin') {
+        listing_controls_template = HandlebarsTemplates['listing_show_controls'](newListing);
+        $(`#listing-owner-controls`).append(listing_controls_template);
+    };
 }
 
 function loadLocationListingArray(){
-    $.getJSON(currentLocationListingsPath + '/listing_ids', {
+    path = currentLocationListingsPath.split('/').slice(0, -1).join('/')
+
+    $.getJSON(path + '/listing_ids', {
         id: currentLocation
     }, function(response) {
         locationListingIds = response;
@@ -201,7 +208,7 @@ function buildListingIndexControls(listing){
     $(`#listing-${listing.id}-delete`).on('click', function(event){
         event.preventDefault();
         $.ajax({
-            url: `${currentLocationListingsPath}/listings/${listing.id}`,
+            url: `${currentLocationListingsPath}/${listing.id}`,
             type: 'DELETE',
             dataType: "json",
             success: function(response){

@@ -22,7 +22,7 @@ class Comment {
 function loadComments() {
     const location = window.location.pathname.split('/')[2];
 
-    $.getJSON(`${currentLocationListingsPath}/${currentListingId}/listing_comments`, {
+    $.getJSON(`${currentLocationListingsPath}/listing_comments`, {
         id: location
     }, function (response) {
 
