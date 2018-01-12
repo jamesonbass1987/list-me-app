@@ -4,7 +4,7 @@ let locationListingIds;
 let currentListingId;
 let listingsPath;
 let currentLocation = window.location.pathname.split('/')[2];;
-let currentLocationListingsPath = window.location.pathname
+let currentPath = window.location.pathname;
 let currentListingFilter = "Everything";
 
 // CLASS CONSTRUCTORS //
@@ -90,8 +90,10 @@ function loadListingsShow(){
             //find current index of listing on page inside the location listing ids array, load next listing id
             //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
             //next index
+
             let listingIdIndex = locationListingIds.indexOf(currentListingId);
             let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
+
             // set current listing id to next listing in array
             currentListingId = nextListingId;
             loadListing();
@@ -128,8 +130,9 @@ function findCurrentListing(){
 
 function loadListing(){
     $('#js-listing, #js-listing-comments').empty();
+    let path = currentPath.split('/').slice(0,-1).join('/')
     // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
-    $.getJSON(`${currentLocationListingsPath}?ajax=1`, function (response) {
+    $.getJSON(`${path}/${currentListingId}?ajax=1`, function (response) {
         buildListing(response);
         currentListingId = response.id;
         loadComments();
@@ -153,14 +156,16 @@ function buildListing(listingParams){
     let listingTemplate = HandlebarsTemplates['listing'](newListing);
     $('#js-listing').append(listingTemplate);
 
-    if (currentUser.id === newListing.user_id || currentUser.role.title === 'admin') {
-        listing_controls_template = HandlebarsTemplates['listing_show_controls'](newListing);
-        $(`#listing-owner-controls`).append(listing_controls_template);
-    };
+    if (currentUser){
+        if (currentUser.id === newListing.user_id || currentUser.role.title === 'admin') {
+            listing_controls_template = HandlebarsTemplates['listing_show_controls'](newListing);
+            $(`#listing-owner-controls`).append(listing_controls_template);
+        };
+    }
 }
 
 function loadLocationListingArray(){
-    path = currentLocationListingsPath.split('/').slice(0, -1).join('/')
+    let path = currentPath.split('/').slice(0, -1).join('/')
 
     $.getJSON(path + '/listing_ids', {
         id: currentLocation
@@ -200,6 +205,8 @@ function buildListingsIndex(listing){
 }
 
 function buildListingIndexControls(listing){
+        let path = currentPath.split('/').slice(0, -1).join('/')
+
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
@@ -208,7 +215,7 @@ function buildListingIndexControls(listing){
     $(`#listing-${listing.id}-delete`).on('click', function(event){
         event.preventDefault();
         $.ajax({
-            url: `${currentLocationListingsPath}/${listing.id}`,
+            url: `${path}/listings/${listing.id}`,
             type: 'DELETE',
             dataType: "json",
             success: function(response){

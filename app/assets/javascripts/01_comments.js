@@ -21,8 +21,9 @@ class Comment {
 
 function loadComments() {
     const location = window.location.pathname.split('/')[2];
+    let path = currentPath.split('/').slice(0, -1).join('/')
 
-    $.getJSON(`${currentLocationListingsPath}/listing_comments`, {
+    $.getJSON(`${path}/${currentListingId}/listing_comments`, {
         id: location
     }, function (response) {
 

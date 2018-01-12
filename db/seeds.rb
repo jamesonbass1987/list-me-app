@@ -3,7 +3,7 @@ user_ids = User.all.select(:id).map{|user| user.id}
 
 listing_1 = Listing.create(
     title: "Gibson 2017 Les Paul Custom Special Electric Guitar Ebony Brown Shell Pickguard",
-    description: "Body Body shape: Les Paul Body type: Solid Body Body material: Mahogany Top wood: Mahogany Body wood: Mahogany Body finish: Select finish Orientation: Right Hand Neck Neck shape: Slim Taper Neck wood: Maple Joint: Set Neck Scale length: 24.75 Truss rod: Single Action Neck finish: Select finish Fretboard Material: Rosewood Radius: Slim Taper Fret size: Medium Number of frets: 22 In
+    description: "Body shape: Les Paul Body type: Solid Body Body material: Mahogany Top wood: Mahogany Body wood: Mahogany Body finish: Select finish Orientation: Right Hand Neck Neck shape: Slim Taper Neck wood: Maple Joint: Set Neck Scale length: 24.75 Truss rod: Single Action Neck finish: Select finish Fretboard Material: Rosewood Radius: Slim Taper Fret size: Medium Number of frets: 22 In
     Absolutely no compromise for the new S Series Made-in-USA guitars
     The Les Paul Custom Special was designed around Gibson's standards of quality and innovation for Gibson USA's new S Series, bringing unprecedented value in an American-made guitar
     It is made in USA, with American craftsmanship that is second to none, and featuring superior quality, tone and playability, and a modern design inspired by the Les Paul ""The Paul"" model
@@ -77,15 +77,10 @@ listing_3 = Listing.create(
 )
 
 
-listing_3.tags.find_or_create_by(name: "guitar")
-listing_3.tags.find_or_create_by(name: "squier")
-listing_3.tags.find_or_create_by(name: "music")
-listing_3.tags.find_or_create_by(name: "fender")
-listing_3.tags.find_or_create_by(name: "electric guitar")
-listing_3.tags.find_or_create_by(name: "cutaway guitar")
-listing_3.tags.find_or_create_by(name: "custom made")
-listing_3.tags.find_or_create_by(name: "black")
-listing_3.tags.find_or_create_by(name: "pickups")
+listing_3.tags.find_or_create_by(name: "electronic")
+listing_3.tags.find_or_create_by(name: "personal assistant")
+listing_3.tags.find_or_create_by(name: "google home")
+listing_3.tags.find_or_create_by(name: "alexa")
 
 listing_3.listing_images.create(image_url: "https://images-na.ssl-images-amazon.com/images/I/61qaMh0rSIL._SL1000_.jpg")
 listing_3.listing_images.create(image_url: "https://images-na.ssl-images-amazon.com/images/I/61ikAJnULvL._SL1000_.jpg")
