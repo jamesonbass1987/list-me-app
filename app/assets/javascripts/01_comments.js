@@ -24,7 +24,7 @@ function loadComments() {
 
     $.getJSON(`${path}/${currentListingId}/listing_comments`, {id: location}, function(resp){
         if (resp.length === 0) {
-            $("#js-listing-comments").append('<p>No comments have been added. Log in to ask the seller a question!</p>')
+            $("#js-listing-comments").append('<p>No comments have been added.</p>')
         } else {
             resp.forEach(comment => buildComments(comment));
             // for (let i = 0; i < resp.length; i++) {
