@@ -117,7 +117,7 @@ function loadListingsShow(){
 // SHOW PAGE GENERAL FUNCTIONS //
 
 function loggedInUser() {
-    $.getJSON('/logged_in_user', function (resp){
+    $.getJSON('/logged_in_user', { format: 'json' }, function (resp){
         currentUser = resp;
     });
 }
@@ -132,7 +132,7 @@ function loadListing(){
     $('#js-listing, #js-listing-comments').empty();
     let path = currentPath.split('/').slice(0,-1).join('/')
     // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
-    $.getJSON(`${path}/${currentListingId}?ajax=1`, function (response) {
+    $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, function (response) {
         buildListing(response);
         currentListingId = response.id;
         loadComments();
@@ -168,7 +168,8 @@ function loadLocationListingArray(){
     let path = currentPath.split('/').slice(0, -1).join('/')
 
     $.getJSON(path + '/listing_ids', {
-        id: currentLocation
+        id: currentLocation,
+        format: 'json'
     }, function(response) {
         locationListingIds = response;
     });
@@ -181,16 +182,20 @@ function loadLocationListingArray(){
 //and listings filter function
 function loadListings(searchQuery, categoryFilter){
     listingsPath = window.location.pathname.split("/").slice(0, -1).join('/');
-    $.getJSON(listingsPath + '/listings', {
-        searchQuery: searchQuery,
-        categoryFilter: categoryFilter
-    }, function(response){
+
+    $.ajax({
+        url: listingsPath + '/listings',
+        data: {searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json'},
+        dataType: 'json'
+    }).done(function(response){
         $('.listings-index').empty();
         response.forEach(function(listing){
             buildListingsIndex(listing);
         })
         setCurrentListingFilter(response);
     });
+
+
 }
 
 function buildListingsIndex(listing){

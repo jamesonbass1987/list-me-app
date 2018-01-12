@@ -44,7 +44,9 @@ class ListingsController < ApplicationController
   def show
     respond_to do |format|
       format.html { render 'show' }
-      format.json { render json: @listing, include: ['comments.**', 'listing_images', 'location', 'user', 'category'] }
+      format.json { 
+        render json: @listing, include: ['comments.**', 'listing_images', 'location', 'user', 'category']
+      }
     end
   end
 
