@@ -10,7 +10,7 @@ let currentListingFilter = "Everything";
 // CLASS CONSTRUCTORS //
 
 class BaseListing {
-    constructor(listing){
+    constructor(listing) {
         this.id = listing.id;
         this.title = listing.title;
         this.description = listing.description;
@@ -20,7 +20,7 @@ class BaseListing {
         this.user_id = listing.user_id
     }
 
-    formattedPrice(){
+    formattedPrice() {
         return '$' + Number(this.price).toFixed(2)
     }
 
@@ -29,7 +29,7 @@ class BaseListing {
 class Listing extends BaseListing {
     constructor(listing) {
         super(listing, listing);
-    
+
         this.category = listing.category.name
         this.locationCity = listing.location.city;
         this.locationState = listing.location.state;
@@ -49,15 +49,16 @@ class Listing extends BaseListing {
 
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
-$(document).on('turbolinks:load', function(){
-    //Check for logged in user
-    loggedInUser();
-
-    if ($(".listings.index")[0]){
-        loadListingsIndex();
-    } else if ($(".listings.show")[0]){
-        loadListingsShow();
-    }
+$(function(){
+    $(document).ready(function(){
+        //Check for logged in user
+        loggedInUser();
+        if ($(".listings.index")[0]) {
+            loadListingsIndex();
+        } else if ($(".listings.show")[0]) {
+            loadListingsShow();
+        }
+    })
 })
 
 function loadListingsIndex(){
@@ -87,10 +88,10 @@ function loadListingsShow(){
         //Event Listeners
         $('#js-next-listing').click(function (event) {
             event.preventDefault();
+            
             //find current index of listing on page inside the location listing ids array, load next listing id
             //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
             //next index
-
             let listingIdIndex = locationListingIds.indexOf(currentListingId);
             let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
 
@@ -145,23 +146,20 @@ function buildListing(listingParams){
     let listingImageArray = listingParams.listing_images;
     let tagsArray = listingParams.tags;
 
-    for(let i = 1; i < listingImageArray.length; i++){
-        newListing.listingImagesArray.push(listingImageArray[i].image_url);
-    };
-
-    for (let i = 0; i < tagsArray.length; i++) {
-        newListing.tagsArray.push(tagsArray[i].name);
-    };
+    listingImageArray.forEach(image => newListing.listingImagesArray.push(image.image_url))
+    tagsArray.forEach(tag => newListing.tagsArray.push(tag.name))
 
     let listingTemplate = HandlebarsTemplates['listing'](newListing);
     $('#js-listing').append(listingTemplate);
 
-    if (currentUser){
-        if (currentUser.id === newListing.user_id || currentUser.role.title === 'admin') {
-            listing_controls_template = HandlebarsTemplates['listing_show_controls'](newListing);
-            $(`#listing-owner-controls`).append(listing_controls_template);
-        };
-    }
+    if (currentUser) appendListingOwnerControls(newListing);
+}
+
+function appendListingOwnerControls(listing){
+    if (currentUser.id === listing.user_id || currentUser.role.title === 'admin') {
+        listing_controls_template = HandlebarsTemplates['listing_show_controls'](listing);
+        $(`#listing-owner-controls`).append(listing_controls_template);
+    };
 }
 
 function loadLocationListingArray(){
@@ -199,18 +197,15 @@ function loadListings(searchQuery, categoryFilter){
 }
 
 function buildListingsIndex(listing){
-
     let newListing = new BaseListing(listing);
     let listingTemplate = HandlebarsTemplates['listing_index'](newListing);
     $('.listings-index').append(listingTemplate)
 
-    if (currentUser !== null) {
-        buildListingIndexControls(newListing);
-    }
+    if (currentUser !== null) buildListingIndexControls(newListing);
 }
 
 function buildListingIndexControls(listing){
-        let path = currentPath.split('/').slice(0, -1).join('/')
+    let path = currentPath.split('/').slice(0, -1).join('/')
 
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
@@ -262,15 +257,17 @@ function filterListingsEvent(){
 }
 
 function setCurrentListingFilter(listings){
-    
     if (listings.length !== 0){
         let categoryCheck = 0;
+
         for (let i = 0; i < (listings.length - 1); i++) {
             listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : i;
         }
+
         currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name;
     } else {
         currentListingFilter = "There doesn't seem to be anything here. Please try another filter."
     }
+
     $("#listings-filter").empty().append(currentListingFilter);
 }

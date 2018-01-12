@@ -16,23 +16,20 @@ class Comment {
         return this.status_id === 1 ? "Answer Pending" : "Resolved";
     }
 }
-
 // SHOW LISTING COMMENTS FUNCTIONS //
 
 function loadComments() {
     const location = window.location.pathname.split('/')[2];
     let path = currentPath.split('/').slice(0, -1).join('/')
 
-    $.getJSON(`${path}/${currentListingId}/listing_comments`, {
-        id: location
-    }, function (response) {
-
-        if (response.length === 0) {
+    $.getJSON(`${path}/${currentListingId}/listing_comments`, {id: location}, function(resp){
+        if (resp.length === 0) {
             $("#js-listing-comments").append('<p>No comments have been added. Log in to ask the seller a question!</p>')
         } else {
-            for (let i = 0; i < response.length; i++) {
-                buildComments(response[i]);
-            }
+            resp.forEach(comment => buildComments(comment));
+            // for (let i = 0; i < resp.length; i++) {
+            //     buildComments(resp[i]);
+            // }
         }
     });
 }
@@ -41,11 +38,7 @@ function buildComments(commentParent) {
     let newComment = new Comment(commentParent);
     let commentTemplate = HandlebarsTemplates['comments'](newComment);
 
-    if (newComment.commentableType === 'Listing') {
-        $("#js-listing-comments").append(commentTemplate);
-    } else if (newComment.commentableType === "Comment") {
-        $(`#comment-${newComment.commentableId}`).append(commentTemplate);
-    };
+    newComment.commentableType === "Listing" ? $("#js-listing-comments").append(commentTemplate) : $(`#comment-${newComment.commentableId}`).append(commentTemplate);
 
     if (currentUser !== null) {
         buildCommentControls(newComment);
@@ -59,13 +52,11 @@ function buildComments(commentParent) {
 function buildCommentControls(newComment) {
     if (currentUser.id === newComment.ownerId || currentUser.role.title === 'admin') {
         owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${newComment.id}` });
-
         $(`#comment-${newComment.id}-controls`).append(owner_controls_template);
     };
 
     if (currentUser || currentUser.role.title === 'admin') {
         reply_controls_template = HandlebarsTemplates['comment_reply_controls']();
-
         $(`#comment-${newComment.id}-controls`).append(reply_controls_template);
     };
 }
