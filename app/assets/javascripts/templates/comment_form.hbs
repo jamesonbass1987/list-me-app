@@ -1,15 +1,12 @@
-<div id="comment-{{id}}" class="border border-top-0 border-right-0 comment-border comment-box">
-    <div class="media">
-        <img src="{{ownerProfileImageUrl}}" alt="Profile Image" class="align-self-center mr-3 profile-image-small rounded-circle">
-        <div class="media-body">
-            <h6 class="mt-0">Posted at {{createdAt}} by {{ownerUsername}}</h6>
-            <div>
-                {{content}}
-            </div>
-            <div>
-                <span>Status: {{status}}</span>
-            </div>
-            <div id="comment-{{id}}-controls"></div>
-        </div>
+
+<form id="new-listing-comment" action="/comments" accept-charset="UTF-8" method="post">
+    <input name="utf8" type="hidden" value="&#x2713;">
+    <input type="hidden" name="authenticity_token" value="{{authToken}}" />
+    <input value="{{commentableId}}" type="hidden" name="comment[commentable_id]" id="commentableId" />
+    <input value="{{commentableType}}" type="hidden" name="comment[commentable_type]" id="commentableType" />
+    <div class="form-group">
+        <textarea class="form-control" id='commentContent' name="comment[content]" rows="6" placeholder="Ask the seller a question..." ></textarea>
     </div>
-</div>
+    <input type="submit" name="commit" value="Create Comment" class="btn btn-outline-success btn-block" id="js-listing-comment-submit" />
+
+</form>
