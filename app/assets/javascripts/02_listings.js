@@ -156,13 +156,6 @@ function buildListing(listingParams){
         loadComments(listingParams.comments);
         buildListingCommentForm()
     } 
-
-
-
-
-    if (currentUser) {
-        buildListingCommentForm()
-    }
 }
 
 function appendListingOwnerControls(listing){
