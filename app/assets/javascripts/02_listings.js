@@ -136,7 +136,6 @@ function loadListing(){
     $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, function (response) {
         buildListing(response);
         currentListingId = response.id;
-        loadComments();
     });
 
 }
@@ -152,7 +151,18 @@ function buildListing(listingParams){
     let listingTemplate = HandlebarsTemplates['listing'](newListing);
     $('#js-listing').append(listingTemplate);
 
-    if (currentUser) appendListingOwnerControls(newListing);
+    if (currentUser) {
+        appendListingOwnerControls(newListing);
+        loadComments(listingParams.comments);
+        buildListingCommentForm()
+    } 
+
+
+
+
+    if (currentUser) {
+        buildListingCommentForm()
+    }
 }
 
 function appendListingOwnerControls(listing){
@@ -261,9 +271,8 @@ function setCurrentListingFilter(listings){
         let categoryCheck = 0;
 
         for (let i = 0; i < (listings.length - 1); i++) {
-            listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : i;
+            listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : false;
         }
-
         currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name;
     } else {
         currentListingFilter = "There doesn't seem to be anything here. Please try another filter."

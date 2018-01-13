@@ -10,10 +10,10 @@ class ListingsController < ApplicationController
   end
 
   def listing_ids
-  location = Location.friendly.find(params[:id])
-  listing_ids = []
-  location.listings.select(:id).map{|listing| listing_ids.push(listing.id) }    
-  render json: listing_ids
+    location = Location.friendly.find(params[:id])
+    listing_ids = []
+    location.listings.select(:id).map{|listing| listing_ids.push(listing.id) }    
+    render json: listing_ids
   end
 
 
