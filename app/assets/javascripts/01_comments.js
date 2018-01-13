@@ -19,6 +19,8 @@ class Comment {
 // SHOW LISTING COMMENTS FUNCTIONS //
 
 function loadComments() {
+    $("#js-listing-comments").empty();
+
     const location = window.location.pathname.split('/')[2];
     let path = currentPath.split('/').slice(0, -1).join('/')
 
@@ -61,6 +63,8 @@ function buildCommentControls(newComment) {
         reply_controls_template = HandlebarsTemplates['comment_reply_controls']();
         $(`#comment-${newComment.id}-controls`).append(reply_controls_template);
     };
+
+    attachCommentControlListeners(newComment.id);
 }
 
 function buildListingCommentForm(){
@@ -107,8 +111,32 @@ function submitListingCommentListener() {
             type: 'POST',
             data: values,
             dataType: 'json',
-            success: function(data){
+            success: function(){
+                
                 loadComments();
             }});
     });
+}
+
+function attachCommentControlListeners(commentId){
+    //Delete Comment
+    $(`#comment-${commentId}-delete`).click(function(event){
+        event.preventDefault();
+        deleteComment(this)
+    }).bind( commentId );
+}
+
+function deleteComment(comment){
+    let commentId = comment.href.split('/').slice(-1).join()
+
+    $.ajax({
+        type: "POST",
+        url: `/comments/${commentId}`,
+        dataType: 'json',
+        data: { "_method": "delete" },
+        complete: function () {
+            $(`#comment-${commentId}`).remove();
+        }
+    })
+
 }

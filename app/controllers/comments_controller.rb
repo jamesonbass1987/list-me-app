@@ -53,7 +53,11 @@ class CommentsController < ApplicationController
     listing = parent_listing_for(comment)
 
     comment.destroy!
-    redirect_to location_listing_path(listing.location, listing)
+
+    respond_to do |format|
+      format.html { redirect_to location_listing_path(listing.location, listing) }
+      format.json {render json: "ok".to_json, status: 202}
+    end
   end
 
   private
