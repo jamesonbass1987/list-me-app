@@ -215,35 +215,42 @@ function loadListings(searchQuery, categoryFilter){
 }
 
 //Build listing card for each listing returned in loadListings function ajax call and append to DOM body.
-//If user is signed in, append create listing button and applicable edit/delete controls to listing card.
-function buildListingCard(listing){
-    let newListing = new BaseListing(listing);
-    let listingTemplate = HandlebarsTemplates['listing_index'](newListing);
-    $('#listings-index').append(listingTemplate)
+//If user is signed in, append edit/delete controls to listing card for current user's listings.
+function buildListingCard(listingParams){
+    const listing = new BaseListing(listingParams);
+    const listingTemplate = HandlebarsTemplates['listing_index'](listing);
+    $('#listings-index').append(listingTemplate);
 
     if (currentUser){
-        buildListingControls(newListing);
+        buildListingCardControls(listing);
     } 
 }
 
-function buildListingControls(listing){
-    let path = currentPath.split('/').slice(0, -1).join('/')
-
+function buildListingCardControls(listing){
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
+        
+        deleteListingEventListener(listing.id)
     };
+}
 
-    $(`#listing-${listing.id}-delete`).on('click', function(event){
+function deleteListingEventListener(listingId){
+    const path = currentPath.split('/').slice(0, -1).join('/');
+    $(`#listing-${listingId}-delete`).on('click', function (event) {
         event.preventDefault();
-        $.ajax({
-            url: `${path}/listings/${listing.id}`,
-            type: 'DELETE',
-            dataType: "json",
-            success: function(response){
-                loadListings();
-            }
-        })
+        deleteListing(listingId);
+    })
+}
+
+function deleteListing(id){
+    $.ajax({
+        url: `${path}/listings/${id}`,
+        type: 'DELETE',
+        dataType: "json",
+        success: function (response) {
+            loadListings();
+        }
     })
 }
 
