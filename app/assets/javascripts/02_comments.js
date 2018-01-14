@@ -1,3 +1,5 @@
+//CLASS CONSTRUCTORS
+
 class Comment {
     constructor(comment) {
         this.id = comment.id
@@ -16,6 +18,7 @@ class Comment {
     }
 
 }
+
 // SHOW LISTING COMMENTS FUNCTIONS //
 
 function loadComments(comments) {
@@ -50,7 +53,7 @@ function buildCommentControls(newComment) {
 
 
 function buildListingCommentForm(){
-    $('#js-listing-comment-form-show').append(
+    $('#js-listing-comment-form-btn').append(
             `<a href="#" class="btn btn-block btn-outline-info">Click here to ask the seller a question!</a>`);
 
     attachListingCommentFormListener();
@@ -107,16 +110,14 @@ function attachCommentControlListeners(commentId){
 //COMMENT REPLY FUNCTIONS AND LISTENERS
 
 function buildCommentReply(commentId) {
-    buildCommentReplyControl(commentId);
-    buildCommentReplyFormListener(commentId);
-}
-
-function buildCommentReplyControl(commentId) {
     reply_controls_template = HandlebarsTemplates['comment_reply_controls']({ id: commentId });
     $(`#comment-${commentId}-controls`).append(reply_controls_template);
+
+    commentReplyFormListener(commentId);
 }
 
-function buildCommentReplyFormListener(commentId) {
+
+function commentReplyFormListener(commentId) {
     $(`#js-comment-reply-${commentId}`).click(function (event) {
         event.preventDefault();
 
@@ -125,6 +126,7 @@ function buildCommentReplyFormListener(commentId) {
             commentableType: 'Comment',
             commentableId: commentId,
         });
+
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
         addCommentReplySubmissionListener(commentId);
@@ -160,7 +162,6 @@ function hideListingCommentReplyForm(commentId) {
 
 function submitComment(form) {
     let values = $(form).serialize();
-
     $.ajax({
         url: '/comments',
         type: 'POST',

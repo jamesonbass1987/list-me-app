@@ -142,7 +142,7 @@ function findCurrentListing(){
 //Empty listing from DOM if coming from next/prev button events, send an ajax getJSON request for the
 //newly set current listing, and build the listing from the response.
 function loadListing(){
-    $('#js-listing, #js-listing-comments').empty();
+    $('#js-listing, #js-listing-comments, #js-listing-comment-form-btn').empty();
     const path = currentPath.split('/').slice(0,-1).join('/')
 
     $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, (response => buildListing(response)));
@@ -297,7 +297,6 @@ function filterListingsEvent(){
 //listings' message to div. If listings are present, check for category based on listings by //checking categoryids and comparing values. If category id's are different, 'Everything' is being
 //displayed on the page. If they are the same, the value of the first listing category name is
 //displayed in the element.
-
 function setCurrentListingFilter(listings){
     if (listings.length !== 0){
         let categoryCheck = 0;
