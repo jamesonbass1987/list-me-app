@@ -292,6 +292,12 @@ function filterListingsEvent(){
     });
 }
 
+
+//Set category filter based on current indexed listings. If no listings are present, append 'no
+//listings' message to div. If listings are present, check for category based on listings by //checking categoryids and comparing values. If category id's are different, 'Everything' is being
+//displayed on the page. If they are the same, the value of the first listing category name is
+//displayed in the element.
+
 function setCurrentListingFilter(listings){
     if (listings.length !== 0){
         let categoryCheck = 0;
