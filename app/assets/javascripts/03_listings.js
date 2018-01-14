@@ -94,43 +94,43 @@ function loadListingsShow(){
         loadLocationListingArray();
 
         //Event Listeners
-        nextListingListener();
-        prevListingListener();
+        nextListingBtnListener();
+        prevListingBtnListener();
     })
 }
 
 // SHOW PAGE EVENT LISTENERS //
 
-function nextListingListener(){
+//Find current index of listing on page inside the location listing ids array, loads next listing id
+//by finding next element in array. If element is at end of array, cycle through to beggining of array  
+//for the next index. Then, set current listing id to next listing in array and load the listing.
+function nextListingBtnListener(){
     $('#js-next-listing').click(function (event) {
         event.preventDefault();
 
-        //find current index of listing on page inside the location listing ids array, load next listing id
-        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
-        //next index
-        let listingIdIndex = locationListingIds.indexOf(currentListingId);
-        let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
-
-        // set current listing id to next listing in array
+        const listingIdIndex = locationListingIds.indexOf(currentListingId);
+        const nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
+        
         currentListingId = nextListingId;
         loadListing();
     });
 }
 
-function prevListingListener(){
+//Find current index of listing on page inside the location listing ids array, load previous listing id
+//by finding the previous element in array. if element is at beginning of array, choose the last array
+//index. Then, set current listing id to the prev listing in array and load the listing
+function prevListingBtnListener(){
     $('#js-prev-listing').click(function (event) {
         event.preventDefault();
-        //find current index of listing on page inside the location listing ids array, load next listing id
-        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
-        //next index
-        let listingIdIndex = locationListingIds.indexOf(currentListingId);
-        let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
+ 
+        const listingIdIndex = locationListingIds.indexOf(currentListingId);
+        const prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
         // set current listing id to prev listing in array
+        
         currentListingId = parseInt(prevListingId);
         loadListing();
     });
 }
-
 
 // SHOW LISTING FUNCTIONS //
 
@@ -140,13 +140,13 @@ function findCurrentListing(){
 
 function loadListing(){
     $('#js-listing, #js-listing-comments').empty();
+
     let path = currentPath.split('/').slice(0,-1).join('/')
     // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
     $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, function (response) {
         buildListing(response);
         currentListingId = response.id;
     });
-
 }
 
 function buildListing(listingParams){
