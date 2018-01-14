@@ -16,9 +16,7 @@ class ListingsController < ApplicationController
     render json: listing_ids
   end
 
-
-  # REST ROUTES
-
+  # RESTFUL ROUTES
   def index
     @location = Location.friendly.find(params[:location_id])
     @categories = Category.all

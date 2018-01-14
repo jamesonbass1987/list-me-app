@@ -141,7 +141,6 @@ function findCurrentListing(){
 
 //Empty listing from DOM if coming from next/prev button events, send an ajax getJSON request for the
 //newly set current listing, and build the listing from the response.
-
 function loadListing(){
     $('#js-listing, #js-listing-comments').empty();
     const path = currentPath.split('/').slice(0,-1).join('/')
@@ -151,7 +150,6 @@ function loadListing(){
 
 //Build listing from json response, and load any comments to the DOM. If user is logged in, add reply
 //controls to listing, as well as any listing controls if the current user is viewing their own listing
-
 function buildListing(listingParams){
     //build new listing from response listing params
     const listing = new Listing(listingParams);
@@ -174,6 +172,7 @@ function buildListing(listingParams){
     } 
 }
 
+//Check to see if current user is the listing owner and append listing controls, if so.
 function appendListingOwnerControls(listing){
     if (currentUser.id === listing.user_id || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_owner_controls'](listing);
@@ -181,6 +180,9 @@ function appendListingOwnerControls(listing){
     };
 }
 
+//Make an axaj request to listing_ids API path, setting global locationListingIds array to response.
+//Array contains all listing ids for current location to use in next/previous button event listener
+//functions.
 function loadLocationListingArray(){
     let path = currentPath.split('/').slice(0, -1).join('/')
 
