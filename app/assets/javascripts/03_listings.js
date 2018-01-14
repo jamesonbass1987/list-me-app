@@ -197,11 +197,12 @@ function loadLocationListingArray(){
 
 // INDEX LISTINGS FUNCTIONS
 
-//Load listings for index page based on current location. searchQuery and categoryFilter are optional 
+//Empty listings index div (to clear in case of filtering via search or category). Then load //listings for index page based on current location. searchQuery and categoryFilter are optional 
 //arguments passed in via listing search function and listings filter functions. Build listing card
 //for each listing returned via ajax call. Set the current listing filter based off of returned listings.
 function loadListings(searchQuery, categoryFilter){
     listingsPath = window.location.pathname.split("/").slice(0, -1).join('/');
+    $('#listings-index').empty()
 
     $.ajax({
         url: listingsPath + '/listings',
@@ -260,33 +261,33 @@ function deleteListing(listing, element){
     })
 }
 
+//Add click event for search filtering. On click, submit search form and reset input to clear
+//search query.
 function searchListingsEvent(){
     $("#listings-search-submit").on('click', function(event){
         event.preventDefault();
-        //submit form
         $("#search-form").submit();
-
-        //reset button and prevent default
         $("#search-form")[0].reset();
     })
 
     $('#search-form').on('submit', function (event) {
         event.preventDefault();
-        let searchQuery = $(this).serializeArray()[1].value;
+        const searchQuery = $(this).serializeArray()[1].value;
         loadListings(searchQuery, undefined);
     });
 }
 
+//Add click event for category filtering. On click, submit filter form load listings in selected
+//category.
 function filterListingsEvent(){
     $("#listings-filter-submit").on('click', function(event){
         event.preventDefault();
-        //submit form
         $("#listings-filter-form").submit();
     })
 
     $('#listings-filter-form').on('submit', function (event) {
         event.preventDefault();
-        let categoryFilter = $(this).serializeArray()[2].value;
+        const categoryFilter = $(this).serializeArray()[2].value;
         loadListings(undefined, categoryFilter);
     });
 }
