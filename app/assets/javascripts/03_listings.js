@@ -226,31 +226,37 @@ function buildListingCard(listingParams){
     } 
 }
 
+//If the listing belongs to the current user or the current user is an admin, append edit/delete listing card 
+//controls and add an event listener to the delete button.
 function buildListingCardControls(listing){
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
         
-        deleteListingEventListener(listing.id)
+        deleteListingEventListener(listing)
     };
 }
 
-function deleteListingEventListener(listingId){
-    const path = currentPath.split('/').slice(0, -1).join('/');
-    $(`#listing-${listingId}-delete`).on('click', function (event) {
+//Event listener for listing index card delete button. When clicked, runs the deleteListing function, passing
+//in the current listing object, and listing DOM element.
+function deleteListingEventListener(listing){
+    $(`#listing-${listing.id}-delete`).on('click', function (event) {
         event.preventDefault();
-        deleteListing(listingId);
+        const listingCard = $(this).parents()[1]
+        deleteListing(listing, listingCard);
     })
 }
 
-function deleteListing(id){
+//Make ajax call for listing deletion from the index page. Remove DOM element on success.
+function deleteListing(listing, element){
+    const path = currentPath.split('/').slice(0, -1).join('/');
     $.ajax({
-        url: `${path}/listings/${id}`,
+        url: `${path}/listings/${listing.id}`,
         type: 'DELETE',
         dataType: "json",
         success: function (response) {
-            loadListings();
-        }
+            $(this).remove();
+        }.bind(element)
     })
 }
 
