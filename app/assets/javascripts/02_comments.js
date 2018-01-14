@@ -89,10 +89,7 @@ function attachListingCommentFormButtonListener(formId){
     });
 }
 
-//When 'Hide' button is clicked (when Listing comment form is in expanded state)
-//scroll up page to bottom of comments div, remove the comment form and hide 
-//comment link. Call buildListingCommentFormButton() function to reappend link
-//to expand comment form.
+//Adds event listener for hide listing comment form
 function hideListingCommentFormButtonListener() {
     $('#js-comment-form-btn-link').click(function (event) {
         event.preventDefault();
@@ -100,6 +97,11 @@ function hideListingCommentFormButtonListener() {
     });
 }
 
+
+//When 'Hide' button is clicked (when Listing comment form is in expanded state)
+//scroll up page to bottom of comments div, remove the comment form and hide 
+//comment link. Call buildListingCommentFormButton() function to reappend link
+//to expand comment form.
 function hideCommentForm(position){
     $('html, body').animate({
         scrollTop: $(document).height() - $(window).height() - position
@@ -111,7 +113,9 @@ function hideCommentForm(position){
     )
 }
 
-
+//Add listener to comment form submit. event.stopImmediatePropagation() was 
+//added to stop propogation up the DOM (preventing multiple form submits from
+//firing). After submission, reset comment form.
 function submitCommentListener() {
     $(".new-comment").on('submit', function (event) {
         event.preventDefault();
@@ -124,6 +128,8 @@ function submitCommentListener() {
     })
 }
 
+//Submit comment form action, after completion, hide form and add comment to
+//the DOM.
 function submitComment(form) {
     $.ajax({
         url: '/comments',
@@ -131,10 +137,14 @@ function submitComment(form) {
         data: $(form).serialize(),
         dataType: 'json'
     }).done(function (resp) {
-        debugger;
+        hideCommentForm(85)
         buildComment(resp)
     });
 }
+
+
+
+
 
 
 function buildComment(commentParent) {
