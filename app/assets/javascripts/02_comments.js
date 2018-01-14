@@ -217,15 +217,8 @@ function commentReplyFormListener(commentId) {
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
         submitCommentListener()
-        // addCommentReplySubmissionListener(commentId);
     })
 }
-
-// function addCommentReplySubmissionListener(data) {
-//     $(`#comment-${data}-controls form input`).click(function (event) {
-//         submitComment(this.parentElement);
-//     })
-// }
 
 function addReplyHideControls(replyButton, commentId) {
 
