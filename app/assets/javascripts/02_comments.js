@@ -52,33 +52,57 @@ function buildCommentControls(newComment) {
 
 
 
-function buildListingCommentForm(){
-    $('#js-listing-comment-form-btn').append(
-            `<a href="#" class="btn btn-block btn-outline-info">Click here to ask the seller a question!</a>`);
+function buildListingCommentFormButton(){
+    $('#js-listing-comment-form-btn').append(HandlebarsTemplates['listing_comment_reply_controls']);
 
     attachListingCommentFormListener();
 }
 
 function attachListingCommentFormListener(formId){
-    $('#js-listing-comment-form-show').click(function(event){
+    $('#js-comment-form-btn-link').click(function(event){
+        event.preventDefault();
+        const commentFormBtn = $(this).parents()[0];
+        const commentForm = $(this).parents()[1];
 
-        let listingCommentForm = HandlebarsTemplates['comment_form']({
+        const listingCommentForm = HandlebarsTemplates['comment_form']({
             authToken: $('meta[name=csrf-token]').attr('content'),
             commentableType: 'Listing',
             commentableId: currentListingId,
         });
 
-        $('#js-listing-comment-form').empty().append(listingCommentForm)
-        
+        $(commentFormBtn).empty();
+        $(commentForm).append(listingCommentForm)
+        appendHideListingCommentFormButton();
+
         $('html, body').animate({
-            scrollTop: $("#js-listing-comment-form").offset().top
-        }, 2000);
+            scrollTop: $(document).height() - $(window).height()
+            }, 650
+        );
 
         submitListingCommentListener()
     })
 
 }
 
+function appendHideListingCommentFormButton(){
+    $('#js-listing-comment-form').append(HandlebarsTemplates['listing_comment_reply_hide_controls'])
+
+    hideListingCommentFormButtonListener();
+}
+
+function hideListingCommentFormButtonListener() {
+    $('#js-comment-form-btn-link').click(function (event) {
+        event.preventDefault();
+
+        $('html, body').animate({
+            scrollTop: $(document).height() - $(window).height() - 230
+        }, 650, null, function(){
+            $('#js-listing-comment-form form').remove();
+            $('#js-listing-comment-form a').remove();
+            buildListingCommentFormButton();
+        }
+    )})
+}
 
 function submitListingCommentListener() {
     $("#js-listing-comment-submit").on('click', function (event) {

@@ -54,8 +54,6 @@ class Listing extends BaseListing {
 }
 
 
-
-
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
 //Load listings for current location and attach event listeners to index page for search and filter
@@ -156,7 +154,7 @@ function buildListing(listingParams){
     //if user is logged in, append listing controls and comment form to DOM
     if (currentUser) {
         appendListingOwnerControls(listing);;
-        buildListingCommentForm()
+        buildListingCommentFormButton()
     } 
 }
 
