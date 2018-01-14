@@ -8,7 +8,7 @@ class Comment {
         this.ownerId = comment.user.id
         this.ownerProfileImageUrl = comment.user.profile_image_url
         this.ownerRating = comment.user.rating
-        this.status_id = comment.comment_status_id
+        this.commentStatusId = comment.comment_status_id
         this.createdAt = comment.created_at
         this.commentableType = comment.commentable_type
         this.commentableId = comment.commentable_id
@@ -27,15 +27,6 @@ function loadComments(comments) {
     } else {
         comments.forEach(comment => buildComment(comment));
     }
-}
-
-function buildComment(commentParent) {
-    let newComment = new Comment(commentParent);
-    let commentTemplate = HandlebarsTemplates['comment'](newComment);
-
-    newComment.commentableType === "Listing" ? $("#js-listing-comments").append(commentTemplate) : $(`#comment-${newComment.commentableId}`).append(commentTemplate);
-    currentUser ? buildCommentControls(newComment) : false
-    commentParent.comments.length >= 1 ? commentParent.comments.forEach(comment => buildComment(comment)) : false 
 }
 
 function buildCommentControls(newComment) {
@@ -76,6 +67,7 @@ function attachListingCommentFormButtonListener(formId){
             authToken: $('meta[name=csrf-token]').attr('content'),
             commentableType: 'Listing',
             commentableId: currentListingId,
+            commentStatusId: '1'
         });
         const replyHideControls = HandlebarsTemplates['listing_comment_reply_hide_controls']
 
@@ -91,7 +83,7 @@ function attachListingCommentFormButtonListener(formId){
         $('html, body').animate({
             scrollTop: $(document).height() - $(window).height()
             }, 650, null, function(){
-                submitListingCommentListener();
+                submitCommentListener();
             }
         );
     });
@@ -104,34 +96,56 @@ function attachListingCommentFormButtonListener(formId){
 function hideListingCommentFormButtonListener() {
     $('#js-comment-form-btn-link').click(function (event) {
         event.preventDefault();
+        hideCommentForm(230);
+    });
+}
 
-        $('html, body').animate({
-            scrollTop: $(document).height() - $(window).height() - 230
-        }, 650, null, function(){
+function hideCommentForm(position){
+    $('html, body').animate({
+        scrollTop: $(document).height() - $(window).height() - position
+    }, 650, null, function () {
             $('#js-listing-comment-form form').remove();
             $('#js-listing-comment-form a').remove();
             buildListingCommentFormButton();
         }
-    )})
+    )
 }
 
 
-
-
-function submitListingCommentListener() {
-    $("#js-listing-comment-submit").on('click', function (event) {
+function submitCommentListener() {
+    $(".new-comment").on('submit', function (event) {
         event.preventDefault();
-        //submit form
-        $("#new-listing-comment").submit();
-        //reset button and prevent default
-        $("#new-listing-comment")[0].reset();
+        event.stopImmediatePropagation();
+
+        const commentableType = this[3].value
+
+        submitComment(this)
+        $(this)[0].reset();
     })
+}
 
-    $('#new-listing-comment').on('submit', function(event) {
-        event.preventDefault();
-        submitComment(this);
+function submitComment(form) {
+    $.ajax({
+        url: '/comments',
+        type: 'POST',
+        data: $(form).serialize(),
+        dataType: 'json'
+    }).done(function (resp) {
+        debugger;
+        buildComment(resp)
     });
 }
+
+
+function buildComment(commentParent) {
+    let newComment = new Comment(commentParent);
+    let commentTemplate = HandlebarsTemplates['comment'](newComment);
+
+    newComment.commentableType === "Listing" ? $("#js-listing-comments").append(commentTemplate) : $(`#comment-${newComment.commentableId}`).append(commentTemplate);
+    currentUser ? buildCommentControls(newComment) : false
+    commentParent.comments.length >= 1 ? commentParent.comments.forEach(comment => buildComment(comment)) : false
+}
+
 
 
 function attachCommentControlListeners(commentId){
@@ -195,21 +209,6 @@ function hideListingCommentReplyForm(commentId) {
     $(`#comment-${commentId}-controls`).empty();
 }
 
-
-//SUBMIT COMMENT
-
-function submitComment(form) {
-    let values = $(form).serialize();
-    $.ajax({
-        url: '/comments',
-        type: 'POST',
-        data: values,
-        dataType: 'json',
-        success: function (resp) {
-            buildComment(resp)
-        }
-    });
-}
 
 
 //DELETE COMMENT FUNCTIONS AND LISTENERS

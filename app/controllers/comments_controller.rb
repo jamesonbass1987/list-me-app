@@ -8,24 +8,24 @@ class CommentsController < ApplicationController
 
   def create
 
-    @comment = @commentable.comments.create(comment_params)
+    @comment = @commentable.comments.build(comment_params)
     @comment.user = current_user
     @listing = parent_listing_for(@comment)
-
+ 
     #if save successful, redirect to listing page. if save unsuccessful
     #and routing from reply page, render comments#new, otherwise route
     #back to listing with errors
     if @comment.save
       respond_to do |format|
         format.html { redirect_to location_listing_path(@listing.location, @listing) }
-        format.json { render json: @comment, status: 201 }
+        format.json { render :json => @comment, :status => :created }
       end
-    else
-      if request.referer.include? '/comments/new'
-        render 'new'
-      else 
-        render 'listings/show'
-      end
+    # else
+    #   if request.referer.include? '/comments/new'
+    #     render 'new' and return
+    #   else 
+    #     render 'listings/show' and return
+    #   end
     end
   end
 
