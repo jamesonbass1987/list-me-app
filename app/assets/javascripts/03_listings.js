@@ -16,7 +16,7 @@ class BaseListing {
         this.price = listing.price;
         this.locationSlug = listing.location.slug
         this.primaryImage = listing.listing_images[0].image_url;
-        this.user_id = listing.user_id
+        this.user_id = listing.user.id
     }
 
     formattedPrice() {
