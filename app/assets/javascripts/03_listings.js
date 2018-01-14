@@ -159,7 +159,7 @@ function buildListing(listingParams){
     listing.loadTags(listingParams.tags)
 
     // build listing template from new listing object and append to DOM
-    let listingTemplate = HandlebarsTemplates['listing'](listing);
+    const listingTemplate = HandlebarsTemplates['listing'](listing);
     $('#js-listing').append(listingTemplate);
 
     // load listing comments to DOM
@@ -209,20 +209,24 @@ function loadListings(searchQuery, categoryFilter){
         dataType: 'json'
     }).done(function(response){
         $('.listings-index').empty();
-        response.forEach(listing => buildListingsIndex(listing));
+        response.forEach(listing => buildListingCard(listing));
         setCurrentListingFilter(response);
     });
 }
 
-function buildListingsIndex(listing){
+//Build listing card for each listing returned in loadListings function ajax call and append to DOM body.
+//If user is signed in, append create listing button and applicable edit/delete controls to listing card.
+function buildListingCard(listing){
     let newListing = new BaseListing(listing);
     let listingTemplate = HandlebarsTemplates['listing_index'](newListing);
-    $('.listings-index').append(listingTemplate)
+    $('#listings-index').append(listingTemplate)
 
-    if (currentUser !== null) buildListingIndexControls(newListing);
+    if (currentUser){
+        buildListingControls(newListing);
+    } 
 }
 
-function buildListingIndexControls(listing){
+function buildListingControls(listing){
     let path = currentPath.split('/').slice(0, -1).join('/')
 
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
