@@ -39,18 +39,20 @@ function buildComment(commentParent) {
 
     newComment.commentableType === "Listing" ? $("#js-listing-comments").append(commentTemplate) : $(`#comment-${newComment.commentableId}`).append(commentTemplate);
     
-    currentUser.id === newComment.ownerId || currentUser.role.title === 'admin' ? buildCommentControls(newComment) : false;
+    if (currentUser){
+        currentUser.id === newComment.ownerId || currentUser.role.title === 'admin' ? buildCommentOwnerControls(newComment.id) : false;
+        buildReplyControls(newComment.id)
+    }
 
     commentParent.comments.length >= 1 ? commentParent.comments.forEach(comment => buildComment(comment)) : false;
 }
 
 //Attaches reply/edit/delete comment controls and sets delete and reply comment listeners.
-function buildCommentControls(newComment) {
-    const owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${newComment.id}` });
-    $(`#comment-${newComment.id}-controls`).append(owner_controls_template);
+function buildCommentOwnerControls(commentId) {
+    const owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${commentId}` });
+    $(`#comment-${commentId}-controls`).append(owner_controls_template);
     
     deleteCommentListener();
-    replyCommentListener(newComment.id)
 }
 
 
@@ -153,11 +155,21 @@ function hideCommentForm(position){
 
 //Add listener to comment form submit. event.stopImmediatePropagation() was 
 //added to stop propogation up the DOM (preventing multiple form submits from
-//firing). After submission, reset comment form.
+//firing). Check for blank form submission and alert if so. After submission, 
+//reset comment form.
 function submitCommentListener() {
     $(".new-comment").on('submit', function (event) {
+        debugger;
         event.preventDefault();
         event.stopImmediatePropagation();
+        debugger;
+
+        const content = $.trim($(this).find('.form-control')[0].value);
+
+        if (content === '') {
+            alert("Content can't be blank. Please try again");
+            return false;
+        }
 
         const commentableType = this[3].value
 
@@ -169,6 +181,7 @@ function submitCommentListener() {
 //Submit comment form action, after completion, hide form and add comment to
 //the DOM.
 function submitComment(form) {
+    debugger;
     $.ajax({
         url: '/comments',
         type: 'POST',
@@ -181,40 +194,38 @@ function submitComment(form) {
 }
 
 
-
-
-
 //COMMENT REPLY FUNCTIONS AND LISTENERS
 
-function replyCommentListener(commentId) {
+function buildReplyControls(commentId) {
     reply_controls_template = HandlebarsTemplates['comment_reply_controls']({ id: commentId });
     $(`#comment-${commentId}-controls`).append(reply_controls_template);
 
     commentReplyFormListener(commentId);
 }
 
-
 function commentReplyFormListener(commentId) {
-    $(`#js-comment-reply-${commentId}`).click(function (event) {
+    $(`.reply-comment`).click(function (event) {
         event.preventDefault();
 
-        let listingCommentForm = HandlebarsTemplates['comment_form']({
+        const listingCommentForm = HandlebarsTemplates['comment_form']({
             authToken: $('meta[name=csrf-token]').attr('content'),
             commentableType: 'Comment',
             commentableId: commentId,
+            commentStatusId: '1'
         });
 
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
-        addCommentReplySubmissionListener(commentId);
+        submitCommentListener()
+        // addCommentReplySubmissionListener(commentId);
     })
 }
 
-function addCommentReplySubmissionListener(data) {
-    $(`#comment-${data}-controls form input`).click(function (event) {
-        submitComment(this.parentElement);
-    })
-}
+// function addCommentReplySubmissionListener(data) {
+//     $(`#comment-${data}-controls form input`).click(function (event) {
+//         submitComment(this.parentElement);
+//     })
+// }
 
 function addReplyHideControls(replyButton, commentId) {
 
