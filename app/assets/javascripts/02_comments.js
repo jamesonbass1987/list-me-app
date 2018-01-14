@@ -21,24 +21,36 @@ class Comment {
 
 // SHOW LISTING COMMENTS FUNCTIONS //
 
+//Checks if passed in array of listing comments is empty. If so, appends message. Otherwise, loops through top level
+//comments, appending them to the DOM
 function loadComments(comments) {
-    if (comments.length === 0) {
-        $("#js-listing-comments").append('<p>No comments have been added.</p>')
-    } else {
-        comments.forEach(comment => buildComment(comment));
-    }
+    comments.length === 0 ? $("#js-listing-comments").append('<p>No comments have been added.</p>') : comments.forEach(comment => buildComment(comment));
 }
 
-function buildCommentControls(newComment) {
-    if (currentUser.id === newComment.ownerId || currentUser.role.title === 'admin') {
-        let owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${newComment.id}` });
-        $(`#comment-${newComment.id}-controls`).append(owner_controls_template);
-    };
+//Builds comment and creates a new comment template based on passed in comment parameters. If the comment's commentable type
+//is 'Listing', it is appended to the listing-comments element in the DOM. If it is a 'Comment', the new comment is appended
+//to the parent comment as a reply. If user is signed in and is the comment owner or admin, comment controls are 
+//appended. If the submitted comment has any child comment nodes, they are each recursively
+//sent to the buildComment function for appending to the DOM.
 
-    if (currentUser || currentUser.role.title === 'admin') {
-        buildCommentReply(newComment.id)
-    };
-    attachCommentControlListeners(newComment.id);
+function buildComment(commentParent) {
+    const newComment = new Comment(commentParent);
+    const commentTemplate = HandlebarsTemplates['comment'](newComment);
+
+    newComment.commentableType === "Listing" ? $("#js-listing-comments").append(commentTemplate) : $(`#comment-${newComment.commentableId}`).append(commentTemplate);
+    
+    currentUser.id === newComment.ownerId || currentUser.role.title === 'admin' ? buildCommentControls(newComment) : false;
+
+    commentParent.comments.length >= 1 ? commentParent.comments.forEach(comment => buildComment(comment)) : false;
+}
+
+//Attaches reply/edit/delete comment controls and sets delete and reply comment listeners.
+function buildCommentControls(newComment) {
+    const owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${newComment.id}` });
+    $(`#comment-${newComment.id}-controls`).append(owner_controls_template);
+    
+    deleteCommentListener(newComment.id);
+    replyCommentListener(newComment.id)
 }
 
 
@@ -146,32 +158,9 @@ function submitComment(form) {
 
 
 
-
-function buildComment(commentParent) {
-    let newComment = new Comment(commentParent);
-    let commentTemplate = HandlebarsTemplates['comment'](newComment);
-
-    newComment.commentableType === "Listing" ? $("#js-listing-comments").append(commentTemplate) : $(`#comment-${newComment.commentableId}`).append(commentTemplate);
-    currentUser ? buildCommentControls(newComment) : false
-    commentParent.comments.length >= 1 ? commentParent.comments.forEach(comment => buildComment(comment)) : false
-}
-
-
-
-function attachCommentControlListeners(commentId){
-    //Delete Comment
-    deleteCommentListener(commentId);
-
-    //Reply To Comment
-    $(`#js-comment-reply-${commentId}`).click(function(event){
-        event.preventDefault();
-    })
-
-}
-
 //COMMENT REPLY FUNCTIONS AND LISTENERS
 
-function buildCommentReply(commentId) {
+function replyCommentListener(commentId) {
     reply_controls_template = HandlebarsTemplates['comment_reply_controls']({ id: commentId });
     $(`#comment-${commentId}-controls`).append(reply_controls_template);
 
