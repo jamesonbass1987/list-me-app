@@ -107,7 +107,7 @@ function loadListingsShow(){
 function nextListingBtnListener(){
     $('#js-next-listing').click(function (event) {
         event.preventDefault();
-
+        
         const listingIdIndex = locationListingIds.indexOf(currentListingId);
         const nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
         
@@ -125,7 +125,6 @@ function prevListingBtnListener(){
  
         const listingIdIndex = locationListingIds.indexOf(currentListingId);
         const prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
-        // set current listing id to prev listing in array
         
         currentListingId = parseInt(prevListingId);
         loadListing();
@@ -134,9 +133,14 @@ function prevListingBtnListener(){
 
 // SHOW LISTING FUNCTIONS //
 
+//Finds the current listing that is loaded on the page after reload, or if it is linked to via the listings
+//index page.
 function findCurrentListing(){
-    currentListingId = window.location.pathname.split('/')[4];
+    currentListingId = parseInt(window.location.pathname.split('/')[4]);
 }
+
+//Empty listing from DOM if coming from next/prev button events, send an ajax getJSON request for the
+//newly set current listing, and build the listing from the response.
 
 function loadListing(){
     $('#js-listing, #js-listing-comments').empty();
@@ -145,7 +149,8 @@ function loadListing(){
     // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
     $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, function (response) {
         buildListing(response);
-        currentListingId = response.id;
+        // debugger;
+        // currentListingId = response.id;
     });
 }
 
