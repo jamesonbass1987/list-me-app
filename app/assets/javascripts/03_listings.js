@@ -1,5 +1,4 @@
 // GLOBAL VARIABLE DECLARATIONS //
-let currentUser;
 let locationListingIds;
 let currentListingId;
 let listingsPath;
@@ -45,14 +44,24 @@ class Listing extends BaseListing {
         return this.tagsArray.join(', ');
     }
 
+    loadImages(images) {
+        images.forEach(image => this.listingImagesArray.push(image.image_url))
+    }
+
+    loadTags(tags){
+        tags.forEach(tag => this.tagsArray.push(tag.name))
+    }
 }
 
-// LISTING INDEX PAGE LOAD FUNCTIONS
 
+
+
+// LISTING INDEX PAGE LOAD FUNCTIONS
+       
+//Check for logged in user and fire appropriate load functions based on current view
 $(function(){
     $(document).ready(function(){
-        //Check for logged in user
-        loggedInUser();
+        checkUser();
         if ($(".listings.index")[0]) {
             loadListingsIndex();
         } else if ($(".listings.show")[0]) {
@@ -61,67 +70,67 @@ $(function(){
     })
 })
 
+//Load listings for current location and attach event listeners to index page for search and filter
 function loadListingsIndex(){
     $(".listings.index").ready(function () {
-        //Load location listings
         loadListings();
-        //Attach event listeners
         searchListingsEvent();
         filterListingsEvent();
     })
 }
 
+
+// LISTING SHOW PAGE LOAD FUNCTIONS
+
+//Load listings show page for current listing
 function loadListingsShow(){
-    // LISTING SHOW PAGE LOAD FUNCTIONS/EVENT LISTENERS//
-
     $(".listings.show").ready(function () {
-        //Check for logged in user
-        loggedInUser();
 
-        //Load listing
+        //Find and load listing to DOM
         findCurrentListing();
         loadListing();
 
-        //Load Location Listing ID's for Next/Prev Listing Buttons
+        //Load Location Listing ID's for Next/Prev Listing Button Events
         loadLocationListingArray();
 
         //Event Listeners
-        $('#js-next-listing').click(function (event) {
-            event.preventDefault();
-            
-            //find current index of listing on page inside the location listing ids array, load next listing id
-            //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
-            //next index
-            let listingIdIndex = locationListingIds.indexOf(currentListingId);
-            let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
-
-            // set current listing id to next listing in array
-            currentListingId = nextListingId;
-            loadListing();
-        });
-
-        $('#js-prev-listing').click(function (event) {
-            event.preventDefault();
-            //find current index of listing on page inside the location listing ids array, load next listing id
-            //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
-            //next index
-            let listingIdIndex = locationListingIds.indexOf(currentListingId);
-            let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
-            // set current listing id to prev listing in array
-            currentListingId = parseInt(prevListingId);
-            loadListing();
-        });
-
+        nextListingListener();
+        prevListingListener();
     })
 }
 
-// SHOW PAGE GENERAL FUNCTIONS //
+// SHOW PAGE EVENT LISTENERS //
 
-function loggedInUser() {
-    $.getJSON('/logged_in_user', { format: 'json' }, function (resp){
-        currentUser = resp;
+function nextListingListener(){
+    $('#js-next-listing').click(function (event) {
+        event.preventDefault();
+
+        //find current index of listing on page inside the location listing ids array, load next listing id
+        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
+        //next index
+        let listingIdIndex = locationListingIds.indexOf(currentListingId);
+        let nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
+
+        // set current listing id to next listing in array
+        currentListingId = nextListingId;
+        loadListing();
     });
 }
+
+function prevListingListener(){
+    $('#js-prev-listing').click(function (event) {
+        event.preventDefault();
+        //find current index of listing on page inside the location listing ids array, load next listing id
+        //by finding next element in array. if element is at end of array, cycle through beggining of array to find 
+        //next index
+        let listingIdIndex = locationListingIds.indexOf(currentListingId);
+        let prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
+        // set current listing id to prev listing in array
+        currentListingId = parseInt(prevListingId);
+        loadListing();
+    });
+}
+
 
 // SHOW LISTING FUNCTIONS //
 
@@ -141,19 +150,23 @@ function loadListing(){
 }
 
 function buildListing(listingParams){
-    let newListing = new Listing(listingParams);
-    let listingImageArray = listingParams.listing_images;
-    let tagsArray = listingParams.tags;
+    //build new listing from response listing params
+    let listing = new Listing(listingParams);
 
-    listingImageArray.forEach(image => newListing.listingImagesArray.push(image.image_url))
-    tagsArray.forEach(tag => newListing.tagsArray.push(tag.name))
+    // load listing images and tags into listing
+    listing.loadImages(listingParams.listing_images)
+    listing.loadTags(listingParams.tags)
 
-    let listingTemplate = HandlebarsTemplates['listing'](newListing);
+    // build listing template from new listing object and append to DOM
+    let listingTemplate = HandlebarsTemplates['listing'](listing);
     $('#js-listing').append(listingTemplate);
 
+    // load listing comments to DOM
+    loadComments(listingParams.comments)
+
+    //if user is logged in, append listing controls and comment form to DOM
     if (currentUser) {
-        appendListingOwnerControls(newListing);
-        loadComments(listingParams.comments);
+        appendListingOwnerControls(listing);;
         buildListingCommentForm()
     } 
 }
