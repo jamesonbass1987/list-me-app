@@ -197,8 +197,9 @@ function loadLocationListingArray(){
 
 // INDEX LISTINGS FUNCTIONS
 
-//searchQuery and categoryFilter are optional arguments passed in via listing search function
-//and listings filter function
+//Load listings for index page based on current location. searchQuery and categoryFilter are optional 
+//arguments passed in via listing search function and listings filter functions. Build listing card
+//for each listing returned via ajax call. Set the current listing filter based off of returned listings.
 function loadListings(searchQuery, categoryFilter){
     listingsPath = window.location.pathname.split("/").slice(0, -1).join('/');
 
@@ -208,13 +209,9 @@ function loadListings(searchQuery, categoryFilter){
         dataType: 'json'
     }).done(function(response){
         $('.listings-index').empty();
-        response.forEach(function(listing){
-            buildListingsIndex(listing);
-        })
+        response.forEach(listing => buildListingsIndex(listing));
         setCurrentListingFilter(response);
     });
-
-
 }
 
 function buildListingsIndex(listing){
