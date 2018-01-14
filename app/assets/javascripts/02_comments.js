@@ -51,45 +51,56 @@ function buildCommentControls(newComment) {
 }
 
 
+// LISTING COMMENT FORM FUNCTIONS AND EVENT LISTENERS
 
+//Append listing comment reply button to bottom of page and attach form
+//listeners to submit comment link
 function buildListingCommentFormButton(){
     $('#js-listing-comment-form-btn').append(HandlebarsTemplates['listing_comment_reply_controls']);
 
-    attachListingCommentFormListener();
+    attachListingCommentFormButtonListener();
 }
 
-function attachListingCommentFormListener(formId){
+//Empty comment form button div, removing 'Ask seller a question' button, 
+//and append comment form to listing, setting the commentable type to 
+//'Listing' and passing in the commentable id (aka listing_id in this instance).
+// Attach listeners for form submission and hide button.
+function attachListingCommentFormButtonListener(formId){
     $('#js-comment-form-btn-link').click(function(event){
         event.preventDefault();
+
+        //set comment form, form button, and template variables
         const commentFormBtn = $(this).parents()[0];
         const commentForm = $(this).parents()[1];
-
         const listingCommentForm = HandlebarsTemplates['comment_form']({
             authToken: $('meta[name=csrf-token]').attr('content'),
             commentableType: 'Listing',
             commentableId: currentListingId,
         });
+        const replyHideControls = HandlebarsTemplates['listing_comment_reply_hide_controls']
 
+        //empty comment form button div and append both the comment form, and hide form button
         $(commentFormBtn).empty();
-        $(commentForm).append(listingCommentForm)
-        appendHideListingCommentFormButton();
+        $(commentForm).append(listingCommentForm).append(replyHideControls);
 
+        //add listener to hide button
+        hideListingCommentFormButtonListener();
+        
+        //scroll to bottom of window, once done, add listener for listing comment
+        //submission
         $('html, body').animate({
             scrollTop: $(document).height() - $(window).height()
-            }, 650
+            }, 650, null, function(){
+                submitListingCommentListener();
+            }
         );
-
-        submitListingCommentListener()
-    })
-
+    });
 }
 
-function appendHideListingCommentFormButton(){
-    $('#js-listing-comment-form').append(HandlebarsTemplates['listing_comment_reply_hide_controls'])
-
-    hideListingCommentFormButtonListener();
-}
-
+//When 'Hide' button is clicked (when Listing comment form is in expanded state)
+//scroll up page to bottom of comments div, remove the comment form and hide 
+//comment link. Call buildListingCommentFormButton() function to reappend link
+//to expand comment form.
 function hideListingCommentFormButtonListener() {
     $('#js-comment-form-btn-link').click(function (event) {
         event.preventDefault();
@@ -103,6 +114,9 @@ function hideListingCommentFormButtonListener() {
         }
     )})
 }
+
+
+
 
 function submitListingCommentListener() {
     $("#js-listing-comment-submit").on('click', function (event) {
