@@ -107,7 +107,7 @@ function loadListingsShow(){
 function nextListingBtnListener(){
     $('#js-next-listing').click(function (event) {
         event.preventDefault();
-        
+
         const listingIdIndex = locationListingIds.indexOf(currentListingId);
         const nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
         
@@ -144,19 +144,17 @@ function findCurrentListing(){
 
 function loadListing(){
     $('#js-listing, #js-listing-comments').empty();
+    const path = currentPath.split('/').slice(0,-1).join('/')
 
-    let path = currentPath.split('/').slice(0,-1).join('/')
-    // &ajax=1 was added to prevent caching issues when user hits back button and erroneously is served JSON instead of html
-    $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, function (response) {
-        buildListing(response);
-        // debugger;
-        // currentListingId = response.id;
-    });
+    $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, (response => buildListing(response)));
 }
+
+//Build listing from json response, and load any comments to the DOM. If user is logged in, add reply
+//controls to listing, as well as any listing controls if the current user is viewing their own listing
 
 function buildListing(listingParams){
     //build new listing from response listing params
-    let listing = new Listing(listingParams);
+    const listing = new Listing(listingParams);
 
     // load listing images and tags into listing
     listing.loadImages(listingParams.listing_images)
@@ -178,8 +176,8 @@ function buildListing(listingParams){
 
 function appendListingOwnerControls(listing){
     if (currentUser.id === listing.user_id || currentUser.role.title === 'admin') {
-        listing_controls_template = HandlebarsTemplates['listing_show_controls'](listing);
-        $(`#listing-owner-controls`).append(listing_controls_template);
+        listing_controls_template = HandlebarsTemplates['listing_owner_controls'](listing);
+        $(`#js-listing-owner-controls`).append(listing_controls_template);
     };
 }
 
