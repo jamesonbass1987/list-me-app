@@ -19,7 +19,7 @@ class Comment {
 
 }
 
-// SHOW LISTING COMMENTS FUNCTIONS //
+// SHOW LISTING COMMENTS FUNCTIONS AND EVENT LISTENERS //
 
 //Checks if passed in array of listing comments is empty. If so, appends message. Otherwise, loops through top level
 //comments, appending them to the DOM
@@ -49,8 +49,34 @@ function buildCommentControls(newComment) {
     const owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${newComment.id}` });
     $(`#comment-${newComment.id}-controls`).append(owner_controls_template);
     
-    deleteCommentListener(newComment.id);
+    deleteCommentListener();
     replyCommentListener(newComment.id)
+}
+
+
+//DELETE COMMENT FUNCTIONS AND LISTENERS
+
+//Adds a listener to each comments delete click event, and calls the deleteComment function for that comment.
+function deleteCommentListener() {
+    $(`.delete-comment`).click(function (event) {
+        event.preventDefault();
+        let commentDiv = $(this).parents()[3]
+        deleteComment(commentDiv)
+    });
+}
+
+//Fires delete comment ajax call, passing in id from comment div variable that was
+//passed in. Once done, comment div is removed.
+function deleteComment(comment) {
+    let commentId = comment.id.split('-').slice(-1).join()
+    $.ajax({
+        type: "POST",
+        url: `/comments/${commentId}`,
+        dataType: 'json',
+        data: { "_method": "delete" },
+    }).done(function() {
+        $(this).remove();
+    }.bind(comment))
 }
 
 
@@ -206,29 +232,4 @@ function addReplyHideControls(replyButton, commentId) {
 
 function hideListingCommentReplyForm(commentId) {
     $(`#comment-${commentId}-controls`).empty();
-}
-
-
-
-//DELETE COMMENT FUNCTIONS AND LISTENERS
-
-function deleteCommentListener(commentId){
-    $(`#comment-${commentId}-delete`).click(function (event) {
-        event.preventDefault();
-        deleteComment(this)
-    }).bind(commentId);
-}
-
-function deleteComment(comment){
-    let commentId = comment.href.split('/').slice(-1).join()
-    $.ajax({
-        type: "POST",
-        url: `/comments/${commentId}`,
-        dataType: 'json',
-        data: { "_method": "delete" },
-        complete: function () {
-            $(`#comment-${commentId}`).remove();
-        }
-    })
-
 }
