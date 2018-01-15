@@ -14,7 +14,7 @@ class Comment {
         this.commentableId = comment.commentable_id
     }
     status() {
-        return this.status_id === 1 ? "Answer Pending" : "Resolved";
+        return this.commentStatusId === 1 ? "Answer Pending" : "Resolved";
     }
 
     formattedDate(){

@@ -29,6 +29,4 @@ Borrowing from the previous example, instead of plainly taking the JSON response
 
 TODO - 
 
-- Finish refactoring comment replies
-- Fix comment status resolved display issue (shows resolved on listing show page automatically instead of pending)
 - Add feature to edit comment on show page
