@@ -1,12 +1,12 @@
 module CommentsHelper
 
-  def display_listing_comments(comments)
-    if comments.first.id.present?
-      render comments
-    else
-      tag.text("There doesn't seem to be anything here.") + tag(:br)
-    end
-  end
+  # def display_listing_comments(comments)
+  #   if comments.first.id.present?
+  #     render comments
+  #   else
+  #     tag.text("There doesn't seem to be anything here.") + tag(:br)
+  #   end
+  # end
 
   def display_comment_status(comment)
     if comment.user != parent_listing_for(comment).user
@@ -14,10 +14,8 @@ module CommentsHelper
     end
   end
 
-  def display_listing_comment_form(comment)
-    if logged_in?
-      render partial: 'comments/comment_form', locals: {comment: comment, statuses: nil}
-    else
+  def display_comment_login_notice
+    if !logged_in?
       tag.strong(link_to "Log In", login_path) + " or " + tag.strong(link_to "Sign Up", signup_path) + " to ask the seller a question."
     end
   end
