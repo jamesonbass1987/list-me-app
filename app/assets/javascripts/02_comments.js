@@ -96,10 +96,10 @@ function deleteComment(comment) {
 //Checks to see how many comments are present. If none, no comments message is
 //appended, Otherwise, message is removed.
 function resetCommentNotificationCheck(){
-    if ($('#js-listing-comments p').length > 0) {
+    if ($('#js-listing-comments').length > 0 && $('#js-listing-comments p')[0] !== undefined) {
         $('#js-listing-comments p')[0].remove();
-    } else {
-        $("#js-listing-comments").append('<p>No comments have been added.</p>')
+    } else if ($('#js-listing-comments').length === 0) {
+        $("#js-listing-comments").append('<p>No comments have been added.</p>');
     }
 }
 
@@ -165,14 +165,9 @@ function hideListingCommentFormButtonListener() {
 //comment link. Call buildListingCommentFormButton() function to reappend link
 //to expand comment form.
 function hideCommentForm(position){
-    $('html, body').animate({
-        scrollTop: $(document).height() - $(window).height() - position
-    }, 650, null, function () {
-            $('#js-listing-comment-form form').remove();
-            $('#js-listing-comment-form a').remove();
-            buildListingCommentFormButton();
-        }
-    )
+
+    $('#js-listing-comment-form form, #js-listing-comment-form a').remove();
+    buildListingCommentFormButton();
 }
 
 //Add listener to comment form submit. event.stopImmediatePropagation() was 
@@ -213,8 +208,8 @@ function submitComment(form) {
         data: $(form).serialize(),
         dataType: 'json'
     }).done(function (resp) {
-        hideCommentForm(85)
         buildComment(resp)
+        hideCommentForm(85)
     });
 }
 

@@ -52,10 +52,10 @@ class CommentsController < ApplicationController
     comment = Comment.find_by(id: params[:id])
     listing = parent_listing_for(comment)
 
-    comment.destroy!
+    comment.destroy
 
     respond_to do |format|
-      format.html { redirect_to location_listing_path(listing.location, listing) }
+      format.html { redirect_to location_listing_path(listing.location, listing) and return}
       format.json {render json: "ok".to_json, status: 202}
     end
   end
