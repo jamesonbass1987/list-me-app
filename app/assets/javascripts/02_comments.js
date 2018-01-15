@@ -96,9 +96,10 @@ function deleteComment(comment) {
 //Checks to see how many comments are present. If none, no comments message is
 //appended, Otherwise, message is removed.
 function resetCommentNotificationCheck(){
+    debugger;
     if ($('#js-listing-comments').length > 0 && $('#js-listing-comments p')[0] !== undefined) {
         $('#js-listing-comments p')[0].remove();
-    } else if ($('#js-listing-comments').length === 0) {
+    } else if ($('#js-listing-comments p').length === 0) {
         $("#js-listing-comments").append('<p>No comments have been added.</p>');
     }
 }
