@@ -28,7 +28,7 @@ class Comment {
 //Checks if passed in array of listing comments is empty. If so, appends message. Otherwise, loops through top level
 //comments, appending them to the DOM
 function loadComments(comments) {
-    comments.length === 0 ? $("#js-listing-comments").append('<p>No comments have been added.</p>') : comments.forEach(comment => buildComment(comment));
+    comments.length === 0 ? resetCommentNotificationCheck() : comments.forEach(comment => buildComment(comment));
 }
 
 //Builds comment and creates a new comment template based on passed in comment parameters. If the comment's commentable type
@@ -82,7 +82,19 @@ function deleteComment(comment) {
         data: { "_method": "delete" },
     }).done(function() {
         $(this).remove();
+        resetCommentNotificationCheck();
+
     }.bind(comment))
+}
+
+//Checks to see how many comments are present. If none, no comments message is
+//appended, Otherwise, message is removed.
+function resetCommentNotificationCheck(){
+    if ($('#js-listing-comments p').length > 0) {
+        $('#js-listing-comments p')[0].remove();
+    } else {
+        $("#js-listing-comments").append('<p>No comments have been added.</p>')
+    }
 }
 
 
@@ -163,21 +175,25 @@ function hideCommentForm(position){
 //reset comment form.
 function submitCommentListener() {
     $(".new-comment").on('submit', function (event) {
-        debugger;
         event.preventDefault();
         event.stopImmediatePropagation();
-        debugger;
 
         const content = $.trim($(this).find('.form-control')[0].value);
-
+        const commentableType = this[3].value
+        
         if (content === '') {
             alert("Content can't be blank. Please try again");
             return false;
         }
 
-        const commentableType = this[3].value
-
         submitComment(this)
+        
+        if(commentableType === 'Comment'){
+            const hideCommentButton = $(this).siblings()[2]
+            $(hideCommentButton).trigger('click');
+        }
+
+        resetCommentNotificationCheck();
         $(this)[0].reset();
     })
 }
@@ -185,7 +201,6 @@ function submitCommentListener() {
 //Submit comment form action, after completion, hide form and add comment to
 //the DOM.
 function submitComment(form) {
-    debugger;
     $.ajax({
         url: '/comments',
         type: 'POST',
@@ -203,13 +218,13 @@ function submitComment(form) {
 function buildReplyControls(commentId) {
     reply_controls_template = HandlebarsTemplates['comment_reply_controls']({ id: commentId });
     $(`#comment-${commentId}-controls`).append(reply_controls_template);
-
     commentReplyFormListener(commentId);
 }
 
 function commentReplyFormListener(commentId) {
     $(`.reply-comment`).click(function (event) {
         event.preventDefault();
+        event.stopImmediatePropagation();
 
         const listingCommentForm = HandlebarsTemplates['comment_form']({
             authToken: $('meta[name=csrf-token]').attr('content'),
@@ -221,23 +236,23 @@ function commentReplyFormListener(commentId) {
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
         submitCommentListener()
+        $(this).remove();
     })
 }
 
 function addReplyHideControls(replyButton, commentId) {
-
-    let replyHideControl = HandlebarsTemplates['comment_reply_hide_controls']({ id: commentId })
-
+    const replyHideControl = HandlebarsTemplates['comment_reply_hide_controls']({ id: commentId })
     $(replyHideControl).insertAfter(replyButton);
 
-    $(`#js-comment-hide-${commentId}`).click(function (event) {
-        event.preventDefault();
-        hideListingCommentReplyForm(commentId);
-        buildCommentReply(commentId);
-    })
-    $(replyButton).remove();
+    hideCommentLIstener();
 }
 
-function hideListingCommentReplyForm(commentId) {
-    $(`#comment-${commentId}-controls`).empty();
+function hideCommentListener(){
+    $(".hide-comment").click(function (event) {
+        event.preventDefault();
+        const form = $(this).siblings()[2]
+        $(this).remove()
+        $(form).remove()
+        buildReplyControls(commentId);
+    })
 }
