@@ -215,12 +215,15 @@ function submitComment(form) {
 
 //COMMENT REPLY FUNCTIONS AND LISTENERS
 
+//Adds reply button controls to each comment and attaches form listener to the 
+//comment reply form.
 function buildReplyControls(commentId) {
     reply_controls_template = HandlebarsTemplates['comment_reply_controls']({ id: commentId });
     $(`#comment-${commentId}-controls`).append(reply_controls_template);
     commentReplyFormListener(commentId);
 }
 
+//On click, the comment form is appended, 'reply' button removed.
 function commentReplyFormListener(commentId) {
     $(`.reply-comment`).click(function (event) {
         event.preventDefault();
@@ -240,13 +243,15 @@ function commentReplyFormListener(commentId) {
     })
 }
 
+//Hide button is appended to comment reply div.
 function addReplyHideControls(replyButton, commentId) {
     const replyHideControl = HandlebarsTemplates['comment_reply_hide_controls']({ id: commentId })
     $(replyHideControl).insertAfter(replyButton);
 
-    hideCommentLIstener();
+    hideCommentListener();
 }
 
+//When hide button is clicked, the comment form and hide button is removed, and the reply button control function is called to rebuild the reply button.
 function hideCommentListener(){
     $(".hide-comment").click(function (event) {
         event.preventDefault();
