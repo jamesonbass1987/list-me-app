@@ -17,6 +17,10 @@ class Comment {
         return this.status_id === 1 ? "Answer Pending" : "Resolved";
     }
 
+    formattedDate(){
+        return new Date(this.createdAt).toLocaleDateString()
+    }
+
 }
 
 // SHOW LISTING COMMENTS FUNCTIONS AND EVENT LISTENERS //
