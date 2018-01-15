@@ -41,7 +41,13 @@ function buildComment(commentParent) {
     const newComment = new Comment(commentParent);
     const commentTemplate = HandlebarsTemplates['comment'](newComment);
 
-    newComment.commentableType === "Listing" ? $("#js-listing-comments").append(commentTemplate) : $(`#comment-${newComment.commentableId}`).append(commentTemplate);
+    if (newComment.commentableType === "Listing"){
+        $("#js-listing-comments").append(commentTemplate)
+    } else {
+        const commentParentUsername = $(`#comment-${newComment.commentableId} h6`)[0].innerHTML.split(" ")[4]
+        $(`#comment-${newComment.commentableId}`).append(commentTemplate);
+        $(`#comment-${newComment.id}-reply-notification`).append(`(Replying to ${commentParentUsername})`)
+    }
     
     if (currentUser){
         currentUser.id === newComment.ownerId || currentUser.role.title === 'admin' ? buildCommentOwnerControls(newComment.id) : false;
@@ -248,11 +254,11 @@ function addReplyHideControls(replyButton, commentId) {
     const replyHideControl = HandlebarsTemplates['comment_reply_hide_controls']({ id: commentId })
     $(replyHideControl).insertAfter(replyButton);
 
-    hideCommentListener();
+    hideCommentListener(commentId);
 }
 
 //When hide button is clicked, the comment form and hide button is removed, and the reply button control function is called to rebuild the reply button.
-function hideCommentListener(){
+function hideCommentListener(commentId){
     $(".hide-comment").click(function (event) {
         event.preventDefault();
         const form = $(this).siblings()[2]
