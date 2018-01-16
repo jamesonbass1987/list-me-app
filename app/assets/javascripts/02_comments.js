@@ -170,19 +170,19 @@ function deleteComment(comment) {
         url: `/comments/${commentId}`,
         dataType: 'json',
         data: { "_method": "delete" },
-    }).done(function() {
-        $(this).remove();
-        resetCommentNotificationCheck();
+    })
 
-    }.bind(comment))
+    $(comment).remove()
+    resetCommentNotificationCheck();
 }
 
 //Checks to see how many comments are present. If none, no comments message is
 //appended, Otherwise, message is removed.
 function resetCommentNotificationCheck(){
-    if ($('#js-listing-comments').length > 0 && $('#js-listing-comments p')[0] !== undefined) {
+
+    if ($('#js-listing-comments').text().trim() !== "" && $('#js-listing-comments p')[0] !== undefined) {
         $('#js-listing-comments p')[0].remove();
-    } else if ($('#js-listing-comments').length === 0 && $('#js-listing-comments p').length === 0) {
+    } else if ($('#js-listing-comments').text().trim() === "" && $('#js-listing-comments p').length === 0) {
         $("#js-listing-comments").append('<p>No comments have been added.</p>');
     }
 }
@@ -248,7 +248,6 @@ function hideListingCommentFormButtonListener() {
 //comment link. Call buildListingCommentFormButton() function to reappend link
 //to expand comment form.
 function hideCommentForm(position){
-    debugger;
     $('#js-listing-comment-form form, #js-listing-comment-form a').remove();
     buildListingCommentFormButton();
 }

@@ -1,13 +1,12 @@
 class CommentsController < ApplicationController
   before_action :find_commentable, only: [:new, :create]
 
-  def new
-    authorize! :new, Comment
-    @comment = @commentable.comments.new(user: current_user)
-  end
+  # def new
+  #   authorize! :new, Comment
+  #   @comment = @commentable.comments.new(user: current_user)
+  # end
 
   def create
-
     @comment = @commentable.comments.build(comment_params)
     @comment.user = current_user
     @listing = parent_listing_for(@comment)
@@ -17,7 +16,7 @@ class CommentsController < ApplicationController
     #back to listing with errors
     if @comment.save
       respond_to do |format|
-        format.html { redirect_to location_listing_path(@listing.location, @listing) }
+        # format.html { redirect_to location_listing_path(@listing.location, @listing) }
         format.json { render :json => @comment, :status => :created }
       end
     # else
@@ -29,14 +28,14 @@ class CommentsController < ApplicationController
     end
   end
 
-  def edit
-    authorize! :edit, Comment
-    @comment = Comment.find_by(id: params[:id])
-    @statuses = CommentStatus.all
+  # def edit
+  #   authorize! :edit, Comment
+  #   @comment = Comment.find_by(id: params[:id])
+  #   @statuses = CommentStatus.all
 
 
-    redirect_to root_path if @comment.nil?
-  end
+  #   redirect_to root_path if @comment.nil?
+  # end
 
   def update
     @comment = Comment.find_by(id: params[:id])
