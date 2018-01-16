@@ -238,7 +238,7 @@ function attachListingCommentFormButtonListener(formId){
 function hideListingCommentFormButtonListener() {
     $('#js-comment-form-btn-link').click(function (event) {
         event.preventDefault();
-        $(this).remove();
+        hideCommentForm(170)
     });
 }
 
@@ -248,6 +248,7 @@ function hideListingCommentFormButtonListener() {
 //comment link. Call buildListingCommentFormButton() function to reappend link
 //to expand comment form.
 function hideCommentForm(position){
+    debugger;
     $('#js-listing-comment-form form, #js-listing-comment-form a').remove();
     buildListingCommentFormButton();
 }
