@@ -1,11 +1,3 @@
-// GLOBAL VARIABLE DECLARATIONS //
-let locationListingIds;
-let currentListingId;
-let listingsPath;
-let currentLocation = window.location.pathname.split('/')[2];;
-let currentPath = window.location.pathname;
-let currentListingFilter = "Everything";
-
 // CLASS CONSTRUCTORS //
 
 class BaseListing {
@@ -72,12 +64,14 @@ function loadListingsIndex(){
 function loadListingsShow(){
     $(".listings.show").ready(function () {
 
-        //Find and load listing to DOM
+        //Find current listing
         findCurrentListing();
-        loadListing();
 
-        //Load Location Listing ID's for Next/Prev Listing Button Events
+        //Load Location Listing ID's for Next/Prev Listing Button Events and set current listing owner
         loadLocationListingArray();
+        
+        //Load listing to DOM
+        loadListing();
 
         //Event Listeners
         nextListingBtnListener();
@@ -96,11 +90,14 @@ function nextListingBtnListener(){
 
         const listingIdIndex = locationListingIds.indexOf(currentListingId);
         const nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
+        currentListingId = parseInt(nextListingId);
         
-        currentListingId = nextListingId;
+        findCurrentListingOwner();
         loadListing();
     });
 }
+
+
 
 //Find current index of listing on page inside the location listing ids array, load previous listing id
 //by finding the previous element in array. if element is at beginning of array, choose the last array
@@ -108,13 +105,19 @@ function nextListingBtnListener(){
 function prevListingBtnListener(){
     $('#js-prev-listing').click(function (event) {
         event.preventDefault();
- 
+
         const listingIdIndex = locationListingIds.indexOf(currentListingId);
         const prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
         
         currentListingId = parseInt(prevListingId);
+        findCurrentListingOwner();
         loadListing();
     });
+}
+
+function findCurrentListingOwner(){
+    debugger;
+    currentListingOwnerId = locationListingHashes.find(listing => listing.id === currentListingId).user_id
 }
 
 // SHOW LISTING FUNCTIONS //
@@ -176,7 +179,14 @@ function loadLocationListingArray(){
         id: currentLocation,
         format: 'json'
     }, function(response) {
-        locationListingIds = response;
+        locationListingHashes = response;
+        locationListingIds = [];
+        debugger;
+        locationListingHashes.forEach(function (location) {
+            locationListingIds.push(location.id)
+        })
+
+        findCurrentListingOwner();
     });
 }
 

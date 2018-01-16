@@ -39,14 +39,18 @@ function loadComments(comments) {
 
 function buildComment(commentParent, commentDiv) {
     const newComment = new Comment(commentParent);
-    const commentTemplate = HandlebarsTemplates['comment'](newComment);
+    debugger;
+    if (newComment.ownerId === currentListingOwnerId) {
+        newComment.currentListingOwner = true;
+    }
 
+    const commentTemplate = HandlebarsTemplates['comment'](newComment);
     if (commentDiv !== undefined){     
         $(commentDiv).empty();
         $(commentDiv).append(commentTemplate);
     } else if (newComment.commentableType === "Listing" && !commentDiv){
         $("#js-listing-comments").append(commentTemplate)
-    } else if (newComment.commentableType === "Comment " && !commentDiv){
+    } else if (newComment.commentableType === "Comment" && !commentDiv){
         const commentParentUsername = $(`#comment-${newComment.commentableId} h6`)[0].innerHTML.split(" ")[4]
         $(`#comment-${newComment.commentableId}`).append(commentTemplate);
         $(`#comment-${newComment.id}-reply-notification`).append(`(Replying to ${commentParentUsername})`)
@@ -90,7 +94,7 @@ function buildEditCommentForm(commentDiv, id){
         content: content,
         status: commentStatus,
         id: id,
-        user: commentUser,
+        user: commentUser
     }
     const editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
     
@@ -260,6 +264,9 @@ function submitCommentListener() {
             return false;
         }
 
+
+        debugger;
+
         submitComment(this)
         
         if(commentableType === 'Comment'){
@@ -313,7 +320,6 @@ function commentReplyFormListener(commentId) {
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
         submitCommentListener()
-        $(this).remove();
     })
 }
 

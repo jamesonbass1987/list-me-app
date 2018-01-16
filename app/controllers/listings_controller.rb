@@ -11,9 +11,12 @@ class ListingsController < ApplicationController
 
   def listing_ids
     location = Location.friendly.find(params[:id])
-    listing_ids = []
-    location.listings.select(:id).map{|listing| listing_ids.push(listing.id) }    
-    render json: listing_ids
+    listings = []
+    location.listings.select(:id, :user_id).map do |listing| 
+      listingHash = {id: listing.id, user_id: listing.user_id}
+      listings.push(listingHash)
+    end    
+    render json: listings
   end
 
   # RESTFUL ROUTES

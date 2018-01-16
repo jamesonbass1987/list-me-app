@@ -1,3 +1,12 @@
+// GLOBAL VARIABLE DECLARATIONS //
+let locationListingHashes;
+let locationListingIds;
+let currentListingId;
+let currentListingOwnerId;
+let listingsPath;
+let currentLocation = window.location.pathname.split('/')[2];;
+let currentPath = window.location.pathname;
+let currentListingFilter = "Everything";
 let currentUser;
 
 //MAIN PAGE LOAD FUNCTIONS
