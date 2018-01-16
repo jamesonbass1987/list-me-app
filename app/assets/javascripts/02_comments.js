@@ -271,10 +271,9 @@ function submitCommentListener() {
 
         submitComment(this)
         
-        if(commentableType === 'Comment'){
-            const hideCommentButton = $(this).siblings()[2]
-            $(hideCommentButton).trigger('click');
-        }
+        const hideCommentButton = $(this).siblings('.hide-comment')
+        $(hideCommentButton).trigger('click');
+
         $(this).remove();
         resetCommentNotificationCheck();
     })
