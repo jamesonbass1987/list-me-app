@@ -116,7 +116,6 @@ function prevListingBtnListener(){
 }
 
 function findCurrentListingOwner(){
-    debugger;
     currentListingOwnerId = locationListingHashes.find(listing => listing.id === currentListingId).user_id
 }
 
@@ -181,7 +180,6 @@ function loadLocationListingArray(){
     }, function(response) {
         locationListingHashes = response;
         locationListingIds = [];
-        debugger;
         locationListingHashes.forEach(function (location) {
             locationListingIds.push(location.id)
         })

@@ -39,7 +39,7 @@ function loadComments(comments) {
 
 function buildComment(commentParent, commentDiv) {
     const newComment = new Comment(commentParent);
-    debugger;
+
     if (newComment.ownerId === currentListingOwnerId) {
         newComment.currentListingOwner = true;
     }
@@ -85,17 +85,23 @@ function editCommentListener(){
 }
 
 function buildEditCommentForm(commentDiv, id){
-
     const commentStatus = checkStatus(commentDiv)
     const commentUser = $(commentDiv).children()[0].innerText.split(" ")[4]
     const content = $(commentDiv).children()[1].innerText
+
     const commentValues = {
         auth_token: $('meta[name=csrf-token]').attr('content'),
         content: content,
         status: commentStatus,
         id: id,
-        user: commentUser
+        user: commentUser,
+        currentListingOwner: false
     }
+
+    if (id === currentListingOwnerId) {
+        commentValues.currentListingOwner = true;
+    }
+
     const editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
     
     $(commentDiv).children('.comment-content, .comment-status').remove()
@@ -263,9 +269,6 @@ function submitCommentListener() {
             alert("Content can't be blank. Please try again");
             return false;
         }
-
-
-        debugger;
 
         submitComment(this)
         
