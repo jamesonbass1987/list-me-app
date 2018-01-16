@@ -194,7 +194,6 @@ function resetCommentNotificationCheck(){
 //listeners to submit comment link
 function buildListingCommentFormButton(){
     $('#js-listing-comment-form-btn').append(HandlebarsTemplates['listing_comment_reply_controls']);
-
     attachListingCommentFormButtonListener();
 }
 
@@ -239,7 +238,7 @@ function attachListingCommentFormButtonListener(formId){
 function hideListingCommentFormButtonListener() {
     $('#js-comment-form-btn-link').click(function (event) {
         event.preventDefault();
-        hideCommentForm(230);
+        $(this).remove();
     });
 }
 
@@ -249,7 +248,6 @@ function hideListingCommentFormButtonListener() {
 //comment link. Call buildListingCommentFormButton() function to reappend link
 //to expand comment form.
 function hideCommentForm(position){
-
     $('#js-listing-comment-form form, #js-listing-comment-form a').remove();
     buildListingCommentFormButton();
 }
@@ -323,6 +321,7 @@ function commentReplyFormListener(commentId) {
 
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
+        $(this).remove()
         submitCommentListener()
     })
 }
