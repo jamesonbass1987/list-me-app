@@ -4,10 +4,10 @@
         <img src="{{ownerProfileImageUrl}}" alt="Profile Image" class="align-self-center mr-3 profile-image-small rounded-circle">
         <div class="media-body">
             <h6 class="mt-0">Posted on {{formattedDate}} by {{ownerUsername}}  <span class="text-muted" id="comment-{{id}}-reply-notification"></span></h6>
-            <div>
+            <div class='comment-content'>
                 {{content}}
             </div>
-            <div>
+            <div class='comment-status'>
                 <span>Status: {{status}}</span>
             </div>
             <div id="comment-{{id}}-controls"></div>

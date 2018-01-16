@@ -34,16 +34,19 @@ class CommentsController < ApplicationController
     @comment = Comment.find_by(id: params[:id])
     @statuses = CommentStatus.all
 
+
     redirect_to root_path if @comment.nil?
   end
 
   def update
     @comment = Comment.find_by(id: params[:id])
-    if @comment.update_attributes(comment_params)
-      listing = parent_listing_for(@comment)
-      redirect_to location_listing_path(listing.location, listing)
-    else
-      render 'edit'
+    listing = parent_listing_for(@comment)
+
+    @comment.update(comment_params)
+
+    respond_to do |format|
+      format.html { redirect_to location_listing_path(listing.location, listing) and return }
+      format.json {render json: @comment, status: 200}
     end
   end
 

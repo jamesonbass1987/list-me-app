@@ -37,13 +37,16 @@ function loadComments(comments) {
 //appended. If the submitted comment has any child comment nodes, they are each recursively
 //sent to the buildComment function for appending to the DOM.
 
-function buildComment(commentParent) {
+function buildComment(commentParent, commentDiv) {
     const newComment = new Comment(commentParent);
     const commentTemplate = HandlebarsTemplates['comment'](newComment);
 
-    if (newComment.commentableType === "Listing"){
+    if (commentDiv !== undefined){     
+        $(commentDiv).empty();
+        $(commentDiv).append(commentTemplate);
+    } else if (newComment.commentableType === "Listing" && !commentDiv){
         $("#js-listing-comments").append(commentTemplate)
-    } else {
+    } else if (newComment.commentableType === "Comment " && !commentDiv){
         const commentParentUsername = $(`#comment-${newComment.commentableId} h6`)[0].innerHTML.split(" ")[4]
         $(`#comment-${newComment.commentableId}`).append(commentTemplate);
         $(`#comment-${newComment.id}-reply-notification`).append(`(Replying to ${commentParentUsername})`)
@@ -62,9 +65,79 @@ function buildCommentOwnerControls(commentId) {
     const owner_controls_template = HandlebarsTemplates['comment_controls']({ id: `${commentId}` });
     $(`#comment-${commentId}-controls`).append(owner_controls_template);
     
+    editCommentListener();
     deleteCommentListener();
 }
 
+//EDIT COMMENT FUNCTIONS AND LISTENERS
+
+function editCommentListener(){
+    $('.edit-comment').click(function(event){
+        event.preventDefault();
+        const commentDiv = $(this).parents()[1];
+        const commentId = $(this).parents()[0].id.split('-')[1]
+        buildEditCommentForm(commentDiv, commentId);
+    });
+}
+
+function buildEditCommentForm(commentDiv, id){
+
+    const commentStatus = checkStatus(commentDiv)
+    const commentUser = $(commentDiv).children()[0].innerText.split(" ")[4]
+    const content = $(commentDiv).children()[1].innerText
+    const commentValues = {
+        auth_token: $('meta[name=csrf-token]').attr('content'),
+        content: content,
+        status: commentStatus,
+        id: id,
+        user: commentUser,
+    }
+    const editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
+    
+    $(commentDiv).children('.comment-content, .comment-status').remove()
+    $(commentDiv).append(editCommentForm)
+
+    editCommentFormListener(commentDiv);
+}
+
+function checkStatus(commentDiv){
+    const status = $(commentDiv).children('.comment-status').text().trim().split('Status: ')[1];
+    if (status === 'Answer Pending'){
+        return '1';
+    }
+}
+
+function editCommentFormListener(){
+    $('.edit-comment').submit(function(event){
+        event.preventDefault();
+        const formUser = $(this).find('input')[2].value;
+        const content = $(this).find('.commentContent')[0].innerHTML
+
+        if (content === '') {
+            alert("Content can't be blank. Please try again");
+            return false;
+        } else if (currentUser.username !== formUser || currentUser.role.title != 'admin'){
+            alert("Only the comment owner can edit this comment.");
+            return false;
+        }
+
+        editComment(this)
+    })
+}
+
+function editComment(form) {
+    const id = $(form).children()[3].value
+
+    $.ajax({
+        url: `/comments/${id}`,
+        type: 'PATCH',
+        data: $(form).serialize(),
+        dataType: 'json'
+    }).done(function (resp) {
+        const commentDiv = $(this).parents()[2];
+        buildComment(resp, commentDiv);
+    }.bind(form));
+}
 
 //DELETE COMMENT FUNCTIONS AND LISTENERS
 
@@ -96,7 +169,6 @@ function deleteComment(comment) {
 //Checks to see how many comments are present. If none, no comments message is
 //appended, Otherwise, message is removed.
 function resetCommentNotificationCheck(){
-    debugger;
     if ($('#js-listing-comments').length > 0 && $('#js-listing-comments p')[0] !== undefined) {
         $('#js-listing-comments p')[0].remove();
     } else if ($('#js-listing-comments p').length === 0) {

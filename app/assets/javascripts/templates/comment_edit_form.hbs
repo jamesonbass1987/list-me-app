@@ -1,0 +1,25 @@
+<form class="edit-comment" data-commentable-type="{{commentableType}}" data-commentable-id="{{commentableId}}" action="/comments"
+    accept-charset="UTF-8" method="post">
+    <input name="utf8" type="hidden" value="&#x2713;">
+    <input type="hidden" name="authenticity_token" value="{{authToken}}" />
+    <input type="hidden" name="user" value="{{user}}" />
+    <input type="hidden" name="id" value="{{id}}" />
+    <div class="form-group">
+        <textarea class="form-control commentContent" name="comment[content]" rows="6">{{content}}</textarea>
+    </div>
+    <div class="form-group">
+        <select class="form-control custom-select btn" name="comment[comment_status_id]" id="comment_comment_status_id">
+
+        {{#if status}}
+            <option selected="selected" value="1">Answer Pending</option>
+            <option value="2">Resolved</option>
+        {{else}}
+            <option value="1">Answer Pending</option>
+            <option selected="selected" value="2">Resolved</option>
+        {{/if}}
+            
+        </select>
+    </div>
+    <input type="submit" name="commit" value="Edit Comment" class="btn btn-outline-success btn-block" 
+    />
+</form>

@@ -29,4 +29,4 @@ Borrowing from the previous example, instead of plainly taking the JSON response
 
 TODO - 
 
-- Add feature to edit comment on show page
+- Migrate to postgresql db
