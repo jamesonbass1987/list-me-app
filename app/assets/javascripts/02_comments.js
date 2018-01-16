@@ -127,7 +127,7 @@ function editCommentFormListener(){
         if (content === '') {
             alert("Content can't be blank. Please try again");
             return false;
-        } else if (currentUser.username !== formUser || currentUser.role.title != 'admin'){
+        } else if (currentUser.username !== formUser && currentUser.role.title === 'user'){
             alert("Only the comment owner can edit this comment.");
             return false;
         }
@@ -182,7 +182,7 @@ function deleteComment(comment) {
 function resetCommentNotificationCheck(){
     if ($('#js-listing-comments').length > 0 && $('#js-listing-comments p')[0] !== undefined) {
         $('#js-listing-comments p')[0].remove();
-    } else if ($('#js-listing-comments p').length === 0) {
+    } else if ($('#js-listing-comments').length === 0 && $('#js-listing-comments p').length === 0) {
         $("#js-listing-comments").append('<p>No comments have been added.</p>');
     }
 }
@@ -275,9 +275,8 @@ function submitCommentListener() {
             const hideCommentButton = $(this).siblings()[2]
             $(hideCommentButton).trigger('click');
         }
-
+        $(this).remove();
         resetCommentNotificationCheck();
-        $(this)[0].reset();
     })
 }
 
@@ -318,7 +317,6 @@ function commentReplyFormListener(commentId) {
             commentableId: commentId,
             commentStatusId: '1'
         });
-
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
         $(this).remove()
