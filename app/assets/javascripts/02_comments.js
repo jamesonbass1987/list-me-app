@@ -94,8 +94,7 @@ function buildEditCommentForm(commentDiv, id){
         content: content,
         status: commentStatus,
         id: id,
-        user: commentUser,
-        currentListingOwner: false
+        user: commentUser
     }
 
     if (id === currentListingOwnerId) {
@@ -104,10 +103,12 @@ function buildEditCommentForm(commentDiv, id){
 
     const editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
     
-    $(commentDiv).children('.comment-content, .comment-status').remove()
-    $(commentDiv).append(editCommentForm)
+    if ($(commentDiv).find('form').length < 1){
+        $(commentDiv).children('.comment-content, .comment-status').empty()
+        $(commentDiv).append(editCommentForm)
 
-    editCommentFormListener(commentDiv);
+        editCommentFormListener(commentDiv);
+    } 
 }
 
 function checkStatus(commentDiv){

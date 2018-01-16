@@ -7,7 +7,7 @@
     <div class="form-group">
         <textarea class="form-control commentContent" name="comment[content]" rows="6">{{content}}</textarea>
     </div>
-{{#if currentListingOwner}}
+{{#unless currentListingOwner}}
     <div class="form-group">
         <select class="form-control custom-select btn" name="comment[comment_status_id]" id="comment_comment_status_id">
 
@@ -20,7 +20,7 @@
             {{/if}}
         </select>
     </div>
-{{/if}}
+{{/unless}}
     <input type="submit" name="commit" value="Edit Comment" class="btn btn-outline-success btn-block" 
     />
 </form>
