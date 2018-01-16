@@ -8,7 +8,7 @@
 
   <%= content_tag :div, :class => 'form-group' do %>
     <%= f.label :state, "State" %>
-    <%= f.collection_select(:state, State.all, :abbr, :abbr, {}, {:class => 'form-control custom-select btn'}) %>
+    <%= f.text_field :state, :class => 'form-control' %>
   <% end %>
 
   <%= f.submit :class => 'btn btn-outline-success btn-block' %>

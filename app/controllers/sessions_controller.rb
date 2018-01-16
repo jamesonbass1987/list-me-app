@@ -35,9 +35,9 @@ class SessionsController < ApplicationController
     @user = User.find_or_create_by!(email: fb_auth[:info][:email]) do |u|
       u.uid = fb_auth[:uid]
       u.profile_image_url = fb_auth[:info][:image]
+      u.email = fb_auth[:info][:email]
+      u.username = fb_auth[:info][:email].split("@")[0]
       u.password = SecureRandom.hex(10) unless u.password.present?
-      u.first_name = fb_auth[:info][:name].split(" ")[0]
-      u.last_name = fb_auth[:info][:name].split(" ")[1]
     end
   end
 
