@@ -329,7 +329,7 @@ function addReplyHideControls(replyButton, commentId) {
 function hideCommentListener(commentId){
     $(".hide-comment").click(function (event) {
         event.preventDefault();
-        const form = $(this).siblings()[2]
+        const form = $(this).siblings('form')[0]
         $(this).remove()
         $(form).remove()
         buildReplyControls(commentId);
