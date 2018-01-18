@@ -14,15 +14,25 @@ class Comment {
         this.commentableId = comment.commentable_id
     }
 
+
+    status() {
+        return this.commentStatusId === 1 ? "Answer Pending" : "Resolved";
+    }
+
+    formattedDate() {
+        return new Date(this.createdAt).toLocaleDateString()
+    }
 }
 
-Comment.prototype.status = function(){
-    return this.commentStatusId === 1 ? "Answer Pending" : "Resolved";
-}
+// Manually binded prototype methods have been added above to class declaration
 
-Comment.prototype.formattedDate = function(){
-    return new Date(this.createdAt).toLocaleDateString()
-}
+// Comment.prototype.status = function(){
+//     return this.commentStatusId === 1 ? "Answer Pending" : "Resolved";
+// }
+
+// Comment.prototype.formattedDate = function(){
+//     return new Date(this.createdAt).toLocaleDateString()
+// }
 
 // SHOW LISTING COMMENTS FUNCTIONS AND EVENT LISTENERS //
 

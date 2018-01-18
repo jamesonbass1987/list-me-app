@@ -10,11 +10,16 @@ class BaseListing {
         this.primaryImage = listing.listing_images[0].image_url;
         this.user_id = listing.user.id
     }
+
+    formattedPrice() {
+        return '$' + Number(this.price).toFixed(2)
+    }
+
 }
 
-BaseListing.prototype.formattedPrice = function() {
-    return '$' + Number(this.price).toFixed(2)
-}
+// BaseListing.prototype.formattedPrice = function() {
+//     return '$' + Number(this.price).toFixed(2)
+// }
 
 class Listing extends BaseListing {
     constructor(listing) {
@@ -30,19 +35,34 @@ class Listing extends BaseListing {
         this.userProfileImage = listing.user.profile_image_url
         this.userRating = listing.user.rating
     }
+
+    tagsList() {
+        return this.tagsArray.join(', ');
+    }
+
+    loadImages(images) {
+        images.forEach(image => this.listingImagesArray.push(image.image_url))
+    }
+
+    loadTags(tags) {
+        tags.forEach(tag => this.tagsArray.push(tag.name))
+    }
+
 }
 
-Listing.prototype.tagsList = function () {
-    return this.tagsArray.join(', ');
-}
+// Manually binded prototype methods have been added above to class declaration
 
-Listing.prototype.loadImages = function (images) {
-    images.forEach(image => this.listingImagesArray.push(image.image_url))
-}
+// Listing.prototype.tagsList = function () {
+//     return this.tagsArray.join(', ');
+// }
 
-Listing.prototype.loadTags = function (tags) {
-    tags.forEach(tag => this.tagsArray.push(tag.name))
-}
+// Listing.prototype.loadImages = function (images) {
+//     images.forEach(image => this.listingImagesArray.push(image.image_url))
+// }
+
+// Listing.prototype.loadTags = function (tags) {
+//     tags.forEach(tag => this.tagsArray.push(tag.name))
+// }
 
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
