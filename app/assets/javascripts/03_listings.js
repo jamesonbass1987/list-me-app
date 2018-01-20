@@ -179,7 +179,6 @@ function appendListingOwnerControls(listing){
 //Array contains all listing ids for current location to use in next/previous button event listener
 //functions.
 function loadLocationListingArray(){
-
     $.getJSON(listingsPath + '/listing_ids', {
         id: currentLocation,
         format: 'json'
@@ -245,9 +244,8 @@ function deleteListingEventListener(listing){
 
 //Make ajax call for listing deletion from the index page. Remove DOM element on success.
 function deleteListing(listing, element){
-    const path = currentPath.split('/').slice(0, -1).join('/');
     $.ajax({
-        url: `${path}/listings/${listing.id}`,
+        url: `locations/${currentLocation}/listings/${listing.id}`,
         type: 'DELETE',
         dataType: "json",
         success: function (response) {
