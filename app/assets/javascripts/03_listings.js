@@ -50,20 +50,6 @@ class Listing extends BaseListing {
 
 }
 
-// Manually binded prototype methods have been added above to class declaration
-
-// Listing.prototype.tagsList = function () {
-//     return this.tagsArray.join(', ');
-// }
-
-// Listing.prototype.loadImages = function (images) {
-//     images.forEach(image => this.listingImagesArray.push(image.image_url))
-// }
-
-// Listing.prototype.loadTags = function (tags) {
-//     tags.forEach(tag => this.tagsArray.push(tag.name))
-// }
-
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
 //Load listings for current location and attach event listeners to index page for search and filter
@@ -105,11 +91,13 @@ function loadListingsShow(){
 function nextListingBtnListener(){
     $('#js-next-listing').click(function (event) {
         event.preventDefault();
-
-        const listingIdIndex = locationListingIds.indexOf(currentListingId);
-        const nextListingId = locationListingIds[(listingIdIndex + 1) % locationListingIds.length];
-        currentListingId = parseInt(nextListingId);
         
+        findCurrentListingIdIndex();
+
+        const nextListingId = locationListingHashes[(listingIdIndex + 1) % locationListingHashes.length].id;
+
+        currentListingId = nextListingId;
+
         findCurrentListingOwner();
         loadListing();
     });
@@ -124,10 +112,10 @@ function prevListingBtnListener(){
     $('#js-prev-listing').click(function (event) {
         event.preventDefault();
 
-        const listingIdIndex = locationListingIds.indexOf(currentListingId);
-        const prevListingId = locationListingIds[(listingIdIndex - 1)] || locationListingIds.slice(-1).join("");
-        
-        currentListingId = parseInt(prevListingId);
+        findCurrentListingIdIndex();
+        const prevListingId = (locationListingHashes[(listingIdIndex - 1)] || locationListingHashes.slice(-1)[0]).id;
+
+        currentListingId = prevListingId;
         findCurrentListingOwner();
         loadListing();
     });
@@ -135,6 +123,10 @@ function prevListingBtnListener(){
 
 function findCurrentListingOwner(){
     currentListingOwnerId = locationListingHashes.find(listing => listing.id === currentListingId).user_id
+}
+
+function findCurrentListingIdIndex(){
+    listingIdIndex = locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
 }
 
 // SHOW LISTING FUNCTIONS //
@@ -149,9 +141,7 @@ function findCurrentListing(){
 //newly set current listing, and build the listing from the response.
 function loadListing(){
     $('#js-listing, #js-listing-comments, #js-listing-comment-form-btn').empty();
-    const path = currentPath.split('/').slice(0,-1).join('/')
-
-    $.getJSON(`${path}/${currentListingId}?ajax=1`, { format: 'json' }, (response => buildListing(response)));
+    $.getJSON(`/locations/${currentLocation}/listings/${currentListingId}?ajax=1`, { format: 'json' }, (response => buildListing(response)));
 }
 
 //Build listing from json response, and load any comments to the DOM. If user is logged in, add reply
@@ -173,7 +163,7 @@ function buildListing(listingParams){
 
     //if user is logged in, append listing controls and comment form to DOM
     if (currentUser) {
-        appendListingOwnerControls(listing);;
+        appendListingOwnerControls(listing);
         buildListingCommentFormButton()
     } 
 }
@@ -190,9 +180,8 @@ function appendListingOwnerControls(listing){
 //Array contains all listing ids for current location to use in next/previous button event listener
 //functions.
 function loadLocationListingArray(){
-    let path = currentPath.split('/').slice(0, -1).join('/')
 
-    $.getJSON(path + '/listing_ids', {
+    $.getJSON(listingsPath + '/listing_ids', {
         id: currentLocation,
         format: 'json'
     }, function(response) {
@@ -213,7 +202,6 @@ function loadLocationListingArray(){
 //arguments passed in via listing search function and listings filter functions. Build listing card
 //for each listing returned via ajax call. Set the current listing filter based off of returned listings.
 function loadListings(searchQuery, categoryFilter){
-    listingsPath = window.location.pathname.split("/").slice(0, -1).join('/');
     $('#listings-index').empty()
 
     $.ajax({

@@ -24,16 +24,6 @@ class Comment {
     }
 }
 
-// Manually binded prototype methods have been added above to class declaration
-
-// Comment.prototype.status = function(){
-//     return this.commentStatusId === 1 ? "Answer Pending" : "Resolved";
-// }
-
-// Comment.prototype.formattedDate = function(){
-//     return new Date(this.createdAt).toLocaleDateString()
-// }
-
 // SHOW LISTING COMMENTS FUNCTIONS AND EVENT LISTENERS //
 
 //Checks if passed in array of listing comments is empty. If so, appends message. Otherwise, loops through top level
