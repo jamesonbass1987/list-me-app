@@ -317,6 +317,7 @@ function commentReplyFormListener(commentId) {
             commentableId: commentId,
             commentStatusId: '1'
         });
+
         $(this).parent().append(listingCommentForm);
         addReplyHideControls(this, commentId);
         $(this).remove()
