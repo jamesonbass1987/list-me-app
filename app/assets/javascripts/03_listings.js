@@ -93,7 +93,6 @@ function nextListingBtnListener(){
         event.preventDefault();
         
         findCurrentListingIdIndex();
-
         const nextListingId = locationListingHashes[(listingIdIndex + 1) % locationListingHashes.length].id;
 
         currentListingId = nextListingId;
@@ -187,9 +186,7 @@ function loadLocationListingArray(){
     }, function(response) {
         locationListingHashes = response;
         locationListingIds = [];
-        locationListingHashes.forEach(function (location) {
-            locationListingIds.push(location.id)
-        })
+        locationListingHashes.forEach(function (location) {locationListingIds.push(location.id)})
 
         findCurrentListingOwner();
     });
@@ -203,13 +200,11 @@ function loadLocationListingArray(){
 //for each listing returned via ajax call. Set the current listing filter based off of returned listings.
 function loadListings(searchQuery, categoryFilter){
     $('#listings-index').empty()
-
     $.ajax({
-        url: listingsPath + '/listings',
+        url: listingsPath,
         data: {searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json'},
         dataType: 'json'
     }).done(function(response){
-        $('.listings-index').empty();
         response.forEach(listing => buildListingCard(listing));
         setCurrentListingFilter(response);
     });
@@ -264,28 +259,18 @@ function deleteListing(listing, element){
 //Add click event for search filtering. On click, submit search form and reset input to clear
 //search query.
 function searchListingsEvent(){
-    $("#listings-search-submit").on('click', function(event){
-        event.preventDefault();
-        $("#search-form").submit();
-        $("#search-form")[0].reset();
-    })
-
     $('#search-form').on('submit', function (event) {
         event.preventDefault();
         const searchQuery = $(this).serializeArray()[1].value;
         loadListings(searchQuery, undefined);
+        this.reset();
     });
 }
 
 //Add click event for category filtering. On click, submit filter form load listings in selected
 //category.
 function filterListingsEvent(){
-    $("#listings-filter-submit").on('click', function(event){
-        event.preventDefault();
-        $("#listings-filter-form").submit();
-    })
-
-    $('#listings-filter-form').on('submit', function (event) {
+    $('#listings-filter-form').submit(function (event) {
         event.preventDefault();
         const categoryFilter = $(this).serializeArray()[2].value;
         loadListings(undefined, categoryFilter);
