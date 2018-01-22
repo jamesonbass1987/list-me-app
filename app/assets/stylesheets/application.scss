@@ -19,16 +19,25 @@
   font-size: 16px;;
 }
 
- body, html {
-   height: 100%;
- }
+//  body, html {
+//    height: 100%;
+//  }
 
- body {
-   background: rgb(253, 253, 253);
- }
+body.welcome {
+    background: url(list-me-welcome-background.jpg);
+    background-size: cover;
+    background-position: center;
+    color: white; 
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+}
 
 .container {
-  padding-bottom: 30px;
+  margin-top: 2%;
 }
 
 .welcome_main {
@@ -47,12 +56,16 @@
 }
 
 .navbar-brand {
-  color: #5cb85c  !important;
+  color: #ffffff  !important;
+}
+
+a.nav-link {
+  color: #ffffff  !important;
 }
 
 .navbar {
-  padding-right: 0px !important;
-  padding-left: 0px !important;
+  background: rgb(36, 154, 54);
+  color: #ffffff  !important;
 }
 
 .small-visible {
@@ -71,18 +84,12 @@
   padding-top: 10px;
 }
 
-
 .main-page {
   font-size: 40px;
-  color: #fff;
 }
 
 .subtext {
   font-weight: 400;
-}
-
-.welcome_main {
-  color: white;
 }
 
 .welcome_button {
@@ -90,21 +97,19 @@
   display: inline;
 }
 
-.welcome_container {
-  background: url("list-me-welcome-background.jpg");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 100%;
+.welcome-text {
+  text-align: center;
+  padding-top: 25%; 
 }
 
 .darken_overlay:first-child {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+#welcome-filter-form select {
+  margin: 10px 3px;
 }
 
  /*---USER PROFILE---*/
@@ -251,7 +256,6 @@
 
   .main-page, .subtext {
     font-size: 30px;
-    color: #5cb85c;
   }
 
   .small-visible {
@@ -282,7 +286,6 @@
 
   .main-page, .subtext {
     font-size: 35px;
-    color: #5cb85c;
   }
 
 }

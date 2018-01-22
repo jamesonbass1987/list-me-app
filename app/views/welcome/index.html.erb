@@ -1,8 +1,6 @@
-<%= content_tag :div do %>
-    <%= content_tag :main, :class => "welcome_main" do  %>
+<%= content_tag :div, :class => 'welcome-text' do %>
       <%= tag.h1 'Welcome to List.me', :class => "heading-text main-page" %>
       <%= content_tag :div, :class =>"inner cover" do %>
         <%= render partial: 'welcome_form', locals: {locations: @locations, categories: @categories} %>
       <% end %>
-    <% end %>
 <% end %>

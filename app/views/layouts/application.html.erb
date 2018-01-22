@@ -12,12 +12,14 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'false' %>
   </head>
   <%= content_tag :body, :class => "#{controller_name} #{action_name}" do %>
-    <%= content_tag :div, :class => 'container' do %>
-        <%= render 'layouts/navbar' %>
-        <%= content_tag :div, :class => "#{page_classes}"  do %>
-          <%= render 'layouts/flash_notice' %>
-          <%= yield %>
-        <% end %>
+    <%= render 'layouts/navbar' %>
+    <%= content_tag :div, :class => 'container-fluid' do %>
+      <%= content_tag :div, :class => 'container' do %>
+          <%= content_tag :div, :class => "#{page_classes}"  do %>
+            <%= render 'layouts/flash_notice' %>
+            <%= yield %>
+          <% end %>
+      <% end %>
     <% end %>
     
   <% end %>
