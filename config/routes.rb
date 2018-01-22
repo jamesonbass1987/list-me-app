@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get '/locations/:id/listings/:id/listing_comments' => 'listings#listing_comments'
   get '/logged_in_user' => 'users#logged_in_user'
   get '/locations/:id/listings/listing_ids' => 'listings#listing_ids'
+  get 'locations/get_location' => 'locations#get_location'
 
   # STANDARD ROUTES
   post '/search' => 'welcome#search'
@@ -22,7 +23,7 @@ Rails.application.routes.draw do
   patch '/users/:id/user_rating' => 'users#user_rating'
   resources :users
   resources :categories
-
+  
   get '/locations/:id/listings/take_my_money' => 'listings#take_my_money'
   resources :locations, only: [:index, :show, :new, :create, :edit, :update, :destroy]
 

@@ -7,7 +7,7 @@ class WelcomeController < ApplicationController
   #redirect to appropriate location and category filter based on homepage search
   def search
     location = Location.friendly.find(params[:location_selector])
-    session[:categoryFilter] = params[:category_selector]
+    session[:categoryFilter] = params[:categoryFilter]
 
     redirect_to(location_listings_path(location))
   end

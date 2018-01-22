@@ -53,14 +53,30 @@ class Listing extends BaseListing {
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
 //Load listings for current location and attach event listeners to index page for search and filter
+//Parses welcome page query params if anything is sumitted via form and passes to load listings function
+
 function loadListingsIndex(){
     $(".listings.index").ready(function () {
-        loadListings();
+        const queryParams = getUrlParams();
+
+        loadListings(null, queryParams.categoryFilter);
         searchListingsEvent();
         filterListingsEvent();
     })
 }
 
+function getUrlParams(){
+    const params = window.location.search.split('?');
+    let returnParams = {};
+    params.forEach(function(parameter){
+        if (parameter.length > 0){
+            const key = parameter.split("=")[0];
+            const val = parameter.split("=")[1]
+            returnParams[key] = val;
+        }
+    })
+    return returnParams
+}
 
 // LISTING SHOW PAGE LOAD FUNCTIONS
 
@@ -198,7 +214,8 @@ function loadLocationListingArray(){
 //arguments passed in via listing search function and listings filter functions. Build listing card
 //for each listing returned via ajax call. Set the current listing filter based off of returned listings.
 function loadListings(searchQuery, categoryFilter){
-    $('#listings-index').empty()
+    $('#listings-index').empty();
+
     $.ajax({
         url: listingsPath,
         data: {searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json'},

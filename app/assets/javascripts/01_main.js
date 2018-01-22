@@ -18,6 +18,8 @@ $(document).on('turbolinks:load', function () {
         loadListingsIndex();
     } else if ($(".listings.show")[0]) {
         loadListingsShow();
+    } else if ($(".welcome.index")[0]){
+        welcomeFormListener();
     }
 })
 
@@ -29,4 +31,20 @@ function checkUser() {
     $.getJSON('/logged_in_user', { format: 'json' }, function (resp) {
         currentUser = resp;
     });
+}
+
+//WELCOME PAGE FORM LISTENERS
+
+function welcomeFormListener(){
+    $("#welcome-filter-form").submit(function(event){
+        event.preventDefault();
+        const location_id = $("#locationFilter").val()
+
+        $.getJSON('/locations/get_location', {
+            location_id: location_id
+        }).done(function (resp) {
+            const categoryFilter = $('#categoryFilter').val()
+            window.location = `/locations/${resp.slug}/listings?categoryFilter=${categoryFilter}`
+        })
+    })
 }

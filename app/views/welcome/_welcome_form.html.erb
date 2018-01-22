@@ -1,9 +1,9 @@
 <%= form_tag "/search", :id => 'welcome-filter-form' do %>
   <%= tag.h5 :class => 'subtext' do %>
     <%= tag.strong("I'm looking for", :class => "welcome_text_small") %> <%= tag(:br, :class => "small-visible") %>
-    <%= select_tag 'category_selector', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything', :class => "form-control welcome_button" %> <%= tag(:br, :class => "small-visible") %>
+    <%= select_tag 'categoryFilter', options_from_collection_for_select(@categories, 'id', :name), :include_blank => 'Everything', :class => "form-control welcome_button" %> <%= tag(:br, :class => "small-visible") %>
     <%= tag.strong("  in  ", :class => "welcome_text_small", :id => 'in_welcome_text') %> <%= tag(:br, :class => "small-visible") %>
-    <%= select_tag 'location_selector', options_from_collection_for_select(@locations, 'id', :full_location_name), :class => "form-control welcome_button" %> <%= tag(:br) %>
+    <%= select_tag 'locationFilter', options_from_collection_for_select(@locations, 'id', :full_location_name), :class => "form-control welcome_button" %> <%= tag(:br) %>
     <%= submit_tag "Show me what you've got.", :class => 'btn btn-success btn-lg main_search_button' %>
   <% end %>
 <% end %>

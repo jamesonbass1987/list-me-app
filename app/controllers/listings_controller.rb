@@ -27,7 +27,6 @@ class ListingsController < ApplicationController
     #There are three paths to the index controller: standard get request,
     #category filter, and search filter. Based on which is used,
     #the appropriate method is called to filter listings
-
     if params[:categoryFilter].present? || session[:categoryFilter].present?
       filter_listings_by_category
     elsif params[:searchQuery].present?
@@ -131,6 +130,7 @@ class ListingsController < ApplicationController
   def filter_listings_by_category
     category_filter = Category.find_by(id: (params[:categoryFilter] || session[:categoryFilter]))
     @listings = Listing.listings_in_category(category_filter, @location)
+    session[:categoryFilter].clear
   end
 
   #find category by search term and clear session data once done

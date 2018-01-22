@@ -2,6 +2,15 @@ class LocationsController < ApplicationController
   before_action :validate_location, except: [:index, :new, :create, :update]
   before_action :set_location, only: [:show, :edit, :update, :destroy]
 
+  # API CALLS
+
+    def get_location
+      location = Location.find_by(id: params[:location_id])
+      render json: location;
+    end
+
+  # RESTFUL ROUTES
+
   def show
     authorize! :show, @locations
 
