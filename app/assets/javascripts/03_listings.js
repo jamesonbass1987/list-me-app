@@ -107,10 +107,9 @@ function nextListingBtnListener(){
     $('#js-next-listing').click(function (event) {
         event.preventDefault();
         
-        findCurrentListingIdIndex();
-        const nextListingId = locationListingHashes[(listingIdIndex + 1) % locationListingHashes.length].id;
+        const nextListingId = locationListingHashes[(currentListingIdIndex() + 1) % locationListingHashes.length].id;
         currentListingId = nextListingId;
-        
+
         loadListing();
     });
 }
@@ -121,9 +120,8 @@ function nextListingBtnListener(){
 function prevListingBtnListener(){
     $('#js-prev-listing').click(function (event) {
         event.preventDefault();
-
-        findCurrentListingIdIndex();
-        const prevListingId = (locationListingHashes[(listingIdIndex - 1)] || locationListingHashes.slice(-1)[0]).id;
+        
+        const prevListingId = (locationListingHashes[(currentListingIdIndex() - 1)] || locationListingHashes.slice(-1)[0]).id;
 
         currentListingId = prevListingId;
         loadListing();
@@ -134,8 +132,8 @@ function currentListingOwner(){
     return locationListingHashes.find(listing => listing.id === currentListingId).user_id
 }
 
-function findCurrentListingIdIndex(){
-    listingIdIndex = locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
+function currentListingIdIndex(){
+    return locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
 }
 
 // SHOW LISTING FUNCTIONS //
