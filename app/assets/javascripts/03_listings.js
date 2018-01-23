@@ -58,7 +58,6 @@ class Listing extends BaseListing {
 function loadListingsIndex(){
     $(".listings.index").ready(function () {
         const queryParams = getUrlParams();
-
         loadListings(null, queryParams.categoryFilter);
         searchListingsEvent();
         filterListingsEvent();
@@ -110,15 +109,11 @@ function nextListingBtnListener(){
         
         findCurrentListingIdIndex();
         const nextListingId = locationListingHashes[(listingIdIndex + 1) % locationListingHashes.length].id;
-
         currentListingId = nextListingId;
-
-        findCurrentListingOwner();
+        
         loadListing();
     });
 }
-
-
 
 //Find current index of listing on page inside the location listing ids array, load previous listing id
 //by finding the previous element in array. if element is at beginning of array, choose the last array
@@ -131,13 +126,12 @@ function prevListingBtnListener(){
         const prevListingId = (locationListingHashes[(listingIdIndex - 1)] || locationListingHashes.slice(-1)[0]).id;
 
         currentListingId = prevListingId;
-        findCurrentListingOwner();
         loadListing();
     });
 }
 
-function findCurrentListingOwner(){
-    currentListingOwnerId = locationListingHashes.find(listing => listing.id === currentListingId).user_id
+function currentListingOwner(){
+    return locationListingHashes.find(listing => listing.id === currentListingId).user_id
 }
 
 function findCurrentListingIdIndex(){
@@ -156,7 +150,8 @@ function findCurrentListing(){
 //newly set current listing, and build the listing from the response.
 function loadListing(){
     $('#js-listing, #js-listing-comments, #js-listing-comment-form-btn').empty();
-    $.getJSON(`/locations/${currentLocation}/listings/${currentListingId}?ajax=1`, { format: 'json' }, (response => buildListing(response)));
+    $.getJSON(`/locations/${currentLocation}/listings/${currentListingId}?ajax=1`)
+        .then(response => buildListing(response))
 }
 
 //Build listing from json response, and load any comments to the DOM. If user is logged in, add reply
@@ -169,9 +164,13 @@ function buildListing(listingParams){
     listing.loadImages(listingParams.listing_images)
     listing.loadTags(listingParams.tags)
 
-    // build listing template from new listing object and append to DOM
-    const listingTemplate = HandlebarsTemplates['listing'](listing);
-    $('#js-listing').append(listingTemplate);
+    // build listing template from new listing object, set owner and listing id to jQuery data variables,
+    // and append to DOM
+    let newListing = $(HandlebarsTemplates['listing'](listing));
+    newListing.data('id', listing.id);
+    newListing.data('owner', listing.user_id)
+
+    $('#js-listing').append(newListing);
 
     // load listing comments to DOM
     loadComments(listingParams.comments)
@@ -198,12 +197,9 @@ function loadLocationListingArray(){
     $.getJSON(listingsPath + '/listing_ids', {
         id: currentLocation,
         format: 'json'
-    }, function(response) {
+    })
+    .then(function(response) {
         locationListingHashes = response;
-        locationListingIds = [];
-        locationListingHashes.forEach(function (location) {locationListingIds.push(location.id)})
-
-        findCurrentListingOwner();
     });
 }
 

@@ -41,7 +41,7 @@ function loadComments(comments) {
 function buildComment(commentParent, commentDiv) {
     const newComment = new Comment(commentParent);
 
-    if (newComment.ownerId === currentListingOwnerId) {
+    if (newComment.ownerId === currentListingOwner()) {
         newComment.currentListingOwner = true;
     }
 
@@ -98,7 +98,7 @@ function buildEditCommentForm(commentDiv, id){
         user: commentUser
     }
 
-    if (id === currentListingOwnerId) {
+    if (id === currentListingOwner()) {
         commentValues.currentListingOwner = true;
     }
 

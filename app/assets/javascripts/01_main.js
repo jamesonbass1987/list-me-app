@@ -3,7 +3,6 @@ let locationListingHashes;
 let listingIdIndex;
 let locationListingIds;
 let currentListingId;
-let currentListingOwnerId;
 let currentLocation = window.location.pathname.split('/')[2];
 let listingsPath = `/locations/${currentLocation}/listings`
 let currentListingFilter = "Everything";
