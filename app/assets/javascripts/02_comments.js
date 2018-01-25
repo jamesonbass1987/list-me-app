@@ -123,6 +123,7 @@ async function editComment(form) {
     let commentId = $(form).attr('data-comment-id');
     let parentComment = $(form).parent();
     let editedComment;
+
     try {
         editedComment = await $.ajax({
             url: `/comments/${commentId}`,
@@ -130,13 +131,13 @@ async function editComment(form) {
             data: $(form).serialize(),
             dataType: 'json'
         })
+
+        //build edited comment
+        buildComment(editedComment, parentComment);
+
     } catch(error){
         alert("Something went wrong. Please try again.");
         $(form).empty();
-    }
-    
-    if (editedComment){ 
-        buildComment(editedComment, parentComment); 
     }
 }
 
@@ -171,7 +172,6 @@ function deleteComment(comment) {
 //Checks to see how many comments are present. If none,'no comments' message is
 //appended, Otherwise, message is removed.
 function checkCommentCount(){
-    debugger;
     if ($('#js-listing-comments').children().length === 0) {
         $("#js-listing-comments").append('<p>No comments have been added.</p>');
     } else if ($('#js-listing-comments p').length > 0) {
@@ -257,17 +257,18 @@ async function submitComment(form) {
             data: $(form).serialize(),
             dataType: 'json'
         })
+
+        //If comment was set, build comment and hide comment form
+        if (comment) {
+            let hideCommentButton = $(form).siblings('.hide-comment');
+            buildComment(comment);
+            $(hideCommentButton).trigger('click');
+            checkCommentCount();
+        }
+
     } catch(error) {
         alert("Something went wrong. Please try again.");
         hideCommentForm();
-    }
-
-    //If comment was set, build comment and hide comment form
-    if (comment) {
-        let hideCommentButton = $(form).siblings('.hide-comment');
-        buildComment(comment);
-        $(hideCommentButton).trigger('click');
-        checkCommentCount();
     }
 }
 

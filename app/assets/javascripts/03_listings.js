@@ -243,17 +243,17 @@ async function loadListings(searchQuery, categoryFilter){
     try {
         //create JSON ajax call and await response on Promise
         listings = await $.getJSON({url: url, data: data});
+
+        //Iterate through listings and build listing cards
+        listings.forEach(listing => buildListingCard(listing));
+
+        //Update current filter element
+        setCurrentListingFilter(listings);
     } catch(error) {
         //If something went wrong, alert user and reload page
         alert("Something went wrong. The window will now refresh.");
         location.reload();
     }
-
-    //Iterate through listings and build listing cards
-    listings.forEach(listing => buildListingCard(listing));
-
-    //Update current filter element
-    setCurrentListingFilter(listings);
 }
 
 //Build listing card for each listing returned in loadListings function call and append to DOM body.
