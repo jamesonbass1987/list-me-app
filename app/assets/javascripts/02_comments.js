@@ -32,12 +32,12 @@ function loadComments(comments) {
     comments.length === 0 ? checkCommentCount() : comments.forEach(comment => buildComment(comment));
 }
 
+//REFACTORED
 //Builds comment and creates a new comment template based on passed in comment parameters. If the comment's commentable type
 //is 'Listing', it is appended to the listing-comments element in the DOM. If it is a 'Comment', the new comment is appended
 //to the parent comment as a reply. If user is signed in and is the comment owner or admin, comment controls are 
 //appended. If the submitted comment has any child comment nodes, they are each recursively
 //sent to the buildComment function for appending to the DOM.
-
 function buildComment(commentParent) {
     let comment = new Comment(commentParent);
     if (comment.ownerId === currentListingOwnerId) {comment.currentListingOwner = true};
@@ -57,10 +57,10 @@ function buildComment(commentParent) {
     }
 }
 
+//REFACTORED
 //Attaches reply/edit/delete comment controls and sets delete and reply comment listeners.
 function buildCommentOwnerControls() {
-
-    const owner_controls_template = HandlebarsTemplates['comment_controls']();
+    let owner_controls_template = HandlebarsTemplates['comment_controls']();
     this.children().find('.comment-controls').append(owner_controls_template);
     editCommentListener();
     deleteCommentListener();
@@ -157,21 +157,19 @@ function deleteCommentListener() {
 // REFACTORED
 //Fires delete comment ajax call, passing in id from comment div variable that was
 //passed in. Once done, comment div is removed.
-async function deleteComment(comment) {
+function deleteComment(comment) {
     let id = $(comment).attr('data-comment-id');
 
-    try {
-        await $.ajax({
-        method: "DELETE",
+    $.ajax({
+        type: "POST",
         url: `/comments/${id}`,
-        })
+        dataType: 'json',
+        data: { "_method": "delete" },
+    })
 
         $(comment).remove();
         checkCommentCount();
 
-    } catch(error) {
-        alert("Something went wrong. Please try again.");
-    }
 }
 
 // REFACTORED
@@ -188,6 +186,7 @@ function checkCommentCount(){
 
 // LISTING COMMENT FORM FUNCTIONS AND EVENT LISTENERS
 
+//REFACTORED
 //Append listing comment reply button to bottom of page and attach form
 //listeners to submit comment link
 function buildListingCommentFormButton(){
@@ -195,8 +194,8 @@ function buildListingCommentFormButton(){
     attachListingCommentFormButtonListener();
 }
 
-
-function attachListingCommentFormButtonListener(formId){
+//REFACTORED
+function attachListingCommentFormButtonListener(){
     $('#js-comment-form-btn-link').click(function(event){
         event.preventDefault();
 
@@ -222,10 +221,10 @@ function attachListingCommentFormButtonListener(formId){
     });
 }
 
-
+//REFACTORED
 //When hide button is clicked, the comment form and hide button is removed, and the reply button control function is called to rebuild the reply button.
 function hideCommentFormListener() {
-    $(".hide-comment").click(function (event) {
+    $(".hide-comment").click(function(event) {
         event.preventDefault();
 
         let parentElement = $(this).parent();
@@ -301,6 +300,7 @@ function buildReplyControls() {
     commentReplyFormListener();
 }
 
+//REFACTORED
 //Hide button is appended to comment reply div.
 function addReplyHideControls() {
     let commentId = $(this).parents().eq(3).attr('data-comment-id')
@@ -309,16 +309,16 @@ function addReplyHideControls() {
     hideCommentFormListener();
 }
 
-
+//REFACTORED
 //On click, the comment form is appended, 'reply' button removed.
 function commentReplyFormListener() {
     $(document).on('click', '.reply-comment', function (event) {
         event.preventDefault();
         event.stopImmediatePropagation();
 
-        let parentCommentableId = $(this).parents().eq(3).attr('data-commentable-id');
+        let parentCommentableId = $(this).parents().eq(3).attr('data-comment-id');
 
-        const listingCommentForm = HandlebarsTemplates['comment_form']({
+        let listingCommentForm = HandlebarsTemplates['comment_form']({
             authToken: $('meta[name=csrf-token]').attr('content'),
             commentableType: 'Comment',
             commentableId: parentCommentableId,
