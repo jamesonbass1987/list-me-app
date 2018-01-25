@@ -34,7 +34,7 @@ function loadComments(comments) {
 function buildComment(commentParent, commentDiv) {
     let comment = new Comment(commentParent);
     let listingOwnerId = $('.listing').attr('data-listing-owner-id');
-    if (comment.ownerId === listingOwnerId) {comment.currentListingOwner = true};
+    if (comment.ownerId === parseInt(listingOwnerId)) {comment.currentListingOwner = true};
     let newComment = $(HandlebarsTemplates['comment'](comment));
 
     //Checks for parent comment or if comment is coming from edit action
@@ -46,10 +46,14 @@ function buildComment(commentParent, commentDiv) {
         commentDiv.replaceWith(newComment);
     }
 
-    //Appends owner/reply controls if comment owner is signed in and/or an admin
+    //Adds reply controls if user is signed in
+    currentUser ? 
+        buildReplyControls.apply(newComment) : 
+        null
+
+    //Appends owner controls if comment owner is signed in and/or an admin
     if (currentUser && (currentUser.id === comment.ownerId || currentUser.role.title === 'admin')){
         buildCommentOwnerControls.apply(newComment);
-        buildReplyControls.apply(newComment);
     }
 
     //If comment has comment child nodes, recursively calls buildComment for all child comments
@@ -83,7 +87,7 @@ function editCommentListener(){
 //Builds comment form, pre-filling values into form template
 function buildEditCommentForm(comment) {
     let auth_token = $('meta[name=csrf-token]').attr('content');
-    let content = $(comment).children().find('.comment-content').text().trim();
+    let content = $(comment).children().find('.comment-content').eq(0).text().trim();
     let commentStatus = $(comment).attr('data-comment-status');
     let id = $(comment).attr('data-comment-id');
     let user = $(comment).attr('data-owner-username');
@@ -167,6 +171,7 @@ function deleteComment(comment) {
 //Checks to see how many comments are present. If none,'no comments' message is
 //appended, Otherwise, message is removed.
 function checkCommentCount(){
+    debugger;
     if ($('#js-listing-comments').children().length === 0) {
         $("#js-listing-comments").append('<p>No comments have been added.</p>');
     } else if ($('#js-listing-comments p').length > 0) {
@@ -262,6 +267,7 @@ async function submitComment(form) {
         let hideCommentButton = $(form).siblings('.hide-comment');
         buildComment(comment);
         $(hideCommentButton).trigger('click');
+        checkCommentCount();
     }
 }
 

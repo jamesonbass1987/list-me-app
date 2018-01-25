@@ -6,9 +6,11 @@
             <div class='comment-content'>
                 {{content}}
             </div>
+            {{#unless currentListingOwner}}
             <div class='comment-status'>
                 <span>Status: {{status}}</span>
             </div>
+            {{/unless}}
             <div class="comment-controls"></div>
         </div>
     </div>
