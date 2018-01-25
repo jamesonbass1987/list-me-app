@@ -7,7 +7,7 @@ let currentListingFilter = "Everything";
 //MAIN PAGE LOAD FUNCTIONS
 
 //Check for logged in user and fire appropriate load functions based on current view
-$(document).ready(() => {
+$(document).on('turbolinks:load', function() {
     getUser();
     if ($(".listings.index")[0]) {
         loadListingsIndex();
