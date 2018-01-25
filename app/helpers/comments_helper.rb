@@ -1,13 +1,5 @@
 module CommentsHelper
 
-  # def display_listing_comments(comments)
-  #   if comments.first.id.present?
-  #     render comments
-  #   else
-  #     tag.text("There doesn't seem to be anything here.") + tag(:br)
-  #   end
-  # end
-
   def display_comment_status(comment)
     if comment.user != parent_listing_for(comment).user
       tag(:br) + tag.strong("Status: ") + comment.comment_status.name
