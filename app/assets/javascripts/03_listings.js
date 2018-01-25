@@ -46,13 +46,14 @@ class Listing extends BaseListing {
 
 }
 
+//Load index page event handlers
 function addListingIndexEventListeners() {
     deleteListingEventListener();
     searchListingsListener();
     filterListingsListener();
 }
 
-//Load page event handlers
+//Load show page event handlers
 function addListingShowEventListeners() {
     commentReplyFormListener();
     submitCommentListener();
@@ -69,7 +70,6 @@ function addListingShowEventListeners() {
 
 //Load listings for current location and attach event listeners to index page for search and filter
 //Parses welcome page query params if anything is sumitted via form and passes to load listings function
-
 function loadListingsIndex(){
     $(".listings.index").ready(() => {
         let queryParams = getUrlParams();
@@ -77,11 +77,14 @@ function loadListingsIndex(){
     })
 }
 
-//REFACTORED
+//Parses any variables/queries submitted from main welcome page passed as url params
+//Currently only have category, but written so code can be expanded upon in future
 function getUrlParams(){
+    //Get params from url
     let filterParams = window.location.search.split('?');
     let returnParams = {};
 
+    //Iterate through setting parameter key and values to returnParams object
     filterParams.forEach(parameter => {
         if (parameter.length > 0){
             let key = parameter.split("=")[0];
@@ -89,29 +92,26 @@ function getUrlParams(){
             returnParams[key] = val;
         }
     })
+    //Return object
     return returnParams;
 }
 
-//REFACTORED
+//Parses url to get current location
 function getCurrentLocation(){
     return window.location.pathname.split('/')[2];
 }
-//REFACTORED
+// Parses url to get current location id
 function getCurrentListingId(){
     return parseInt(window.location.pathname.slice(-1));
 }
-//REFACTORED
-function currentListingOwner() {
-    return locationListingHashes.find(listing => listing.id === currentListingId).user_id;
-}
-//REFACTORED
+
+//Parses location listing hashes, and returns index of current listing on show page
 function currentListingIdIndex() {
-    return locationListingHashes.findIndex(listing => { return listing.id === currentListingId });
+    return locationListingHashes.findIndex(listing => listing.id === currentListingId );
 }
 
 // LISTING SHOW PAGE LOAD FUNCTIONS
 
-//REFACTORED
 //Load listings show page for current listing
 function loadListingsShow(){
     $(".listings.show").ready(function () {
@@ -119,8 +119,8 @@ function loadListingsShow(){
         //Set current listing id
         currentListingId = getCurrentListingId();
 
-        //Load Location Listing ID's for Next/Prev Listing Button Events and set current listing owner
-        loadLocationListingArray();
+        //Load Location Listing ID's hash for Next/Prev Listing Button Events
+        loadLocationListings();
         
         //Load listing to DOM
         loadListing();
@@ -129,57 +129,57 @@ function loadListingsShow(){
 
 // SHOW PAGE EVENT LISTENERS //
 
-//REFACTORED
-//Find current index of listing on page inside the location listing ids array, loads next listing id
-//by finding next element in array. If element is at end of array, cycle through to beggining of array  
-//for the next index. Then, set current listing id to next listing in array and load the listing.
+//Loads next listing from location listings hash by finding next element in obj. If element is at end of array, 
+//cycle through to beginning of object for the next index.
 function nextListingBtnListener(){
     $(document).on('click', '#js-next-listing', event => {
         event.preventDefault();
-
+        //set next listing index and id variables
         let nextListingIndex = (currentListingIdIndex() + 1) % locationListingHashes.length;
         let nextListingId = locationListingHashes[nextListingIndex].id;
-        
+
+        //update current listing id to next listing
         currentListingId = nextListingId;
 
+        //load new listing
         loadListing();
     });
 }
 
-//REFACTORED
-//Find current index of listing on page inside the location listing ids array, load previous listing id
-//by finding the previous element in array. if element is at beginning of array, choose the last array
-//index. Then, set current listing id to the prev listing in array and load the listing
+//Loads previous listing from location listings hash by finding previous element in obj. If element is at beginning of array, 
+//select last key/value in obj
 function prevListingBtnListener(){
     $(document).on('click', '#js-prev-listing', event => {
         event.preventDefault();
 
+        //set last listing id
         let prevListingId = (locationListingHashes[(currentListingIdIndex() - 1)] || locationListingHashes.slice(-1)[0]).id;
         
+        //update current listing id to last listing
         currentListingId = prevListingId;
 
+        //load new listing
         loadListing();
     });
 }
 
-
-
 // SHOW LISTING FUNCTIONS //
 
-//REFACTORED
 //Empty listing from DOM if coming from next/prev button events, send an ajax getJSON request for the
 //newly set current listing, and build the listing from the response.
 function loadListing(){
     let currentLocation = getCurrentLocation();
     let url = `/locations/${currentLocation}/listings/${currentListingId}`;
 
+    //Empty elements if coming from another listing
     $('#js-listing, #js-listing-comments, #js-listing-comment-form-btn').empty();
     
+    //Make JSON request, and build listing
     $.getJSON(url).done(listing => buildListing(listing));
 }
 
-//Build listing from json response, and load any comments to the DOM. If user is logged in, add reply
-//controls to listing, as well as any listing controls if the current user is viewing their own listing
+//Build listing from json response, and load any comments to the DOM. Adds controls based on logged
+//in status.
 function buildListing(listingParams){
     //build new listing from response listing params
     let listing = new Listing(listingParams);
@@ -188,114 +188,119 @@ function buildListing(listingParams){
     listing.loadImages(listingParams.listing_images)
     listing.loadTags(listingParams.tags)
 
-    // build listing template from new listing object, set owner and listing id,
-    // and append to DOM
+    // build listing template from new listing object, and append to DOM
     let newListing = $(HandlebarsTemplates['listing'](listing));
-    newListing.data('owner', listing.user_id)
-
     $('#js-listing').append(newListing);
 
     // load listing comments to DOM
-    loadComments(listingParams.comments)
+    loadComments(listingParams.comments);
 
     //if user is logged in, append listing controls and comment form to DOM
     if (currentUser) {
-        appendListingOwnerControls(listing);
-        buildListingCommentFormButton()
+        appendListingOwnerControls.apply(listing);
+        buildListingCommentFormButton();
     } 
 }
 
-//Check to see if current user is the listing owner and append listing controls, if so.
-function appendListingOwnerControls(listing){
-
-
-    if (currentUser.id === listing.user_id || currentUser.role.title === 'admin') {
-        listing_controls_template = HandlebarsTemplates['listing_owner_controls'](listing);
+//Check to see if current user is the listing owner or admin and appends listing controls if true.
+function appendListingOwnerControls(){
+    if (currentUser.id === this.userId || currentUser.role.title === 'admin') {
+        listing_controls_template = HandlebarsTemplates['listing_owner_controls'](this);
         $(`#js-listing-owner-controls`).append(listing_controls_template);
-    };
+    }
 }
 
-//REFACTORED
-//Make an axaj request to listing_ids API path, setting global locationListingHashes variable to response.
-//Array contains all listing ids for current location to use in next/previous button event listener
-//functions.
-async function loadLocationListingArray(){
+//Loads location listings to object via JSON ajax call
+async function loadLocationListings(){
+    //set location and url variables
     let currentLocation = getCurrentLocation();
     let url = `/locations/${currentLocation}/listings/listing_ids`;
     
     try {
+        //create JSON ajax call and await response on Promise
         locationListingHashes = await $.getJSON(url, {id: currentLocation, format: 'json'});
+
     } catch(error) {
+        //If something went wrong, alert user and reload page
         alert("Something went wrong. The window will now refresh.");
         location.reload();
     }
 }
 
-
 // INDEX LISTINGS FUNCTIONS
 
-//Empty listings index div (to clear in case of filtering via search or category). Then load //listings for index page based on current location. searchQuery and categoryFilter are optional 
-//arguments passed in via listing search function and listings filter functions. Build listing card
-//for each listing returned via ajax call. Set the current listing filter based off of returned listings.
-function loadListings(searchQuery, categoryFilter){
+//Empty listings in DOM in case of filtering via search or category. Then load listings based on current location.
+//searchQuery and categoryFilter are optional arguments passed in via listing search function and listings filter functions. 
+//Build listing card for each listing returned via ajax call. Set the current listing filter based off of returned listings.
+async function loadListings(searchQuery, categoryFilter){
+    //Declare and set variables for listings, url, location, and data
+    let listings;
     let currentLocation = getCurrentLocation();
     let url = `/locations/${currentLocation}/listings`;
-    
+    let data = { searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json' };
     $('#listings-index').empty();
 
-    $.ajax({
-        url: url,
-        data: {searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json'},
-        dataType: 'json'
-    }).done(listings => {
-        listings.forEach(listing => buildListingCard(listing));
-        setCurrentListingFilter(listings);
-    });
+    try {
+        //create JSON ajax call and await response on Promise
+        listings = await $.getJSON({url: url, data: data});
+    } catch(error) {
+        //If something went wrong, alert user and reload page
+        alert("Something went wrong. The window will now refresh.");
+        location.reload();
+    }
+
+    //Iterate through listings and build listing cards
+    listings.forEach(listing => buildListingCard(listing));
+
+    //Update current filter element
+    setCurrentListingFilter(listings);
 }
 
-//Build listing card for each listing returned in loadListings function ajax call and append to DOM body.
+//Build listing card for each listing returned in loadListings function call and append to DOM body.
 //If user is signed in, append edit/delete controls to listing card for current user's listings.
 function buildListingCard(listingParams){
-    let listing = new BaseListing(listingParams);
-    let listingTemplate = HandlebarsTemplates['listing_index'](listing);
+    //Create new listing object and append to template
+    let listingObj = new BaseListing(listingParams);
+    let newListing = $(HandlebarsTemplates['listing_index'](listingObj));
 
-    $('#listings-index').append(listingTemplate);
+    //Append new listing to DOM
+    $('#listings-index').append(newListing);
 
-    if (currentUser){
-        buildListingCardControls(listing);
+    //If user is signed in, and is the listing owner, build owner edit/delete controls
+    if (currentUser && (currentUser.id === listingObj.userId || currentUser.role.title === 'admin')){
+        buildListingCardControls.call(newListing, listingObj);
     } 
 }
 
-//If the listing belongs to the current user or the current user is an admin, append edit/delete listing card 
-//controls and add an event listener to the delete button.
+//Appends edit/delete listing card  controlls to footer controls 
 function buildListingCardControls(listing){
-    if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
-        listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
-        $(`#listing-${listing.id}-footer`).append(listing_controls_template);
-    };
+    listingControls = HandlebarsTemplates['listing_index_controls'](listing);
+    this.children('.listing-footer').append(listingControls);
 }
 
-//REFACTORED
 //Event listener for listing index card delete button. When clicked, runs the deleteListing function, passing
-//in the current listing object, and listing DOM element.
+//in the listing element
 function deleteListingEventListener(){
     $(document).on('click', `.listing-delete`, function(event){
         event.preventDefault();
+        event.stopImmediatePropagation();
+        
+        //set listing element
         let listing = $(this).parents().eq(1)
 
-        deleteListing.apply(listing);
+        //call deleteListing, passing in listing 
+        deleteListing(listing);
     })
 }
 
 //REFACTORED
 //Make ajax call for listing deletion from the index page. Remove DOM element on success.
 function deleteListing(listing){
-    let currentLocation = getCurrentLocation();
-    let id = $(this).attr('data-listing-id')
-    let url = `locations/${currentLocation}/listings/${id}`
+    let currentLocation = window.location.pathname.split('/')[2]
+    let id = $(listing).attr('data-listing-id')
 
-    $.ajax({
-        url: url,
+    $.ajax(
+        {url: `locations/${currentLocation}/listings/${id}`,
         type: 'DELETE',
         dataType: "json",
         success: function(){
@@ -304,56 +309,69 @@ function deleteListing(listing){
     })
 }
 
-//REFACTORED
-//Add click event for search filtering. On click, submit search form and reset input to clear
-//search query.
+//On click, submit search form and reset input to clear search query.
 function searchListingsListener(){
     $(document).on('submit', '#search-form', function (event) {
         event.preventDefault();
+
+        //parse form search query
         let searchQuery = $(this).serializeArray()[1].value;
+
+        //load listings based on search query
         loadListings(searchQuery);
+
+        //reset search form
         this.reset();
     });
 }
 
-//REFACTORED
-//Add click event for category filtering. On click, submit filter form load listings in selected
-//category.
+//On click, submit filter form and load listings in selected category
 function filterListingsListener(){
     $(document).on('submit', '#listings-filter-form', function(event){
         event.preventDefault();
+
+        //parse category from form
         let categoryFilter = $(this).serializeArray()[2].value;
 
+        //load listings and submit category filter as variable
         loadListings(undefined, categoryFilter);
     });
 }
 
 
-//REFACTORED
-//Set category filter based on current indexed listings. If no listings are present, append 'no
-//listings' message to div. If listings are present, check for category based on listings by //checking categoryids and comparing values. If category id's are different, 'Everything' is being
-//displayed on the page. If they are the same, the value of the first listing category name is
-//displayed in the element.
+//Set category filter based on current indexed listings. Appending message if no listings are present.
+//If listings are present, check for category of listings shown on page
 function setCurrentListingFilter(listings){
+    //check number of listings
     if (listings.length > 0){
+
+        //if more than one listing, check listing category and set to current listing Filter message
         currentListingFilter = checkListingCategories(listings);
+
     } else {
+
+        //Update listings message if no listings are in that category
         currentListingFilter = "There doesn't seem to be anything here. Please try another filter."
     }
 
+    //Replace html in listings-filter element with new message
     $("#listings-filter").html(currentListingFilter);
 }
 
-//REFACTORED
+//Checking listings categoryIds and compare values. If category id's are different, 'Everything' is being
+//displayed on the page. If they are the same, the value of the first listing category name is
+//displayed in the element.
 function checkListingCategories(listings){
+    //set category check variable to 0
     let categoryCheck = 0;
 
+    //Decrease categoryCheck variable if listings category ids do not match
     for (let i = 0; i < (listings.length - 1); i++) {
         listings[i].category.id !== listings[i + 1].category.id ?
             categoryCheck-- :
             false;
     }
-
+    //If category id's are all the same, return category name from first listing, otherwise, return "Everything"
     return categoryCheck < 0 ?
         'Everything' :
         listings[0].category.name;
