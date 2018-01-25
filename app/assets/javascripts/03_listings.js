@@ -74,8 +74,6 @@ function loadListingsIndex(){
     $(".listings.index").ready(function () {
         const queryParams = getUrlParams();
         loadListings(null, queryParams.categoryFilter);
-        searchListingsListener();
-        filterListingsListener();
     })
 }
 
@@ -296,23 +294,25 @@ function deleteListing(listing){
     })
 }
 
+//REFACTORED
 //Add click event for search filtering. On click, submit search form and reset input to clear
 //search query.
 function searchListingsListener(){
-    $('#search-form').on('submit', function (event) {
+    $(document).on('submit', '#search-form', function (event) {
         event.preventDefault();
-        const searchQuery = $(this).serializeArray()[1].value;
-        loadListings(searchQuery, undefined);
+        let searchQuery = $(this).serializeArray()[1].value;
+        loadListings(searchQuery);
         this.reset();
     });
 }
 
+//REFACTORED
 //Add click event for category filtering. On click, submit filter form load listings in selected
 //category.
 function filterListingsListener(){
-    $('#listings-filter-form').submit(function (event) {
+    $(document).on('submit', '#listings-filter-form', function (event) {
         event.preventDefault();
-        const categoryFilter = $(this).serializeArray()[2].value;
+        let categoryFilter = $(this).serializeArray()[2].value;
         loadListings(undefined, categoryFilter);
     });
 }
