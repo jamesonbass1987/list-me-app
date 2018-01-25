@@ -12,7 +12,7 @@ let currentUser;
 //MAIN PAGE LOAD FUNCTIONS
 
 //Check for logged in user and fire appropriate load functions based on current view
-$(document).on('turbolinks:load', function () {
+$(document).ready(() => {
     checkUser();
     if ($(".listings.index")[0]) {
         loadListingsIndex();
@@ -28,21 +28,19 @@ $(document).on('turbolinks:load', function () {
 
 //Check for current user, if so, set to global variable
 function checkUser() {
-    $.getJSON('/logged_in_user', { format: 'json' }, function (resp) {
-        currentUser = resp;
-    });
+    $.getJSON('/logged_in_user', { format: 'json' }).then(resp => currentUser = resp);
 }
 
 //WELCOME PAGE FORM LISTENERS
 
 function welcomeFormListener(){
-    $("#welcome-filter-form").submit(function(event){
+    $("#welcome-filter-form").submit(event => {
         event.preventDefault();
         const location_id = $("#locationFilter").val()
 
         $.getJSON('/locations/get_location', {
             location_id: location_id
-        }).done(function (resp) {
+        }).done(resp => {
             const categoryFilter = $('#categoryFilter').val()
             window.location = `/locations/${resp.slug}/listings?categoryFilter=${categoryFilter}`
         })
