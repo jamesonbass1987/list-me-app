@@ -71,37 +71,40 @@ function addListingShowEventListeners() {
 //Parses welcome page query params if anything is sumitted via form and passes to load listings function
 
 function loadListingsIndex(){
-    $(".listings.index").ready(function () {
-        const queryParams = getUrlParams();
+    $(".listings.index").ready(() => {
+        let queryParams = getUrlParams();
         loadListings(null, queryParams.categoryFilter);
     })
 }
 
+//REFACTORED
 function getUrlParams(){
-    const params = window.location.search.split('?');
+    let filterParams = window.location.search.split('?');
     let returnParams = {};
-    params.forEach(function(parameter){
+
+    filterParams.forEach(parameter => {
         if (parameter.length > 0){
-            const key = parameter.split("=")[0];
-            const val = parameter.split("=")[1]
+            let key = parameter.split("=")[0];
+            let val = parameter.split("=")[1]
             returnParams[key] = val;
         }
     })
     return returnParams
 }
 
+//REFACTORED
 function getCurrentLocation(){
     return window.location.pathname.split('/')[2]
 }
-
+//REFACTORED
 function getCurrentListingId(){
     return parseInt(window.location.pathname.slice(-1));
 }
-
+//REFACTORED
 function currentListingOwner() {
     return locationListingHashes.find(listing => listing.id === currentListingId).user_id
 }
-
+//REFACTORED
 function currentListingIdIndex() {
     return locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
 }
