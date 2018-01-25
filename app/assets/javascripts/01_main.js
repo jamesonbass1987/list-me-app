@@ -11,9 +11,10 @@ $(document).ready(() => {
     getUser();
     if ($(".listings.index")[0]) {
         loadListingsIndex();
+        addListingIndexEventListeners();
     } else if ($(".listings.show")[0]) {
         loadListingsShow();
-        addListingShowEventListeners()
+        addListingShowEventListeners();
     } else if ($(".welcome.index")[0]){
         welcomeFormListener();
     }

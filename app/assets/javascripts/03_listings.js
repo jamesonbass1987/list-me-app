@@ -46,17 +46,24 @@ class Listing extends BaseListing {
 
 }
 
-// function addListingIndexEventListeners() {
-//     searchListingsListener();
-//     filterListingsListener();
+function addListingIndexEventListeners() {
+    deleteListingEventListener();
+    searchListingsListener();
+    filterListingsListener();
+}
 
-//     nextListingBtnListener();
-//     prevListingBtnListener();
-
-//     deleteListingEventListener();
-//     searchListingsListener();
-//     filterListingsListener();
-// }
+//Load page event handlers
+function addListingShowEventListeners() {
+    commentReplyFormListener();
+    submitCommentListener();
+    hideCommentFormListener();
+    editCommentListener();
+    deleteCommentListener();
+    editCommentFormListener();
+    listingCommentFormButtonListener();
+    nextListingBtnListener();
+    prevListingBtnListener();
+}
 
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
@@ -115,10 +122,6 @@ function loadListingsShow(){
         
         //Load listing to DOM
         loadListing();
-
-        //Event Listeners
-        nextListingBtnListener();
-        prevListingBtnListener();
     })
 }
 
@@ -128,7 +131,7 @@ function loadListingsShow(){
 //by finding next element in array. If element is at end of array, cycle through to beggining of array  
 //for the next index. Then, set current listing id to next listing in array and load the listing.
 function nextListingBtnListener(){
-    $('#js-next-listing').click(function (event) {
+    $(document).on('click', '#js-next-listing', event => {
         event.preventDefault();
 
         const nextListingIndex = (currentListingIdIndex() + 1) % locationListingHashes.length;
@@ -143,7 +146,7 @@ function nextListingBtnListener(){
 //by finding the previous element in array. if element is at beginning of array, choose the last array
 //index. Then, set current listing id to the prev listing in array and load the listing
 function prevListingBtnListener(){
-    $('#js-prev-listing').click(function (event) {
+    $(document).on('click', '#js-prev-listing', event => {
         event.preventDefault();
 
         const prevListingId = (locationListingHashes[(currentListingIdIndex() - 1)] || locationListingHashes.slice(-1)[0]).id;
@@ -262,32 +265,34 @@ function buildListingCardControls(listing){
     if (currentUser.id === listing.user_id  || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_index_controls'](listing);
         $(`#listing-${listing.id}-footer`).append(listing_controls_template);
-        
-        deleteListingEventListener(listing)
     };
 }
 
+//REFACTORED
 //Event listener for listing index card delete button. When clicked, runs the deleteListing function, passing
 //in the current listing object, and listing DOM element.
-function deleteListingEventListener(listing){
-    $(`#listing-${listing.id}-delete`).on('click', function (event) {
+function deleteListingEventListener(){
+    $(document).on('click', `.listing-delete`, function(event){
         event.preventDefault();
-        const listingCard = $(this).parents()[1]
-        deleteListing(listing, listingCard);
+        let listing = $(this).parents().eq(1)
+        deleteListing.apply(listing);
     })
 }
 
+//REFACTORED
 //Make ajax call for listing deletion from the index page. Remove DOM element on success.
-function deleteListing(listing, element){
+function deleteListing(listing){
     let currentLocation = getCurrentLocation();
+    let id = $(this).attr('data-listing-id')
+    let url = `locations/${currentLocation}/listings/${id}`
 
     $.ajax({
-        url: `locations/${currentLocation}/listings/${listing.id}`,
+        url: url,
         type: 'DELETE',
         dataType: "json",
-        success: function (response) {
+        success: function(){
             $(this).remove();
-        }.bind(element)
+        }.bind(listing)
     })
 }
 

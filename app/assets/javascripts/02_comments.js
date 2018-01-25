@@ -25,17 +25,6 @@ class Comment {
 
 // SHOW LISTING COMMENTS FUNCTIONS AND EVENT LISTENERS //
 
-//Load page event handlers
-function addListingShowEventListeners() {
-    commentReplyFormListener();
-    submitCommentListener();
-    hideCommentFormListener();
-    editCommentListener();
-    deleteCommentListener();
-    editCommentFormListener();
-    listingCommentFormButtonListener();
-}
-
 //Checks if passed in array of listing comments is empty. If so, appends 'no comments' message. Otherwise, appends comments to DOM
 function loadComments(comments) {
     comments.length === 0 ? checkCommentCount() : comments.forEach(comment => buildComment(comment));
