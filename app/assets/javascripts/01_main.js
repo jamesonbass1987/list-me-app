@@ -18,6 +18,7 @@ $(document).ready(() => {
         loadListingsIndex();
     } else if ($(".listings.show")[0]) {
         loadListingsShow();
+        addListingShowEventListeners()
     } else if ($(".welcome.index")[0]){
         welcomeFormListener();
     }
