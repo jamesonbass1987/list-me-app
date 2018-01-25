@@ -140,26 +140,30 @@ async function editComment(form) {
 
 //Adds a listener to each comments delete click event, and calls the deleteComment function for that comment.
 function deleteCommentListener() {
-    $(`.delete-comment`).click(function (event) {
-        event.preventDefault();
-        let commentDiv = $(this).parents()[3]
-        deleteComment(commentDiv)
+    $(`.delete-comment`).click(function (e) {
+        e.preventDefault();
+        let comment = $(this).parents().eq(3);
+        deleteComment(comment);
     });
 }
 
 //Fires delete comment ajax call, passing in id from comment div variable that was
 //passed in. Once done, comment div is removed.
-function deleteComment(comment) {
-    let commentId = comment.id.split('-').slice(-1).join()
-    $.ajax({
-        type: "POST",
-        url: `/comments/${commentId}`,
-        dataType: 'json',
-        data: { "_method": "delete" },
-    })
+async function deleteComment(comment) {
+    let id = $(comment).attr('data-comment-id');
 
-    $(comment).remove()
-    resetCommentNotificationCheck();
+    try {
+        await $.ajax({
+        method: "DELETE",
+        url: `/comments/${id}`,
+        })
+
+        $(comment).remove();
+        resetCommentNotificationCheck();
+
+    } catch(error) {
+        alert("Something went wrong. Please try again.");
+    }
 }
 
 //Checks to see how many comments are present. If none, no comments message is
