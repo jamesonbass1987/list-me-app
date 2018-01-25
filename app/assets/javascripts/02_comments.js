@@ -28,7 +28,7 @@ class Comment {
 //Checks if passed in array of listing comments is empty. If so, appends message. Otherwise, loops through top level
 //comments, appending them to the DOM
 function loadComments(comments) {
-    comments.length === 0 ? resetCommentNotificationCheck() : comments.forEach(comment => buildComment(comment));
+    comments.length === 0 ? checkCommentCount() : comments.forEach(comment => buildComment(comment));
 }
 
 //Builds comment and creates a new comment template based on passed in comment parameters. If the comment's commentable type
@@ -159,7 +159,7 @@ async function deleteComment(comment) {
         })
 
         $(comment).remove();
-        resetCommentNotificationCheck();
+        checkCommentCount();
 
     } catch(error) {
         alert("Something went wrong. Please try again.");
@@ -168,12 +168,11 @@ async function deleteComment(comment) {
 
 //Checks to see how many comments are present. If none, no comments message is
 //appended, Otherwise, message is removed.
-function resetCommentNotificationCheck(){
-
-    if ($('#js-listing-comments').text().trim() !== "" && $('#js-listing-comments p')[0] !== undefined) {
-        $('#js-listing-comments p')[0].remove();
-    } else if ($('#js-listing-comments').text().trim() === "" && $('#js-listing-comments p').length === 0) {
+function checkCommentCount(){
+    if ($('#js-listing-comments').children().length === 0) {
         $("#js-listing-comments").append('<p>No comments have been added.</p>');
+    } else if ($('#js-listing-comments p').length > 0) {
+        $('#js-listing-comments p')[0].remove();
     }
 }
 
@@ -265,22 +264,31 @@ function submitCommentListener() {
         $(hideCommentButton).trigger('click');
 
         $(this).remove();
-        resetCommentNotificationCheck();
+
     })
 }
 
 //Submit comment form action, after completion, hide form and add comment to
 //the DOM.
-function submitComment(form) {
-    $.ajax({
-        url: '/comments',
-        type: 'POST',
-        data: $(form).serialize(),
-        dataType: 'json'
-    }).done(function (resp) {
-        buildComment(resp)
-        hideCommentForm(85)
-    });
+async function submitComment(form) {
+    let comment;
+    
+    try {
+        comment = await $.ajax({
+            url: '/comments',
+            type: 'POST',
+            data: $(form).serialize(),
+            dataType: 'json'
+        })
+    } catch(error) {
+        alert("Something went wrong. Please try again.");
+        hideCommentForm(85);
+    }
+
+    if (comment) {
+        buildComment(comment);
+        hideCommentForm(85);
+    }
 }
 
 
