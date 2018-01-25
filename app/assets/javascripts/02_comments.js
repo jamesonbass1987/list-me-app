@@ -25,7 +25,7 @@ class Comment {
 
 // SHOW LISTING COMMENTS FUNCTIONS AND EVENT LISTENERS //
 
-//Event handlers
+//Load page event handlers
 function addListingShowEventListeners() {
     commentReplyFormListener();
     submitCommentListener();
@@ -36,22 +36,18 @@ function addListingShowEventListeners() {
     listingCommentFormButtonListener();
 }
 
-//Checks if passed in array of listing comments is empty. If so, appends message. Otherwise, loops through top level
-//comments, appending them to the DOM
+//Checks if passed in array of listing comments is empty. If so, appends 'no comments' message. Otherwise, appends comments to DOM
 function loadComments(comments) {
     comments.length === 0 ? checkCommentCount() : comments.forEach(comment => buildComment(comment));
 }
 
-//Builds comment and creates a new comment template based on passed in comment parameters. If the comment's commentable type
-//is 'Listing', it is appended to the listing-comments element in the DOM. If it is a 'Comment', the new comment is appended
-//to the parent comment as a reply. If user is signed in and is the comment owner or admin, comment controls are 
-//appended. If the submitted comment has any child comment nodes, they are each recursively
-//sent to the buildComment function for appending to the DOM.
+//Builds comment and creates a new comment template based on passed in comment parameters. 
 function buildComment(commentParent, commentDiv) {
     let comment = new Comment(commentParent);
     if (comment.ownerId === currentListingOwnerId) {comment.currentListingOwner = true};
     let newComment = $(HandlebarsTemplates['comment'](comment));
 
+    //Checks for parent comment or if comment is coming from edit action
     if (!commentDiv){
     comment.commentableType === "Listing" ? 
         $("#js-listing-comments").append(newComment) : 
@@ -60,11 +56,13 @@ function buildComment(commentParent, commentDiv) {
         commentDiv.replaceWith(newComment);
     }
 
+    //Appends owner/reply controls if comment owner is signed in and/or an admin
     if (currentUser && (currentUser.id === comment.ownerId || currentUser.role.title === 'admin')){
         buildCommentOwnerControls.apply(newComment);
         buildReplyControls.apply(newComment);
     }
 
+    //If comment has comment child nodes, recursively calls buildComment for all child comments
     if (commentParent.comments.length >= 1) {
         commentParent.comments.forEach(comment => buildComment(comment))
     }
@@ -78,22 +76,21 @@ function buildCommentOwnerControls() {
 
 //EDIT COMMENT FUNCTIONS AND LISTENERS
 
+//When edit button is clicked, form is appended to comment div
 function editCommentListener(){
     $(document).on('click','.edit-comment-btn', function(e) {
         e.preventDefault();
         let comment = $(this).parents().eq(3);
 
+        //Checks to see if form is present, if not, builds comment form on comment.
         if ($(comment).find('form').length === 0) {
-            appendEditCommentForm.apply(comment);
+            let commentForm = buildEditCommentForm(comment);
+            $(comment).append(commentForm);
         }
     });
 }
 
-function appendEditCommentForm() {
-    let commentForm = buildEditCommentForm(this);
-    $(this).append(commentForm);
-}
-
+//Builds comment form, pre-filling values into form template
 function buildEditCommentForm(comment) {
     let auth_token = $('meta[name=csrf-token]').attr('content');
     let content = $(comment).children().find('.comment-content').text().trim();
@@ -108,14 +105,17 @@ function buildEditCommentForm(comment) {
         user: user
     }
 
+    //Adds currentListingOwner boolean to run show/hide logic in HandlebarsTemplate for showing comment status
     if ($(comment).attr('data-owner-id') === $('.listing').attr('data-listing-owner-id')) {
         commentValues.currentListingOwner = true;
     }
 
+    //Builds edit comment form and returns form
     let editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
     return editCommentForm;
 }
 
+//Calls editComment with the form submitted as the variable
 function editCommentFormListener(){
     $(document).on('submit', '.edit-comment', function(event){
         event.preventDefault();
@@ -124,7 +124,7 @@ function editCommentFormListener(){
     })
 }
 
-//Use async function to create ajax promise for comment edit. Then build comment.
+//Use async function to create ajax promise for comment edit. Once complete, rebuild updated comment.
 async function editComment(form) {
     let commentId = $(form).attr('data-comment-id');
     let parentComment = $(form).parent();
@@ -142,7 +142,6 @@ async function editComment(form) {
     }
     
     if (editedComment){ 
-        parentComment.empty();
         buildComment(editedComment, parentComment); 
     }
 }
@@ -170,12 +169,12 @@ function deleteComment(comment) {
         data: { "_method": "delete" },
     })
 
-        $(comment).remove();
-        checkCommentCount();
+    $(comment).remove();
+    checkCommentCount();
 
 }
 
-//Checks to see how many comments are present. If none, no comments message is
+//Checks to see how many comments are present. If none,'no comments' message is
 //appended, Otherwise, message is removed.
 function checkCommentCount(){
     if ($('#js-listing-comments').children().length === 0) {
@@ -188,13 +187,12 @@ function checkCommentCount(){
 
 // LISTING COMMENT FORM FUNCTIONS AND EVENT LISTENERS
 
-//Append listing comment reply button to bottom of page and attach form
-//listeners to submit comment link
+//Append listing comment reply button below comments.
 function buildListingCommentFormButton() {
     $('#js-listing-comment-form-btn').append(HandlebarsTemplates['listing_comment_reply_controls']);
-    attachListingCommentFormButtonListener();
 }
 
+//Builds listing comment form when user clicks "Ask the seller a question"
 function listingCommentFormButtonListener(){
     $(document).on('click', '#js-comment-form-btn-link', function(event){
         event.preventDefault();
@@ -221,10 +219,12 @@ function listingCommentFormButtonListener(){
 function hideCommentFormListener() {
     $(document).on('click', ".hide-comment", function(event) {
         event.preventDefault();
-
         let parentElement = $(this).parent();
+        
+        //hide current comment form
         hideCommentForm.apply(this);
 
+        //Checks to see if comment form being referenced is a comment reply, or the main listing comment form and calls the appropriate method
         parentElement.attr('id') === 'js-listing-comment-form' ? 
             buildListingCommentFormButton() : 
             buildReplyControls.apply(parentElement);
@@ -232,7 +232,7 @@ function hideCommentFormListener() {
 }
 
 //When 'Hide' button is clicked (when comment form is in expanded state)
-//remove the comment form and hide comment link. 
+//removes the form and hides comment link. 
 function hideCommentForm() {
     let form = $(this).siblings('form')[0];
     $(this).remove();
@@ -240,10 +240,7 @@ function hideCommentForm() {
 }
 
 
-//Add listener to comment form submit. event.stopPropagation() was 
-//added to stop propogation up the DOM (preventing multiple form submits from
-//firing). Check for blank form submission and alert if so. After submission, 
-//reset comment form.
+//Stops propogation(bubbling) and calls submitComment async function
 function submitCommentListener() {
     $(document).on('submit', ".new-comment", function (event) {
         event.preventDefault();
@@ -257,6 +254,7 @@ function submitCommentListener() {
 async function submitComment(form) {
     let comment;
     
+    //Create new ajax Promise. If error, hide form and alert user.
     try {
         comment = await $.ajax({
             url: '/comments',
@@ -269,6 +267,7 @@ async function submitComment(form) {
         hideCommentForm();
     }
 
+    //If comment was set, build comment and hide comment form
     if (comment) {
         let hideCommentButton = $(form).siblings('.hide-comment');
         buildComment(comment);
@@ -284,6 +283,7 @@ async function submitComment(form) {
 function buildReplyControls() {
     replyControls = HandlebarsTemplates['comment_reply_controls']();
 
+    //Accounts for both situations where function may be called (either initially on comment build, or after 'hide' has been clicked)
     this.hasClass('comment-controls') ? 
         this.append(replyControls) :
         this.children().find('.comment-controls').append(replyControls);
@@ -302,8 +302,8 @@ function commentReplyFormListener() {
         event.preventDefault();
         event.stopImmediatePropagation();
 
+        //Set comment form information
         let parentCommentableId = $(this).parents().eq(3).attr('data-comment-id');
-
         let listingCommentForm = HandlebarsTemplates['comment_form']({
             authToken: $('meta[name=csrf-token]').attr('content'),
             commentableType: 'Comment',
@@ -311,6 +311,7 @@ function commentReplyFormListener() {
             commentStatusId: '1'
         });
 
+        //Append comment form template, add hide button, and remove current reply button
         $(this).parent().append(listingCommentForm);
         addReplyHideControls.apply(this);
         $(this).remove()
