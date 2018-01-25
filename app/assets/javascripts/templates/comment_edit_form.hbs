@@ -5,7 +5,7 @@
     <input type="hidden" name="user" value="{{user}}" />
     <input type="hidden" name="id" value="{{id}}" />
     <div class="form-group">
-        <textarea class="form-control commentContent" name="comment[content]" rows="6">{{content}}</textarea>
+        <textarea class="form-control commentContent" name="comment[content]" rows="6" required='true'>{{content}}</textarea>
     </div>
 {{#unless currentListingOwner}}
     <div class="form-group">

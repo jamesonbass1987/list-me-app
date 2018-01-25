@@ -70,17 +70,26 @@ function buildCommentOwnerControls(commentId) {
 function editCommentListener(){
     $('.edit-comment').click(function(e) {
         e.preventDefault();
-        let parentComment = $(this).parents().eq(3);
-        buildEditCommentForm.call(parentComment);
+        let comment = $(this).parents().eq(3);
+
+        if ($(comment).find('form').length === 0) {
+            appendEditCommentForm.apply(comment);
+        }
     });
 }
 
-function buildEditCommentForm(){
+function appendEditCommentForm() {
+    let commentForm = buildEditCommentForm(this);
+    $(this).append(commentForm);
+    editCommentFormListener();
+}
+
+function buildEditCommentForm(comment) {
     let auth_token = $('meta[name=csrf-token]').attr('content');
-    let content = $(this).children().find('.comment-content').text().trim();
-    let commentStatus = $(this).attr('data-comment-status');
-    let id = $(this).attr('data-comment-id');
-    let user = $(this).attr('data-owner-username');
+    let content = $(comment).children().find('.comment-content').text().trim();
+    let commentStatus = $(comment).attr('data-comment-status');
+    let id = $(comment).attr('data-comment-id');
+    let user = $(comment).attr('data-owner-username');
     let commentValues = {
         auth_token: auth_token,
         content: content,
@@ -89,30 +98,17 @@ function buildEditCommentForm(){
         user: user
     }
 
-    if (id === $('.listing').attr('data-listing-owner-id')){ commentValues.currentListingOwner = true };
-    let editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
+    if ($(comment).attr('data-owner-id') === $('.listing').attr('data-listing-owner-id')) {
+        commentValues.currentListingOwner = true;
+    }
 
-    if ($(this).find('form').length < 1){
-        $(this).children('.comment-content, .comment-status').empty()
-        $(this).append(editCommentForm)
-        editCommentFormListener(this);
-    } 
+    let editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
+    return editCommentForm;
 }
 
 function editCommentFormListener(){
     $('.edit-comment').submit(function(event){
         event.preventDefault();
-        const formUser = $(this).find('input')[2].value;
-        const content = $(this).find('.commentContent')[0].innerHTML
-
-        if (content === '') {
-            alert("Content can't be blank. Please try again");
-            return false;
-        } else if (currentUser.username !== formUser && currentUser.role.title === 'user'){
-            alert("Only the comment owner can edit this comment.");
-            return false;
-        }
-
         editComment(this);
     })
 }
@@ -130,7 +126,8 @@ async function editComment(form) {
             dataType: 'json'
         })
     } catch(error){
-        alert("Something went wrong. Please try again.")
+        alert("Something went wrong. Please try again.");
+        $(form).empty();
     }
     
     if (editedComment){ 
