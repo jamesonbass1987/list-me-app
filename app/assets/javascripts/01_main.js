@@ -1,19 +1,14 @@
 // GLOBAL VARIABLE DECLARATIONS //
 let locationListingHashes;
-let listingIdIndex;
-let locationListingIds;
 let currentListingId;
-let currentListingOwnerId;
-let currentLocation = window.location.pathname.split('/')[2];
-let listingsPath = `/locations/${currentLocation}/listings`
-let currentListingFilter = "Everything";
 let currentUser;
+let currentListingFilter = "Everything";
 
 //MAIN PAGE LOAD FUNCTIONS
 
 //Check for logged in user and fire appropriate load functions based on current view
 $(document).ready(() => {
-    checkUser();
+    getUser();
     if ($(".listings.index")[0]) {
         loadListingsIndex();
     } else if ($(".listings.show")[0]) {
@@ -28,7 +23,7 @@ $(document).ready(() => {
 //GLOBAL JS FUNCTIONS
 
 //Check for current user, if so, set to global variable
-function checkUser() {
+function getUser() {
     $.getJSON('/logged_in_user', { format: 'json' }).then(resp => currentUser = resp);
 }
 

@@ -46,18 +46,29 @@ class Listing extends BaseListing {
 
 }
 
+// function addListingIndexEventListeners() {
+//     searchListingsListener();
+//     filterListingsListener();
+
+//     nextListingBtnListener();
+//     prevListingBtnListener();
+
+//     deleteListingEventListener();
+//     searchListingsListener();
+//     filterListingsListener();
+// }
+
 // LISTING INDEX PAGE LOAD FUNCTIONS
 
 //Load listings for current location and attach event listeners to index page for search and filter
 //Parses welcome page query params if anything is sumitted via form and passes to load listings function
 
 function loadListingsIndex(){
-
     $(".listings.index").ready(function () {
         const queryParams = getUrlParams();
         loadListings(null, queryParams.categoryFilter);
-        searchListingsEvent();
-        filterListingsEvent();
+        searchListingsListener();
+        filterListingsListener();
     })
 }
 
@@ -74,6 +85,22 @@ function getUrlParams(){
     return returnParams
 }
 
+function getCurrentLocation(){
+    return window.location.pathname.split('/')[2]
+}
+
+function getCurrentListingId(){
+    return parseInt(window.location.pathname.slice(-1));
+}
+
+function currentListingOwner() {
+    return locationListingHashes.find(listing => listing.id === currentListingId).user_id
+}
+
+function currentListingIdIndex() {
+    return locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
+}
+
 // LISTING SHOW PAGE LOAD FUNCTIONS
 
 //Load listings show page for current listing
@@ -81,7 +108,7 @@ function loadListingsShow(){
     $(".listings.show").ready(function () {
 
         //Set current listing id
-        currentListingId = parseInt(window.location.pathname.slice(-1));
+        currentListingId = getCurrentListingId();
 
         //Load Location Listing ID's for Next/Prev Listing Button Events and set current listing owner
         loadLocationListingArray();
@@ -92,8 +119,6 @@ function loadListingsShow(){
         //Event Listeners
         nextListingBtnListener();
         prevListingBtnListener();
-
-        addListingEventListeners();
     })
 }
 
@@ -128,13 +153,7 @@ function prevListingBtnListener(){
     });
 }
 
-function currentListingOwner(){
-    return locationListingHashes.find(listing => listing.id === currentListingId).user_id
-}
 
-function currentListingIdIndex(){
-    return locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
-}
 
 // SHOW LISTING FUNCTIONS //
 
@@ -153,7 +172,7 @@ function loadListing(){
 //controls to listing, as well as any listing controls if the current user is viewing their own listing
 function buildListing(listingParams){
     //build new listing from response listing params
-    const listing = new Listing(listingParams);
+    let listing = new Listing(listingParams);
 
     // load listing images and tags into listing
     listing.loadImages(listingParams.listing_images)
@@ -178,17 +197,22 @@ function buildListing(listingParams){
 
 //Check to see if current user is the listing owner and append listing controls, if so.
 function appendListingOwnerControls(listing){
+
+
     if (currentUser.id === listing.user_id || currentUser.role.title === 'admin') {
         listing_controls_template = HandlebarsTemplates['listing_owner_controls'](listing);
         $(`#js-listing-owner-controls`).append(listing_controls_template);
     };
 }
 
-//Make an axaj request to listing_ids API path, setting global locationListingIds array to response.
+//Make an axaj request to listing_ids API path, setting global locationListingHashes variable to response.
 //Array contains all listing ids for current location to use in next/previous button event listener
 //functions.
 function loadLocationListingArray(){
-    $.getJSON(listingsPath + '/listing_ids', {
+    let currentLocation = getCurrentLocation();
+    let url = `/locations/${currentLocation}/listings/listing_ids` 
+
+    $.getJSON(url, {
         id: currentLocation,
         format: 'json'
     })
@@ -204,10 +228,13 @@ function loadLocationListingArray(){
 //arguments passed in via listing search function and listings filter functions. Build listing card
 //for each listing returned via ajax call. Set the current listing filter based off of returned listings.
 function loadListings(searchQuery, categoryFilter){
+    let currentLocation = getCurrentLocation();
+    let url = `/locations/${currentLocation}/listings`
+    
     $('#listings-index').empty();
 
     $.ajax({
-        url: listingsPath,
+        url: url,
         data: {searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json'},
         dataType: 'json'
     }).done(function(response){
@@ -220,7 +247,8 @@ function loadListings(searchQuery, categoryFilter){
 //If user is signed in, append edit/delete controls to listing card for current user's listings.
 function buildListingCard(listingParams){
     let listing = new BaseListing(listingParams);
-    const listingTemplate = HandlebarsTemplates['listing_index'](listing);
+    let listingTemplate = HandlebarsTemplates['listing_index'](listing);
+
     $('#listings-index').append(listingTemplate);
 
     if (currentUser){
@@ -251,6 +279,8 @@ function deleteListingEventListener(listing){
 
 //Make ajax call for listing deletion from the index page. Remove DOM element on success.
 function deleteListing(listing, element){
+    let currentLocation = getCurrentLocation();
+
     $.ajax({
         url: `locations/${currentLocation}/listings/${listing.id}`,
         type: 'DELETE',
@@ -263,7 +293,7 @@ function deleteListing(listing, element){
 
 //Add click event for search filtering. On click, submit search form and reset input to clear
 //search query.
-function searchListingsEvent(){
+function searchListingsListener(){
     $('#search-form').on('submit', function (event) {
         event.preventDefault();
         const searchQuery = $(this).serializeArray()[1].value;
@@ -274,7 +304,7 @@ function searchListingsEvent(){
 
 //Add click event for category filtering. On click, submit filter form load listings in selected
 //category.
-function filterListingsEvent(){
+function filterListingsListener(){
     $('#listings-filter-form').submit(function (event) {
         event.preventDefault();
         const categoryFilter = $(this).serializeArray()[2].value;

@@ -44,7 +44,8 @@ function loadComments(comments) {
 //Builds comment and creates a new comment template based on passed in comment parameters. 
 function buildComment(commentParent, commentDiv) {
     let comment = new Comment(commentParent);
-    if (comment.ownerId === currentListingOwnerId) {comment.currentListingOwner = true};
+    let listingOwnerId = $('.listing').attr('data-listing-owner-id');
+    if (comment.ownerId === listingOwnerId) {comment.currentListingOwner = true};
     let newComment = $(HandlebarsTemplates['comment'](comment));
 
     //Checks for parent comment or if comment is coming from edit action
