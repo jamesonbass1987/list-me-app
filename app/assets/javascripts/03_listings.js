@@ -293,14 +293,14 @@ function deleteListingEventListener(){
     })
 }
 
-//REFACTORED
 //Make ajax call for listing deletion from the index page. Remove DOM element on success.
 function deleteListing(listing){
-    let currentLocation = window.location.pathname.split('/')[2]
+    //set id from listing variable data attribute
     let id = $(listing).attr('data-listing-id')
 
+    //make delete ajax request and remove listing upon success
     $.ajax(
-        {url: `locations/${currentLocation}/listings/${id}`,
+        {url: `listings/${id}`,
         type: 'DELETE',
         dataType: "json",
         success: function(){
