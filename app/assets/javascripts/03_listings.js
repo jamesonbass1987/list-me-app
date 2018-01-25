@@ -92,6 +92,8 @@ function loadListingsShow(){
         //Event Listeners
         nextListingBtnListener();
         prevListingBtnListener();
+
+        addListingEventListeners();
     })
 }
 
