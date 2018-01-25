@@ -214,20 +214,20 @@ function appendListingOwnerControls(listing){
     };
 }
 
+//REFACTORED
 //Make an axaj request to listing_ids API path, setting global locationListingHashes variable to response.
 //Array contains all listing ids for current location to use in next/previous button event listener
 //functions.
-function loadLocationListingArray(){
+async function loadLocationListingArray(){
     let currentLocation = getCurrentLocation();
-    let url = `/locations/${currentLocation}/listings/listing_ids` 
-
-    $.getJSON(url, {
-        id: currentLocation,
-        format: 'json'
-    })
-    .done(function(response) {
-        locationListingHashes = response;
-    });
+    let url = `/locations/${currentLocation}/listings/listing_ids`;
+    
+    try {
+        locationListingHashes = await $.getJSON(url, {id: currentLocation, format: 'json'});
+    } catch(error) {
+        alert("Something went wrong. The window will now refresh.");
+        location.reload();
+    }
 }
 
 
@@ -281,6 +281,7 @@ function deleteListingEventListener(){
     $(document).on('click', `.listing-delete`, function(event){
         event.preventDefault();
         let listing = $(this).parents().eq(1)
+
         deleteListing.apply(listing);
     })
 }
@@ -322,7 +323,6 @@ function filterListingsListener(){
         event.preventDefault();
         let categoryFilter = $(this).serializeArray()[2].value;
 
-        console.log(categoryFilter);
         loadListings(undefined, categoryFilter);
     });
 }
