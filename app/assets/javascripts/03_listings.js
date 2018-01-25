@@ -166,15 +166,16 @@ function prevListingBtnListener(){
 
 // SHOW LISTING FUNCTIONS //
 
+//REFACTORED
 //Empty listing from DOM if coming from next/prev button events, send an ajax getJSON request for the
 //newly set current listing, and build the listing from the response.
 function loadListing(){
-    const path = window.location.pathname.slice(0, -2)
+    let currentLocation = getCurrentLocation();
+    let url = `/locations/${currentLocation}/listings/${currentListingId}`;
+
     $('#js-listing, #js-listing-comments, #js-listing-comment-form-btn').empty();
-    $.getJSON(`${path}/${currentListingId}`)
-    .done(function(response){
-        buildListing(response);
-    })
+    
+    $.getJSON(url).done(listing => buildListing(listing));
 }
 
 //Build listing from json response, and load any comments to the DOM. If user is logged in, add reply
