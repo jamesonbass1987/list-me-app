@@ -6,13 +6,13 @@ class BaseListing {
         this.title = listing.title;
         this.description = listing.description;
         this.price = listing.price;
-        this.locationSlug = listing.location.slug
+        this.locationSlug = listing.location.slug;
         this.primaryImage = listing.listing_images[0].image_url;
-        this.userId = listing.user.id
+        this.userId = listing.user.id;
     }
 
     formattedPrice() {
-        return '$' + Number(this.price).toFixed(2)
+        return '$' + Number(this.price).toFixed(2);
     }
 
 }
@@ -21,15 +21,15 @@ class Listing extends BaseListing {
     constructor(listing) {
         super(listing);
 
-        this.category = listing.category.name
+        this.category = listing.category.name;
         this.locationCity = listing.location.city;
         this.locationState = listing.location.state;
         this.listingImagesArray = [];
         this.tagsArray = [];
-        this.userEmail = listing.user.email
-        this.username = listing.user.username
-        this.userProfileImage = listing.user.profile_image_url
-        this.userRating = listing.user.rating
+        this.userEmail = listing.user.email;
+        this.username = listing.user.username;
+        this.userProfileImage = listing.user.profile_image_url;
+        this.userRating = listing.user.rating;
     }
 
     tagsList() {
@@ -37,11 +37,11 @@ class Listing extends BaseListing {
     }
 
     loadImages(images) {
-        images.forEach(image => this.listingImagesArray.push(image.image_url))
+        images.forEach(image => this.listingImagesArray.push(image.image_url));
     }
 
     loadTags(tags) {
-        tags.forEach(tag => this.tagsArray.push(tag.name))
+        tags.forEach(tag => this.tagsArray.push(tag.name));
     }
 
 }
@@ -85,16 +85,16 @@ function getUrlParams(){
     filterParams.forEach(parameter => {
         if (parameter.length > 0){
             let key = parameter.split("=")[0];
-            let val = parameter.split("=")[1]
+            let val = parameter.split("=")[1];
             returnParams[key] = val;
         }
     })
-    return returnParams
+    return returnParams;
 }
 
 //REFACTORED
 function getCurrentLocation(){
-    return window.location.pathname.split('/')[2]
+    return window.location.pathname.split('/')[2];
 }
 //REFACTORED
 function getCurrentListingId(){
@@ -102,15 +102,16 @@ function getCurrentListingId(){
 }
 //REFACTORED
 function currentListingOwner() {
-    return locationListingHashes.find(listing => listing.id === currentListingId).user_id
+    return locationListingHashes.find(listing => listing.id === currentListingId).user_id;
 }
 //REFACTORED
 function currentListingIdIndex() {
-    return locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
+    return locationListingHashes.findIndex(listing => { return listing.id === currentListingId });
 }
 
 // LISTING SHOW PAGE LOAD FUNCTIONS
 
+//REFACTORED
 //Load listings show page for current listing
 function loadListingsShow(){
     $(".listings.show").ready(function () {
@@ -128,6 +129,7 @@ function loadListingsShow(){
 
 // SHOW PAGE EVENT LISTENERS //
 
+//REFACTORED
 //Find current index of listing on page inside the location listing ids array, loads next listing id
 //by finding next element in array. If element is at end of array, cycle through to beggining of array  
 //for the next index. Then, set current listing id to next listing in array and load the listing.
@@ -135,14 +137,16 @@ function nextListingBtnListener(){
     $(document).on('click', '#js-next-listing', event => {
         event.preventDefault();
 
-        const nextListingIndex = (currentListingIdIndex() + 1) % locationListingHashes.length;
-        const nextListingId = locationListingHashes[nextListingIndex].id;
+        let nextListingIndex = (currentListingIdIndex() + 1) % locationListingHashes.length;
+        let nextListingId = locationListingHashes[nextListingIndex].id;
+        
         currentListingId = nextListingId;
 
         loadListing();
     });
 }
 
+//REFACTORED
 //Find current index of listing on page inside the location listing ids array, load previous listing id
 //by finding the previous element in array. if element is at beginning of array, choose the last array
 //index. Then, set current listing id to the prev listing in array and load the listing
@@ -150,7 +154,8 @@ function prevListingBtnListener(){
     $(document).on('click', '#js-prev-listing', event => {
         event.preventDefault();
 
-        const prevListingId = (locationListingHashes[(currentListingIdIndex() - 1)] || locationListingHashes.slice(-1)[0]).id;
+        let prevListingId = (locationListingHashes[(currentListingIdIndex() - 1)] || locationListingHashes.slice(-1)[0]).id;
+        
         currentListingId = prevListingId;
 
         loadListing();
@@ -233,7 +238,7 @@ function loadLocationListingArray(){
 //for each listing returned via ajax call. Set the current listing filter based off of returned listings.
 function loadListings(searchQuery, categoryFilter){
     let currentLocation = getCurrentLocation();
-    let url = `/locations/${currentLocation}/listings`
+    let url = `/locations/${currentLocation}/listings`;
     
     $('#listings-index').empty();
 
@@ -241,9 +246,9 @@ function loadListings(searchQuery, categoryFilter){
         url: url,
         data: {searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json'},
         dataType: 'json'
-    }).done(function(response){
-        response.forEach(listing => buildListingCard(listing));
-        setCurrentListingFilter(response);
+    }).done(listings => {
+        listings.forEach(listing => buildListingCard(listing));
+        setCurrentListingFilter(listings);
     });
 }
 
@@ -313,29 +318,42 @@ function searchListingsListener(){
 //Add click event for category filtering. On click, submit filter form load listings in selected
 //category.
 function filterListingsListener(){
-    $(document).on('submit', '#listings-filter-form', function (event) {
+    $(document).on('submit', '#listings-filter-form', function(event){
         event.preventDefault();
         let categoryFilter = $(this).serializeArray()[2].value;
+
+        console.log(categoryFilter);
         loadListings(undefined, categoryFilter);
     });
 }
 
 
+//REFACTORED
 //Set category filter based on current indexed listings. If no listings are present, append 'no
 //listings' message to div. If listings are present, check for category based on listings by //checking categoryids and comparing values. If category id's are different, 'Everything' is being
 //displayed on the page. If they are the same, the value of the first listing category name is
 //displayed in the element.
 function setCurrentListingFilter(listings){
-    if (listings.length !== 0){
-        let categoryCheck = 0;
-
-        for (let i = 0; i < (listings.length - 1); i++) {
-            listings[i].category.id !== listings[i + 1].category.id ? categoryCheck-- : false;
-        }
-        currentListingFilter = categoryCheck < 0 ? 'Everything' : listings[0].category.name;
+    if (listings.length > 0){
+        currentListingFilter = checkListingCategories(listings);
     } else {
         currentListingFilter = "There doesn't seem to be anything here. Please try another filter."
     }
 
-    $("#listings-filter").empty().append(currentListingFilter);
+    $("#listings-filter").html(currentListingFilter);
+}
+
+//REFACTORED
+function checkListingCategories(listings){
+    let categoryCheck = 0;
+
+    for (let i = 0; i < (listings.length - 1); i++) {
+        listings[i].category.id !== listings[i + 1].category.id ?
+            categoryCheck-- :
+            false;
+    }
+
+    return categoryCheck < 0 ?
+        'Everything' :
+        listings[0].category.name;
 }

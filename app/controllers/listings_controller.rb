@@ -130,7 +130,7 @@ class ListingsController < ApplicationController
   def filter_listings_by_category
     category_filter = Category.find_by(id: (params[:categoryFilter] || session[:categoryFilter]))
     @listings = Listing.listings_in_category(category_filter, @location)
-    session[:categoryFilter].clear
+    session[:categoryFilter].clear if session[:categoryFilter]
   end
 
   #find category by search term and clear session data once done
