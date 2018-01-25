@@ -1,11 +1,6 @@
 class CommentsController < ApplicationController
   before_action :find_commentable, only: [:new, :create]
 
-  # def new
-  #   authorize! :new, Comment
-  #   @comment = @commentable.comments.new(user: current_user)
-  # end
-
   def create
     @comment = @commentable.comments.build(comment_params)
     @comment.user = current_user
@@ -16,26 +11,10 @@ class CommentsController < ApplicationController
     #back to listing with errors
     if @comment.save
       respond_to do |format|
-        # format.html { redirect_to location_listing_path(@listing.location, @listing) }
         format.json { render :json => @comment, :status => :created }
       end
-    # else
-    #   if request.referer.include? '/comments/new'
-    #     render 'new' and return
-    #   else 
-    #     render 'listings/show' and return
-    #   end
     end
   end
-
-  # def edit
-  #   authorize! :edit, Comment
-  #   @comment = Comment.find_by(id: params[:id])
-  #   @statuses = CommentStatus.all
-
-
-  #   redirect_to root_path if @comment.nil?
-  # end
 
   def update
     @comment = Comment.find_by(id: params[:id])
