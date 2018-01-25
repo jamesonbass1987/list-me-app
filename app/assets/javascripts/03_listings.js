@@ -8,7 +8,7 @@ class BaseListing {
         this.price = listing.price;
         this.locationSlug = listing.location.slug
         this.primaryImage = listing.listing_images[0].image_url;
-        this.user_id = listing.user.id
+        this.userId = listing.user.id
     }
 
     formattedPrice() {
@@ -17,13 +17,9 @@ class BaseListing {
 
 }
 
-// BaseListing.prototype.formattedPrice = function() {
-//     return '$' + Number(this.price).toFixed(2)
-// }
-
 class Listing extends BaseListing {
     constructor(listing) {
-        super(listing, listing);
+        super(listing);
 
         this.category = listing.category.name
         this.locationCity = listing.location.city;
@@ -56,9 +52,9 @@ class Listing extends BaseListing {
 //Parses welcome page query params if anything is sumitted via form and passes to load listings function
 
 function loadListingsIndex(){
+
     $(".listings.index").ready(function () {
         const queryParams = getUrlParams();
-
         loadListings(null, queryParams.categoryFilter);
         searchListingsEvent();
         filterListingsEvent();
@@ -84,8 +80,8 @@ function getUrlParams(){
 function loadListingsShow(){
     $(".listings.show").ready(function () {
 
-        //Find current listing
-        findCurrentListing();
+        //Set current listing id
+        currentListingId = parseInt(window.location.pathname.slice(-1));
 
         //Load Location Listing ID's for Next/Prev Listing Button Events and set current listing owner
         loadLocationListingArray();
@@ -107,18 +103,14 @@ function loadListingsShow(){
 function nextListingBtnListener(){
     $('#js-next-listing').click(function (event) {
         event.preventDefault();
-        
-        findCurrentListingIdIndex();
-        const nextListingId = locationListingHashes[(listingIdIndex + 1) % locationListingHashes.length].id;
 
+        const nextListingIndex = (currentListingIdIndex() + 1) % locationListingHashes.length;
+        const nextListingId = locationListingHashes[nextListingIndex].id;
         currentListingId = nextListingId;
 
-        findCurrentListingOwner();
         loadListing();
     });
 }
-
-
 
 //Find current index of listing on page inside the location listing ids array, load previous listing id
 //by finding the previous element in array. if element is at beginning of array, choose the last array
@@ -127,36 +119,32 @@ function prevListingBtnListener(){
     $('#js-prev-listing').click(function (event) {
         event.preventDefault();
 
-        findCurrentListingIdIndex();
-        const prevListingId = (locationListingHashes[(listingIdIndex - 1)] || locationListingHashes.slice(-1)[0]).id;
-
+        const prevListingId = (locationListingHashes[(currentListingIdIndex() - 1)] || locationListingHashes.slice(-1)[0]).id;
         currentListingId = prevListingId;
-        findCurrentListingOwner();
+
         loadListing();
     });
 }
 
-function findCurrentListingOwner(){
-    currentListingOwnerId = locationListingHashes.find(listing => listing.id === currentListingId).user_id
+function currentListingOwner(){
+    return locationListingHashes.find(listing => listing.id === currentListingId).user_id
 }
 
-function findCurrentListingIdIndex(){
-    listingIdIndex = locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
+function currentListingIdIndex(){
+    return locationListingHashes.findIndex(listing => { return listing.id === currentListingId })
 }
 
 // SHOW LISTING FUNCTIONS //
 
-//Finds the current listing that is loaded on the page after reload, or if it is linked to via the listings
-//index page.
-function findCurrentListing(){
-    currentListingId = parseInt(window.location.pathname.split('/')[4]);
-}
-
 //Empty listing from DOM if coming from next/prev button events, send an ajax getJSON request for the
 //newly set current listing, and build the listing from the response.
 function loadListing(){
+    const path = window.location.pathname.slice(0, -2)
     $('#js-listing, #js-listing-comments, #js-listing-comment-form-btn').empty();
-    $.getJSON(`/locations/${currentLocation}/listings/${currentListingId}?ajax=1`, { format: 'json' }, (response => buildListing(response)));
+    $.getJSON(`${path}/${currentListingId}`)
+    .done(function(response){
+        buildListing(response);
+    })
 }
 
 //Build listing from json response, and load any comments to the DOM. If user is logged in, add reply
@@ -169,9 +157,12 @@ function buildListing(listingParams){
     listing.loadImages(listingParams.listing_images)
     listing.loadTags(listingParams.tags)
 
-    // build listing template from new listing object and append to DOM
-    const listingTemplate = HandlebarsTemplates['listing'](listing);
-    $('#js-listing').append(listingTemplate);
+    // build listing template from new listing object, set owner and listing id,
+    // and append to DOM
+    let newListing = $(HandlebarsTemplates['listing'](listing));
+    newListing.data('owner', listing.user_id)
+
+    $('#js-listing').append(newListing);
 
     // load listing comments to DOM
     loadComments(listingParams.comments)
@@ -198,12 +189,9 @@ function loadLocationListingArray(){
     $.getJSON(listingsPath + '/listing_ids', {
         id: currentLocation,
         format: 'json'
-    }, function(response) {
+    })
+    .done(function(response) {
         locationListingHashes = response;
-        locationListingIds = [];
-        locationListingHashes.forEach(function (location) {locationListingIds.push(location.id)})
-
-        findCurrentListingOwner();
     });
 }
 
@@ -229,7 +217,7 @@ function loadListings(searchQuery, categoryFilter){
 //Build listing card for each listing returned in loadListings function ajax call and append to DOM body.
 //If user is signed in, append edit/delete controls to listing card for current user's listings.
 function buildListingCard(listingParams){
-    const listing = new BaseListing(listingParams);
+    let listing = new BaseListing(listingParams);
     const listingTemplate = HandlebarsTemplates['listing_index'](listing);
     $('#listings-index').append(listingTemplate);
 
