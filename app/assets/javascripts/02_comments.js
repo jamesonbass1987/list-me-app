@@ -210,7 +210,7 @@ function attachListingCommentFormButtonListener(formId){
         $(commentForm).append(listingCommentForm).append(replyHideControls);
 
         //add listener to hide button
-        hideListingCommentFormButtonListener();
+        hideCommentFormListener();
         
         //scroll to bottom of window, once done, add listener for listing comment
         //submission
@@ -223,25 +223,31 @@ function attachListingCommentFormButtonListener(formId){
     });
 }
 
-//Adds event listener for hide listing comment form
-function hideListingCommentFormButtonListener() {
-    $('#js-comment-form-btn-link').click(function (event) {
+
+//When hide button is clicked, the comment form and hide button is removed, and the reply button control function is called to rebuild the reply button.
+function hideCommentFormListener(commentId) {
+    $(".hide-comment").click(function (event) {
         event.preventDefault();
-        hideCommentForm(170)
-    });
+        let commentParent = $(this).parents().eq(0).attr('id');
+        
+        hideCommentForm.apply(this);
+
+        commentParent === 'js-listing-comment-form' ? 
+            buildListingCommentFormButton() : 
+            buildReplyControls(commentId);
+    })
 }
 
 
-//When 'Hide' button is clicked (when Listing comment form is in expanded state)
-//scroll up page to bottom of comments div, remove the comment form and hide 
-//comment link. Call buildListingCommentFormButton() function to reappend link
-//to expand comment form.
-function hideCommentForm(position){
-    $('#js-listing-comment-form form, #js-listing-comment-form a').remove();
-    buildListingCommentFormButton();
+//When 'Hide' button is clicked (when comment form is in expanded state)
+//remove the comment form and hide comment link. 
+function hideCommentForm() {
+    let form = $(this).siblings('form')[0];
+    $(this).remove();
+    $(form).remove();
 }
 
-//Add listener to comment form submit. event.stopImmediatePropagation() was 
+//Add listener to comment form submit. event.stopPropagation() was 
 //added to stop propogation up the DOM (preventing multiple form submits from
 //firing). Check for blank form submission and alert if so. After submission, 
 //reset comment form.
@@ -249,22 +255,7 @@ function submitCommentListener() {
     $(".new-comment").on('submit', function (event) {
         event.preventDefault();
         event.stopImmediatePropagation();
-
-        const content = $.trim($(this).find('.form-control')[0].value);
-        const commentableType = this[3].value
-        
-        if (content === '') {
-            alert("Content can't be blank. Please try again");
-            return false;
-        }
-
-        submitComment(this)
-        
-        const hideCommentButton = $(this).siblings('.hide-comment')
-        $(hideCommentButton).trigger('click');
-
-        $(this).remove();
-
+        submitComment(this);
     })
 }
 
@@ -282,12 +273,13 @@ async function submitComment(form) {
         })
     } catch(error) {
         alert("Something went wrong. Please try again.");
-        hideCommentForm(85);
+        hideCommentForm();
     }
 
     if (comment) {
+        let hideCommentButton = $(form).siblings('.hide-comment');
         buildComment(comment);
-        hideCommentForm(85);
+        $(hideCommentButton).trigger('click');
     }
 }
 
@@ -327,16 +319,6 @@ function addReplyHideControls(replyButton, commentId) {
     const replyHideControl = HandlebarsTemplates['comment_reply_hide_controls']({ id: commentId })
     $(replyHideControl).insertAfter(replyButton);
 
-    hideCommentListener(commentId);
+    hideCommentFormListener(commentId);
 }
 
-//When hide button is clicked, the comment form and hide button is removed, and the reply button control function is called to rebuild the reply button.
-function hideCommentListener(commentId){
-    $(".hide-comment").click(function (event) {
-        event.preventDefault();
-        const form = $(this).siblings('form')[0]
-        $(this).remove()
-        $(form).remove()
-        buildReplyControls(commentId);
-    })
-}
