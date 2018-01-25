@@ -30,16 +30,20 @@ function getUser() {
 
 //WELCOME PAGE FORM LISTENERS
 
+//on main page form submission, parse query information and redirect to listings index page
 function welcomeFormListener(){
     $("#welcome-filter-form").submit(event => {
         event.preventDefault();
-        const location_id = $("#locationFilter").val()
 
+        //Pull location id
+        let locationId = $("#locationFilter").val();
+
+        //Make ajax request to get location, and forward user submitting category filter as url param
         $.getJSON('/locations/get_location', {
-            location_id: location_id
+            location_id: locationId
         }).done(resp => {
-            const categoryFilter = $('#categoryFilter').val()
-            window.location = `/locations/${resp.slug}/listings?categoryFilter=${categoryFilter}`
+            let categoryFilter = $('#categoryFilter').val();
+            window.location = `/locations/${resp.slug}/listings?categoryFilter=${categoryFilter}`;
         })
     })
 }
