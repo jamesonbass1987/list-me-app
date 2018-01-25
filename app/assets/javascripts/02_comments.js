@@ -14,7 +14,6 @@ class Comment {
         this.commentableId = comment.commentable_id
     }
 
-
     status() {
         return this.commentStatusId === 1 ? "Answer Pending" : "Resolved";
     }
@@ -38,31 +37,23 @@ function loadComments(comments) {
 //appended. If the submitted comment has any child comment nodes, they are each recursively
 //sent to the buildComment function for appending to the DOM.
 
-function buildComment(commentParent, commentDiv) {
-    const newComment = new Comment(commentParent);
+function buildComment(commentParent) {
+    let comment = new Comment(commentParent);
+    if (comment.ownerId === currentListingOwnerId) {comment.currentListingOwner = true};
+    let newComment = HandlebarsTemplates['comment'](comment);
 
-    if (newComment.ownerId === currentListingOwnerId) {
-        newComment.currentListingOwner = true;
+    comment.commentableType === "Listing" ? 
+        $("#js-listing-comments").append(newComment) : 
+        $(`.comment[data-comment-id=${comment.commentableId}]`).append(newComment);
+
+    if (currentUser && (currentUser.id === comment.ownerId || currentUser.role.title === 'admin')){
+        buildCommentOwnerControls(comment.id)
+        buildReplyControls(comment.id)
     }
 
-    const commentTemplate = HandlebarsTemplates['comment'](newComment);
-    if (commentDiv !== undefined){     
-        $(commentDiv).empty();
-        $(commentDiv).append(commentTemplate);
-    } else if (newComment.commentableType === "Listing" && !commentDiv){
-        $("#js-listing-comments").append(commentTemplate)
-    } else if (newComment.commentableType === "Comment" && !commentDiv){
-        const commentParentUsername = $(`#comment-${newComment.commentableId} h6`)[0].innerHTML.split(" ")[4]
-        $(`#comment-${newComment.commentableId}`).append(commentTemplate);
-        $(`#comment-${newComment.id}-reply-notification`).append(`(Replying to ${commentParentUsername})`)
+    if (commentParent.comments.length >= 1) {
+        commentParent.comments.forEach(comment => buildComment(comment))
     }
-    
-    if (currentUser){
-        currentUser.id === newComment.ownerId || currentUser.role.title === 'admin' ? buildCommentOwnerControls(newComment.id) : false;
-        buildReplyControls(newComment.id)
-    }
-
-    commentParent.comments.length >= 1 ? commentParent.comments.forEach(comment => buildComment(comment)) : false;
 }
 
 //Attaches reply/edit/delete comment controls and sets delete and reply comment listeners.
@@ -77,46 +68,35 @@ function buildCommentOwnerControls(commentId) {
 //EDIT COMMENT FUNCTIONS AND LISTENERS
 
 function editCommentListener(){
-    $('.edit-comment').click(function(event){
-        event.preventDefault();
-        const commentDiv = $(this).parents()[1];
-        const commentId = $(this).parents()[0].id.split('-')[1]
-        buildEditCommentForm(commentDiv, commentId);
+    $('.edit-comment').click(function(e) {
+        e.preventDefault();
+        let parentComment = $(this).parents().eq(3);
+        buildEditCommentForm.call(parentComment);
     });
 }
 
-function buildEditCommentForm(commentDiv, id){
-    const commentStatus = checkStatus(commentDiv)
-    const commentUser = $(commentDiv).children()[0].innerText.split(" ")[4]
-    const content = $(commentDiv).children()[1].innerText
-
-    const commentValues = {
-        auth_token: $('meta[name=csrf-token]').attr('content'),
+function buildEditCommentForm(){
+    let auth_token = $('meta[name=csrf-token]').attr('content');
+    let content = $(this).children().find('.comment-content').text().trim();
+    let commentStatus = $(this).attr('data-comment-status');
+    let id = $(this).attr('data-comment-id');
+    let user = $(this).attr('data-owner-username');
+    let commentValues = {
+        auth_token: auth_token,
         content: content,
         status: commentStatus,
         id: id,
-        user: commentUser
+        user: user
     }
 
-    if (id === currentListingOwnerId) {
-        commentValues.currentListingOwner = true;
-    }
+    if (id === $('.listing').attr('data-listing-owner-id')){ commentValues.currentListingOwner = true };
+    let editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
 
-    const editCommentForm = HandlebarsTemplates['comment_edit_form'](commentValues)
-    
-    if ($(commentDiv).find('form').length < 1){
-        $(commentDiv).children('.comment-content, .comment-status').empty()
-        $(commentDiv).append(editCommentForm)
-
-        editCommentFormListener(commentDiv);
+    if ($(this).find('form').length < 1){
+        $(this).children('.comment-content, .comment-status').empty()
+        $(this).append(editCommentForm)
+        editCommentFormListener(this);
     } 
-}
-
-function checkStatus(commentDiv){
-    const status = $(commentDiv).children('.comment-status').text().trim().split('Status: ')[1];
-    if (status === 'Answer Pending'){
-        return '1';
-    }
 }
 
 function editCommentFormListener(){
@@ -133,22 +113,30 @@ function editCommentFormListener(){
             return false;
         }
 
-        editComment(this)
+        editComment(this);
     })
 }
 
-function editComment(form) {
-    const id = $(form).children()[3].value
-
-    $.ajax({
-        url: `/comments/${id}`,
-        type: 'PATCH',
-        data: $(form).serialize(),
-        dataType: 'json'
-    }).done(function (resp) {
-        const commentDiv = $(this).parents()[2];
-        buildComment(resp, commentDiv);
-    }.bind(form));
+//Use async function to create ajax promise for comment edit. Then build comment.
+async function editComment(form) {
+    let commentId = $(form).attr('data-comment-id');
+    let parentComment = $(form).parent();
+    let editedComment;
+    try {
+        editedComment = await $.ajax({
+            url: `/comments/${commentId}`,
+            type: 'PATCH',
+            data: $(form).serialize(),
+            dataType: 'json'
+        })
+    } catch(error){
+        alert("Something went wrong. Please try again.")
+    }
+    
+    if (editedComment){ 
+        parentComment.empty();
+        buildComment(editedComment); 
+    }
 }
 
 //DELETE COMMENT FUNCTIONS AND LISTENERS
