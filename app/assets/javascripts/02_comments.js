@@ -23,6 +23,7 @@ class Comment {
     }
 }
 
+
 // SHOW LISTING COMMENTS FUNCTIONS AND EVENT LISTENERS //
 
 //Checks if passed in array of listing comments is empty. If so, appends 'no comments' message. Otherwise, appends comments to DOM

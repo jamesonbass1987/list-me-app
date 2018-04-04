@@ -1,5 +1,5 @@
 class ListingSerializer < ActiveModel::Serializer
-  attributes :id, :title, :description, :price, :listing_images, :location, :tags
+  attributes :id, :title, :description, :price, :listing_images, :location, :tags, :comments
   
   belongs_to :category
   belongs_to :user

@@ -238,6 +238,7 @@ async function loadListings(searchQuery, categoryFilter){
     let currentLocation = getCurrentLocation();
     let url = `/locations/${currentLocation}/listings`;
     let data = { searchQuery: searchQuery, categoryFilter: categoryFilter, format: 'json' };
+
     $('#listings-index').empty();
 
     try {

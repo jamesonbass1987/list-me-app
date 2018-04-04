@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116192930) do
+ActiveRecord::Schema.define(version: 20171207195300) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -26,8 +29,8 @@ ActiveRecord::Schema.define(version: 20180116192930) do
     t.string "content"
     t.integer "commentable_id"
     t.string "commentable_type"
-    t.integer "user_id"
-    t.integer "comment_status_id", default: 1
+    t.bigint "user_id"
+    t.bigint "comment_status_id", default: 1
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["comment_status_id"], name: "index_comments_on_comment_status_id"
@@ -70,6 +73,7 @@ ActiveRecord::Schema.define(version: 20180116192930) do
     t.string "city"
     t.string "slug"
     t.string "location_long_name"
+    t.string "string"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -100,4 +104,6 @@ ActiveRecord::Schema.define(version: 20180116192930) do
     t.integer "rating_count", default: 0
   end
 
+  add_foreign_key "comments", "comment_statuses"
+  add_foreign_key "comments", "users"
 end
