@@ -105,7 +105,7 @@ This slim side-by-side refrigerator is lit up by bright LEDs so you can always f
     price: "899.99",
     location_id: '2',
     category_id: '3',
-    user_id: user_ids[rand(1..(user_ids.length - 1))])
+    user_id: user_ids[rand(1..(user_ids.length - 1))]
 )
 
 
