@@ -1,11 +1,11 @@
-# Category.create(name: 'Electronics')
-# Category.create(name: 'Musical Instruments')
-# Category.create(name: 'Household Appliances')
-# Category.create(name: 'Books')
-# Category.create(name: 'Video Games')
-# Category.create(name: 'Toys & Games')
-# Category.create(name: 'Cell Phones')
-# Category.create(name: 'Sporting Equipment')
+Category.create(name: 'Electronics')
+Category.create(name: 'Musical Instruments')
+Category.create(name: 'Household Appliances')
+Category.create(name: 'Books')
+Category.create(name: 'Video Games')
+Category.create(name: 'Toys & Games')
+Category.create(name: 'Cell Phones')
+Category.create(name: 'Sporting Equipment')
 
 
 user_ids = User.all.select(:id).map{|user| user.id}

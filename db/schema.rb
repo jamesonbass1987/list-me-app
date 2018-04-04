@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171207195300) do
+ActiveRecord::Schema.define(version: 20180404170423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 20171207195300) do
     t.string "password_digest"
     t.string "username"
     t.string "slug"
-    t.integer "role_id", default: 1
+    t.integer "role_id", default: 3
     t.string "profile_image_url", default: "https://i.imgur.com/jNNT4LE.jpg"
     t.string "string", default: "https://i.imgur.com/jNNT4LE.jpg"
     t.string "uid"
