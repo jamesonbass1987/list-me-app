@@ -7,6 +7,9 @@ Category.create(name: 'Toys & Games')
 Category.create(name: 'Cell Phones')
 Category.create(name: 'Sporting Equipment')
 
+# Location.create(city: 'Portland', state: 'OR', slug:'portland-or')
+# Location.create(city: 'New York', state: 'NY', slug:'new-york-ny')
+
 
 user_ids = User.all.select(:id).map{|user| user.id}
 
