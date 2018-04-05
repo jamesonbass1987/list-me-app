@@ -259,6 +259,8 @@ async function submitComment(form) {
             dataType: 'json'
         })
 
+        console.log(comment)
+
         //If comment was set, build comment and hide comment form
         if (comment) {
             let hideCommentButton = $(form).siblings('.hide-comment');

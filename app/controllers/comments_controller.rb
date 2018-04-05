@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
     #back to listing with errors
     if @comment.save
       respond_to do |format|
-        format.json { render :json => @comment, :status => :created }
+        format.json { render :json => @comment, :status => :created, :template => false }
       end
     end
   end
